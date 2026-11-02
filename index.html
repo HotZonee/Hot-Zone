@@ -337,6 +337,9 @@ canvas { display: block; width: 100%; height: 100%; }
 .field input[type=text] { font: 600 15px var(--mono); color: var(--bone); background: var(--ink); border: 1px solid #ffffff26; padding: 9px 10px; width: 100%; box-sizing: border-box; text-transform: none; }
 .field input:focus-visible { outline: 2px solid var(--coolant); outline-offset: 1px; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mapPick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } .mapPick button { all: unset; box-sizing: border-box; cursor: pointer; display: grid; gap: 2px; padding: 10px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); transition: border-color .15s, background .15s; }
+.mapPick button b { font: 400 18px var(--display); letter-spacing: .03em; color: #ece6da; } .mapPick button small { font: 500 11px var(--mono); color: #9aa6a0; }
+.mapPick button:hover { border-color: rgba(63,240,214,.5); } .mapPick button.on { border-color: var(--coolant); background: rgba(63,240,214,.1); box-shadow: inset 0 0 0 1px var(--coolant); } .mapPick button:focus-visible { outline: 2px solid var(--coolant); outline-offset: 2px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .chips button { font: 600 12px var(--mono); padding: 5px 9px; background: var(--plate); color: var(--bone); clip-path: none; border: 1px solid #ffffff1f; }
 .chips button:hover { background: #333a44; }
@@ -879,7 +882,7 @@ button:focus-visible { outline: 3px solid var(--bone); outline-offset: 4px; }
 #nadeHud i.e { background: rgba(255,255,255,.12); box-shadow: none; } #nadeHud kbd { font: 700 10px var(--mono); padding: 1px 5px; border-radius: 3px; background: rgba(255,255,255,.12); color: #f2ede4; }
 #perkRow { display: flex; gap: 6px; margin-top: 8px; } #perkRow:empty { display: none; }
 #perkRow i { width: 26px; height: 26px; display: grid; place-items: center; font-style: normal; font: 800 15px var(--ui); color: #fff; background: var(--c); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); box-shadow: 0 0 12px var(--c); }
-.ms-lvl { position: absolute; right: 78px; top: 22px; width: 330px; display: flex; align-items: center; gap: 12px; padding: 8px 14px 8px 8px; background: linear-gradient(90deg, rgba(30,18,10,.8), rgba(14,10,8,.6)); border: 1px solid rgba(255,138,31,.3); clip-path: polygon(0 0, 100% 0, 100% 100%, 12px 100%, 0 calc(100% - 12px)); z-index: 2; }
+.ms-lvl { position: absolute; right: calc(3vw + 64px); top: 22px; width: 330px; display: flex; align-items: center; gap: 12px; padding: 8px 14px 8px 8px; background: linear-gradient(90deg, rgba(30,18,10,.8), rgba(14,10,8,.6)); border: 1px solid rgba(255,138,31,.3); clip-path: polygon(0 0, 100% 0, 100% 100%, 12px 100%, 0 calc(100% - 12px)); z-index: 2; }
 #start:has(#mpPanel:not([hidden])) .ms-lvl { display: none; }
 @media (max-width: 720px) { .ms-lvl { display: none; } }
 .ms-lvl .lv-n { display: grid; place-items: center; width: 54px; height: 60px; background: linear-gradient(180deg, #ffcf5a, #ff8a1f 60%, #d4481a); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); color: #1b0a02; }
@@ -930,15 +933,16 @@ button:focus-visible { outline: 3px solid var(--bone); outline-offset: 4px; }
     <div class="ms-title"><div class="ms-badge"><i></i>Season 1 · Furnace &amp; Cargo</div><h1 data-t="Hot Zone">Hot <span>Zone</span></h1><p>Fight anyone. Outlast everything.</p><div class="ms-heat"></div></div>
     <div class="ms-tiles" id="msTiles">
       <button class="tile z" id="play" type="button"><svg class="emb" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6c-12 0-20 8-20 19 0 7 3 11 6 14v7h6v-5h4v5h8v-5h4v5h6v-7c3-3 6-7 6-14 0-11-8-19-20-19z" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="24" cy="27" r="5" fill="currentColor"/><circle cx="40" cy="27" r="5" fill="currentColor"/><path d="M30 36l2-4 2 4z" fill="currentColor"/></svg><div class="tchips"><em class="tchip" id="msBest">Best 0</em><em class="tchip">Waves · Forge · Wall buys</em></div><small>Solo</small><b>Zombies</b><span>Hold Furnace Hall 2 against endless waves of the infected. Buy guns off the walls, forge them, open the yards.</span><em>Play <i>›</i></em></button>
-      <button class="tile m" id="mpOpen" type="button"><svg class="emb" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="18" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="32" cy="32" r="3" fill="currentColor"/><path d="M32 4v14M32 46v14M4 32h14M46 32h14" stroke="currentColor" stroke-width="2.5"/></svg><div class="tchips"><em class="tchip live"><i></i>Deathmatch · Cargo</em><em class="tchip">3 loadouts · first to 30</em></div><small>Online</small><b>Multiplayer</b><span>Free-for-all deathmatch on Cargo with anyone who has this page open. Build your loadout in the Gunsmith.</span><em>Play <i>›</i></em></button>
+      <button class="tile m" id="mpOpen" type="button"><svg class="emb" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="18" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="32" cy="32" r="3" fill="currentColor"/><path d="M32 4v14M32 46v14M4 32h14M46 32h14" stroke="currentColor" stroke-width="2.5"/></svg><div class="tchips"><em class="tchip live"><i></i>Deathmatch · 2 maps</em><em class="tchip">3 loadouts · first to 30</em></div><small>Online</small><b>Multiplayer</b><span>Free-for-all deathmatch on Cargo or the Foundry with anyone who has this page open. Build your loadout in the Gunsmith.</span><em>Play <i>›</i></em></button>
     </div>
     <div class="ms-mp" id="mpPanel" hidden>
       <button class="ms-back" id="mpBack" type="button">‹ Back</button>
-      <h2>Multiplayer <small>Deathmatch · Cargo</small></h2>
+      <h2>Multiplayer <small id="mpSub">Deathmatch · Cargo</small></h2>
       <div class="row2">
         <div class="field"><label for="callsign">Callsign</label><input type="text" id="callsign" maxlength="14" autocomplete="off" spellcheck="false"></div>
         <div class="field"><label for="roomcode">Room code</label><input type="text" id="roomcode" maxlength="16" autocomplete="off" spellcheck="false" value="arena"></div>
       </div>
+      <div class="mapPick" id="mapPick" role="radiogroup" aria-label="Map"><button type="button" data-m="ship" role="radio"><b>Cargo</b><small>Tight container yard · 2–6 players</small></button><button type="button" data-m="foundry" role="radio"><b>Foundry</b><small>The zombies hall · bigger, 4+ players</small></button></div>
       <div class="lo-sec"><div class="lo-title">Loadouts <small>Click one to open and edit it · that one is what you spawn with</small></div><div class="lo-list" id="loList"></div></div>
       <div class="chips" id="matches"></div>
       <button class="go" id="join" disabled>Join match</button>
@@ -5990,7 +5994,7 @@ function clearSolo() {
 function resetSolo() {
   clearSolo();
   player.pos.set(0, 1.6, 20); player.vy = 0; setView(0, 0); player.hp = 100; aiming = false; leanToggle = 0;
-  $('bossbar').hidden = true; resetPerks(); nadeCount = 2; BOX.st = 'idle'; BOX.spr.visible = false; for (const k in AREAS) setArea(k, false); wave = 0; score = 0; kills = 0; spent = 0; boss = null; bossDelay = -1; intermission = false; heads = 0; shotsFired = 0; shotsHit = 0; exoKills = 0; setExo(false); resetGuns(); refillWeapons(); waveGap = 0;
+  $('bossbar').hidden = true; resetPerks(); resetTrap(); nadeCount = 2; BOX.st = 'idle'; BOX.spr.visible = false; for (const k in AREAS) setArea(k, false); wave = 0; score = 0; kills = 0; spent = 0; boss = null; bossDelay = -1; intermission = false; heads = 0; shotsFired = 0; shotsHit = 0; exoKills = 0; setExo(false); resetGuns(); refillWeapons(); waveGap = 0;
   startWave(); updateHud();
 }
 // blood decals on the floor
@@ -6035,7 +6039,7 @@ function killEnemy(e, headshot, dir) {
   corpses.push(e); if (corpses.length > 14) { const c = corpses.shift(); scene.remove(c.root); }
   const pts = e.Z.score * (1 + Math.floor(wave / 3)) + (headshot ? 50 : 0);
   score += pts; kills++; if (headshot) heads++; popPoints(pts, headshot);
-  addXP(e.Z.boss ? 500 : 10 + (headshot ? 5 : 0), e.Z.boss ? 'Golem down' : headshot ? 'Headshot' : ''); if (!knife.on) gunKill(cur); if (e.Z.bloat) bloatBurst(e);
+  addXP(e.Z.boss ? 500 : 10 + (headshot ? 5 : 0), e.Z.boss ? 'Golem down' : headshot ? 'Headshot' : ''); if (!knife.on && !trapKill) gunKill(cur); if (e.Z.bloat) bloatBurst(e);
   if (Math.random() < 0.015 && !e.Z.boss) dropAmmo(e.root.position.x, e.root.position.z);
   if (!exoOn && exoKills < EXO_NEED) { exoKills++; if (exoKills === EXO_NEED) { showBanner('Exo suit charged'); flashSub('Return to the exo pod by the pit and press G'); sfx('streak'); } }
   const now = performance.now(); mkN = now - mkT < 1500 ? mkN + 1 : 1; mkT = now;
@@ -6166,13 +6170,24 @@ const cleanName = s => String(s || '').replace(/[^\p{L}\p{N} _.-]/gu, '').trim()
 const cleanCode = s => String(s || '').toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 16);
 const r2 = v => Math.round(v * 100) / 100;
 
-const avatarGeo = {
-  hips: new THREE.BoxGeometry(0.36, 0.2, 0.24), thigh: new THREE.BoxGeometry(0.15, 0.44, 0.17), shin: new THREE.BoxGeometry(0.13, 0.44, 0.15), boot: new THREE.BoxGeometry(0.14, 0.09, 0.27),
-  torso: new THREE.BoxGeometry(0.44, 0.56, 0.25), vest: new THREE.BoxGeometry(0.48, 0.4, 0.3), neck: new THREE.BoxGeometry(0.12, 0.1, 0.12),
-  head: new THREE.BoxGeometry(0.23, 0.26, 0.25), helmet: new THREE.BoxGeometry(0.28, 0.13, 0.3), visor: new THREE.BoxGeometry(0.22, 0.06, 0.02),
-  upper: new THREE.BoxGeometry(0.12, 0.3, 0.12), fore: new THREE.BoxGeometry(0.1, 0.28, 0.1), gun: new THREE.BoxGeometry(0.07, 0.12, 0.62),
+// ---------- other players: a kitted-out operator holding the gun they actually have out, arms solved onto it every frame ----------
+const AV = {
+  thigh: rbox(0.16, 0.46, 0.18, 0.05).translate(0, -0.23, 0), shin: rbox(0.14, 0.44, 0.15, 0.045).translate(0, -0.21, 0.01), knee: rbox(0.15, 0.13, 0.06, 0.03),
+  boot: rbox(0.14, 0.11, 0.29, 0.04), sole: new THREE.BoxGeometry(0.15, 0.03, 0.3), pelvis: rbox(0.36, 0.2, 0.24, 0.06), belt: new THREE.BoxGeometry(0.38, 0.06, 0.26),
+  pouch: rbox(0.09, 0.11, 0.06, 0.02), torso: rbox(0.4, 0.5, 0.24, 0.08), plate: rbox(0.42, 0.4, 0.09, 0.03), magP: rbox(0.085, 0.13, 0.05, 0.015),
+  strap: new THREE.BoxGeometry(0.06, 0.05, 0.28), pack: rbox(0.3, 0.36, 0.13, 0.04), radio: rbox(0.07, 0.15, 0.05, 0.015), ant: new THREE.CylinderGeometry(0.006, 0.006, 0.32, 5),
+  neck: new THREE.CylinderGeometry(0.06, 0.065, 0.1, 10), head: rbox(0.2, 0.24, 0.22, 0.08), helmet: new THREE.SphereGeometry(0.15, 18, 10, 0, Math.PI * 2, 0, Math.PI * 0.55),
+  rim: new THREE.CylinderGeometry(0.152, 0.152, 0.03, 18, 1, true), ear: new THREE.CylinderGeometry(0.045, 0.045, 0.04, 12), goggle: rbox(0.17, 0.055, 0.04, 0.02), nvg: rbox(0.05, 0.05, 0.06, 0.015),
+  shoulder: new THREE.SphereGeometry(0.075, 12, 8), upper: rbox(0.105, 0.29, 0.11, 0.04).translate(0, -0.145, 0), fore: rbox(0.09, 0.27, 0.095, 0.035).translate(0, -0.135, 0),
+  elbow: new THREE.SphereGeometry(0.052, 10, 6), hand: rbox(0.07, 0.1, 0.09, 0.03).translate(0, -0.04, 0), gunFallback: new THREE.BoxGeometry(0.07, 0.12, 0.62),
 };
-const darkMat = new THREE.MeshLambertMaterial({ color: 0x2b2f36 });
+const AVM = {
+  pants: new THREE.MeshLambertMaterial({ color: 0x3a3d34 }), shirt: new THREE.MeshLambertMaterial({ color: 0x2c3036 }), gear: new THREE.MeshLambertMaterial({ color: 0x23262a }),
+  boot: new THREE.MeshLambertMaterial({ color: 0x1b1a18 }), glove: new THREE.MeshLambertMaterial({ color: 0x161719 }), skin: new THREE.MeshLambertMaterial({ color: 0xb98a6a }),
+  tan: new THREE.MeshLambertMaterial({ color: 0x6b5d45 }),
+};
+const darkMat = AVM.gear;
+const UPPER_L = 0.29, FORE_L = 0.27;
 function nameTag(text, color) {
   const c = document.createElement('canvas'); c.width = 256; c.height = 64; const g = c.getContext('2d');
   g.fillStyle = 'rgba(13,15,18,.7)'; g.fillRect(0, 8, 256, 48);
@@ -6182,33 +6197,106 @@ function nameTag(text, color) {
   const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), depthWrite: false }));
   s.scale.set(1.3, 0.33, 1); s.position.y = 2.25; return s;
 }
+// a gun for the other players: the real model, copied without your hands and your attachment kit, sized to its real length
+const REMOTE_GUNS = {}, GUN_LEN = { pistol: 0.2, viper: 0.2, hornet: 0.21, bulldog: 0.24, mp5: 0.68, ar: 0.88, dmr: 1.02, sg: 0.98, vec: 0.66, sterl: 0.74, hur: 1.08 };
+function cloneVisible(o, skip) { if (!o.visible || skip.has(o) || o.isSprite || o.isLight || o.isPoints) return null; const c = o.clone(false); for (const ch of o.children) { const cc = cloneVisible(ch, skip); if (cc) c.add(cc); } return c; }
+function remoteGunTemplate(i) {
+  if (REMOTE_GUNS[i]) return REMOTE_GUNS[i];
+  const W = WEAPONS[i]; if (!W || !W.model) return null;
+  const skip = new Set([...KIT(), mpHand, mpRHand, armL, armR, pLH, pRH, pArmL, pArmR].flatMap(o => [o, o.userData && o.userData.upper, o.userData && o.userData.elbow, o.userData && o.userData.cuff]).filter(Boolean));
+  const vis = W.model.visible; W.model.visible = true; const g = cloneVisible(W.model, skip); W.model.visible = vis;
+  g.position.set(0, 0, 0); g.rotation.set(0, 0, 0); g.scale.set(1, 1, 1); g.updateMatrixWorld(true);
+  const bb = new THREE.Box3().setFromObject(g), len = Math.max(0.05, bb.max.z - bb.min.z), sc = (GUN_LEN[W.key] || 0.8) / len;
+  // where the hands go, in the gun's own space: firing grip under the trigger, support hand on the handguard
+  const P = isP(i), parts = W.parts;
+  let R, L;
+  if (P) { R = new THREE.Vector3(0.0, -0.075, 0.04); L = new THREE.Vector3(-0.03, -0.085, 0.03); }
+  else if (i === 1) { R = new THREE.Vector3(0, -0.11, 0.07); L = new THREE.Vector3(0, -0.015, -0.38); }
+  else { const t = parts && parts.trig ? parts.trig.position : new THREE.Vector3(0, -0.06, 0); R = new THREE.Vector3(0, t.y - 0.06, t.z + 0.06);
+    const mz = parts && parts.muzzleZ ? parts.muzzleZ : bb.min.z; L = new THREE.Vector3(0, parts && parts.top ? -0.035 : -0.03, Math.max(mz * 0.62, t.z - 0.42)); }
+  g.traverse(o => { if (o.isMesh) { o.castShadow = false; o.frustumCulled = true; o.layers.enable(1); } });
+  return (REMOTE_GUNS[i] = { g, sc, R, L, P, back: bb.max.z, top: bb.max.y });
+}
+function setRemoteGun(r, i) {
+  if (r.wi === i) return; r.wi = i;
+  if (r.gun) { r.aim.remove(r.gun); r.gun = null; }
+  let T = null; try { T = remoteGunTemplate(i); } catch (e) { T = null; }
+  const holder = new THREE.Group(); r.aim.add(holder); r.gun = holder;
+  if (!T) { holder.add(new THREE.Mesh(AV.gunFallback, darkMat)); r.gR = new THREE.Vector3(0.0, -0.09, 0.12); r.gL = new THREE.Vector3(0, -0.04, -0.2); r.pistol = false; holder.position.set(0.1, 0.1, -0.3); return; }
+  const m = T.g.clone(true); m.scale.setScalar(T.sc); holder.add(m); r.pistol = T.P;
+  r.gR = T.R.clone().multiplyScalar(T.sc); r.gL = T.L.clone().multiplyScalar(T.sc);
+  // long guns: butt into the right shoulder pocket, sights at eye height; pistols: pushed out in front at arm's length
+  // place the gun by its firing grip: rifles tucked in at the right side of the chest, pistols pushed out in front
+  if (T.P) holder.position.set(0.02, -0.13, -0.4).sub(r.gR); else holder.position.set(0.12, -0.12, -0.2).sub(r.gR);
+}
 function makeRemote(peer) {
   // a proper body: hitboxes follow the visible shape (head 45, chest 22, arms 18, legs 15 before the gun's multiplier)
   const g = new THREE.Group(); g.rotation.order = 'YXZ';
   const bodyMat = new THREE.MeshLambertMaterial({ color: 0x888888 });
   const visorMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
   const hitParts = [];
-  const part = (geo, mat, parent, x, y, z, rx = 0, rz = 0, zone = null) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.rotation.set(rx, 0, rz); parent.add(m);
+  const part = (geo, mat, parent, x, y, z, rx = 0, rz = 0, zone = null, ry = 0) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.rotation.set(rx, ry, rz); m.castShadow = true; parent.add(m);
     if (zone) { m.userData.remote = { peer, dmg: zone[0], head: zone[1] }; hitParts.push(m); } return m; };
   const LEG = [15], CHEST = [22], ARM = [18], HEAD = [45, true];
-  // legs hang from hip and knee pivots so they can walk
+  // legs hang from hip and knee pivots so they can walk: cargo pants, knee pads, boots
   const legs = [];
   for (const sx of [-1, 1]) { const hip = new THREE.Group(); hip.position.set(sx * 0.1, 0.92, 0); g.add(hip); const knee = new THREE.Group(); knee.position.set(0, -0.44, 0); hip.add(knee);
-    part(avatarGeo.thigh, darkMat, hip, 0, -0.22, 0, 0, 0, LEG); part(avatarGeo.shin, darkMat, knee, 0, -0.21, 0.02, 0, 0, LEG); part(avatarGeo.boot, darkMat, knee, 0, -0.435, -0.04, 0, 0, LEG); legs.push({ hip, knee }); }
-  part(avatarGeo.hips, darkMat, g, 0, 0.98, 0, 0, 0, CHEST);
-  const torso = part(avatarGeo.torso, darkMat, g, 0, 1.28, 0, 0, 0, CHEST); part(avatarGeo.vest, bodyMat, g, 0, 1.33, 0, 0, 0, CHEST);
-  part(avatarGeo.neck, darkMat, g, 0, 1.6, 0, 0, 0, CHEST);
-  const headPivot = new THREE.Group(); headPivot.position.y = 1.6; g.add(headPivot);
-  part(avatarGeo.head, darkMat, headPivot, 0, 0.14, 0, 0, 0, HEAD); part(avatarGeo.helmet, bodyMat, headPivot, 0, 0.26, 0.01, 0, 0, HEAD);
-  part(avatarGeo.visor, visorMat, headPivot, 0, 0.16, -0.13);
-  // arms up in a firing stance, gun shouldered: they pitch with the head so the gun points where they aim
-  part(avatarGeo.upper, bodyMat, headPivot, 0.25, -0.22, -0.06, 0.9, 0.15, ARM); part(avatarGeo.fore, darkMat, headPivot, 0.18, -0.3, -0.3, 1.45, 0.2, ARM);
-  part(avatarGeo.upper, bodyMat, headPivot, -0.25, -0.22, -0.1, 1.0, -0.2, ARM); part(avatarGeo.fore, darkMat, headPivot, -0.1, -0.27, -0.4, 1.5, -0.6, ARM);
-  part(avatarGeo.gun, darkMat, headPivot, 0.1, -0.24, -0.42);
+    part(AV.thigh, AVM.pants, hip, 0, 0, 0, 0, 0, LEG); part(AV.pouch, AVM.gear, hip, sx * 0.085, -0.22, 0.02, 0, 0, null, sx * 0.2);
+    part(AV.shin, AVM.pants, knee, 0, 0, 0, 0, 0, LEG); part(AV.knee, AVM.gear, knee, 0, -0.02, -0.085);
+    part(AV.boot, AVM.boot, knee, 0, -0.42, -0.045, 0, 0, LEG); part(AV.sole, AVM.glove, knee, 0, -0.48, -0.045); legs.push({ hip, knee }); }
+  part(AV.pelvis, AVM.pants, g, 0, 0.98, 0, 0, 0, CHEST); part(AV.belt, AVM.gear, g, 0, 1.06, 0);
+  for (const x of [-0.13, 0.13]) part(AV.pouch, AVM.tan, g, x, 1.02, 0.13);
+  // upper body bends with the aim: a little at the waist, a little at the chest, the rest at the neck and the gun
+  const spine = new THREE.Group(); spine.position.y = 1.04; g.add(spine);
+  const torso = part(AV.torso, AVM.shirt, spine, 0, 0.24, 0, 0, 0, CHEST);
+  part(AV.plate, bodyMat, spine, 0, 0.26, -0.13, 0, 0, CHEST); part(AV.plate, bodyMat, spine, 0, 0.27, 0.12, 0, 0, CHEST);
+  for (const x of [-0.12, 0, 0.12]) part(AV.magP, AVM.tan, spine, x, 0.16, -0.19);
+  for (const x of [-0.13, 0.13]) part(AV.strap, AVM.gear, spine, x, 0.47, 0);
+  part(AV.pack, AVM.gear, spine, 0, 0.27, 0.22); part(AV.radio, AVM.gear, spine, 0.11, 0.42, 0.25); part(AV.ant, AVM.glove, spine, 0.12, 0.62, 0.25, -0.15);
+  const chest = new THREE.Group(); chest.position.y = 0.42; spine.add(chest);
+  part(AV.neck, AVM.skin, chest, 0, 0.07, 0, 0, 0, CHEST);
+  const headPivot = new THREE.Group(); headPivot.position.y = 0.11; chest.add(headPivot);
+  part(AV.head, AVM.skin, headPivot, 0, 0.12, 0, 0, 0, HEAD);
+  part(AV.helmet, bodyMat, headPivot, 0, 0.17, 0.01, 0, 0, HEAD); part(AV.rim, AVM.gear, headPivot, 0, 0.17, 0.01);
+  for (const sx of [-1, 1]) part(AV.ear, AVM.gear, headPivot, sx * 0.115, 0.12, 0.0, 0, Math.PI / 2);
+  part(AV.goggle, visorMat, headPivot, 0, 0.15, -0.115); part(AV.nvg, AVM.gear, headPivot, 0, 0.26, -0.14);
+  // the gun sits on its own pivot in the chest; the arms are solved onto its grips every frame
+  const aim = new THREE.Group(); aim.position.set(0, 0.11, 0); chest.add(aim);
+  const arms = [];
+  for (const sx of [1, -1]) {
+    const S = new THREE.Vector3(sx * 0.2, 0.05, 0.0);
+    part(AV.shoulder, AVM.shirt, chest, S.x, S.y, S.z);
+    const up = part(AV.upper, AVM.shirt, chest, 0, 0, 0, 0, 0, ARM), el = part(AV.elbow, AVM.shirt, chest, 0, 0, 0), fo = part(AV.fore, AVM.shirt, chest, 0, 0, 0, 0, 0, ARM), ha = part(AV.hand, AVM.glove, chest, 0, 0, 0, 0, 0, ARM);
+    arms.push({ S, up, el, fo, ha, side: sx });
+  }
   g.traverse(o => { if (o.isMesh) o.layers.enable(1); });   // thermal scopes see them
   scene.add(g);
-  return { peer, g, headPivot, bodyMat, visorMat, hitParts, legs, torso, ph: 0, spd: 0, lastX: null, lastZ: null, lastY: 0, lastT: 0, tag: null, tagKey: '',
-    samples: [], lastSeq: -1, deaths: null, alive: true, name: 'Someone', color: 0, kills: 0, deathsN: 0, inv: false, seen: false };
+  const r = { peer, g, headPivot, spine, chest, aim, arms, bodyMat, visorMat, hitParts, legs, torso, ph: 0, spd: 0, lastX: null, lastZ: null, lastY: 0, lastT: 0, tag: null, tagKey: '',
+    samples: [], lastSeq: -1, deaths: null, alive: true, name: 'Someone', color: 0, kills: 0, deathsN: 0, inv: false, seen: false, wi: -1, gun: null, kick: 0 };
+  setRemoteGun(r, 1);
+  return r;
+}
+// two-bone arm: shoulder S to target T (both in chest space), elbow pushed down and out toward the pole
+const _rkD = new THREE.Vector3(), _rkP = new THREE.Vector3(), _rkE = new THREE.Vector3(), _rkW = new THREE.Vector3(), _rkT = new THREE.Vector3(), _rkDown = new THREE.Vector3(0, -1, 0), _rkQ = new THREE.Quaternion();
+function solveArm(A, T) {
+  _rkD.copy(T).sub(A.S); let d = _rkD.length(); const a = UPPER_L, b = FORE_L; d = Math.max(Math.abs(a - b) + 0.02, Math.min(a + b - 0.005, d)); _rkD.normalize();
+  _rkP.set(A.side * 0.55, -1, 0.25).normalize(); _rkP.addScaledVector(_rkD, -_rkP.dot(_rkD)).normalize();
+  const ca = (a * a + d * d - b * b) / (2 * a * d), sa = Math.sqrt(Math.max(0, 1 - ca * ca));
+  _rkE.copy(A.S).addScaledVector(_rkD, a * ca).addScaledVector(_rkP, a * sa); _rkW.copy(A.S).addScaledVector(_rkD, d);
+  A.up.position.copy(A.S); A.up.quaternion.setFromUnitVectors(_rkDown, _rkT.copy(_rkE).sub(A.S).normalize());
+  A.el.position.copy(_rkE);
+  A.fo.position.copy(_rkE); A.fo.quaternion.setFromUnitVectors(_rkDown, _rkT.copy(_rkW).sub(_rkE).normalize());
+  A.ha.position.copy(_rkW); A.ha.quaternion.copy(A.fo.quaternion);
+}
+function poseRemote(r, pitch) {
+  // split the look pitch between waist, chest and the gun/head so the whole body leans into high and low shots
+  const p = Math.max(-1.3, Math.min(1.3, pitch));
+  r.spine.rotation.x = p * 0.22; r.chest.rotation.x = p * 0.18; const rest = p - p * 0.4;
+  r.headPivot.rotation.x = rest; r.aim.rotation.x = rest;
+  r.kick = Math.max(0, r.kick - 0.06); r.aim.position.z = r.kick * 0.04; r.aim.rotation.x += r.kick * 0.06;
+  if (!r.gun || !r.gR) return;
+  r.chest.updateMatrixWorld(true);
+  for (const A of r.arms) { _rkT.copy(A.side > 0 ? r.gR : r.gL); r.gun.localToWorld(_rkT); r.chest.worldToLocal(_rkT); solveArm(A, _rkT); }
 }
 function removeRemote(r) {
   scene.remove(r.g); r.bodyMat.dispose(); r.visorMat.dispose();
@@ -6222,6 +6310,7 @@ function ingest(peer) {
   let r = net.remotes.get(peer.peer);
   if (!r) { r = makeRemote(peer.peer); net.remotes.set(peer.peer, r); }
   r.name = cleanName(p.n) || 'Someone';
+  { const wi = Number.isInteger(p.w) && WEAPONS[p.w] ? p.w : 1; if (wi !== r.wi) setRemoteGun(r, wi); }
   r.color = COLORS[(p.c | 0) % COLORS.length];
   const key = r.name + r.color;
   if (r.tagKey !== key) {
@@ -6266,6 +6355,7 @@ function ingest(peer) {
     if (!Array.isArray(s) || s.length < 9) continue;
     const seq = +s[0];
     if (!(seq > r.lastSeq)) continue;
+    r.kick = 1;
     r.lastSeq = seq;
     const a = new THREE.Vector3(+s[1], +s[2], +s[3]), b = new THREE.Vector3(+s[4], +s[5], +s[6]);
     if ([a.x, a.y, a.z, b.x, b.y, b.z].some(v => !isFinite(v))) continue;
@@ -6316,7 +6406,7 @@ function sendPresence(force) {
   if (!force && now - net.sendT < 50) return; // 20 updates a second
   net.sendT = now;
   net.match.presence({
-    n: net.name, c: net.color,
+    n: net.name, c: net.color, w: cur,
     p: [r2(player.pos.x), r2(player.pos.y), r2(player.pos.z)], r: [r2(player.yaw), r2(player.pitch)], l: r2(leanT),
     a: net.alive ? 1 : 0, i: now < net.invUntil ? 1 : 0, hp: Math.ceil(player.hp),
     k: net.kills, d: net.deaths, kb: net.killedBy, s: net.shots,
@@ -6369,7 +6459,7 @@ function animRemoteLegs(r, a, b) {
   r.legs.forEach((L, i) => { const sg = i ? -1 : 1;
     L.hip.rotation.x = sg * s * 0.6 * amp + air * 0.45;                       // + swings the foot forward (they face -z)
     L.knee.rotation.x = -(Math.max(0, sg * c) * 1.0 * amp + air * 0.9 + 0.04); });  // knees only ever bend backward
-  r.torso.position.y = 1.28 - Math.abs(s) * 0.03 * amp;
+  r.spine.position.y = 1.04 - Math.abs(s) * 0.03 * amp;
 }
 function interpRemotes() {
   const now = performance.now();
@@ -6384,7 +6474,7 @@ function interpRemotes() {
     r.g.position.set(x, y - 1.6, z);
     r.g.rotation.y = a.r[0] + dy * f;
     r.g.rotation.z = -((a.l || 0) + ((b.l || 0) - (a.l || 0)) * f) * 0.33;
-    r.headPivot.rotation.x = a.r[1] + (b.r[1] - a.r[1]) * f;
+    poseRemote(r, a.r[1] + (b.r[1] - a.r[1]) * f);
     animRemoteLegs(r, a, b); remoteFootsteps(r);
     r.g.visible = r.alive && !(r.inv && Math.floor(performance.now() / 90) % 2);
   }
@@ -6471,8 +6561,8 @@ function renderLobby(peers) {
   const counts = {}; let here = 0;
   for (const p of peers) {
     if (p.kind !== 'viewer') continue; here++;
-    const m = cleanCode(p.presence && p.presence.m);
-    if (m) counts[m] = (counts[m] || 0) + 1;
+    const m = cleanCode(p.presence && p.presence.m), mp = p.presence && p.presence.mp === 'foundry' ? 'foundry' : 'ship';
+    if (m) counts[m + '|' + mp] = (counts[m + '|' + mp] || 0) + 1;
   }
   if (net.lobby && net.lobby.connected()) {
     $('netstatus').className = 'status ok';
@@ -6481,8 +6571,8 @@ function renderLobby(peers) {
   const el = $('matches'); el.textContent = '';
   for (const [code, n] of Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 6)) {
     const b = document.createElement('button'); b.type = 'button';
-    b.textContent = code + ' · ' + n + ' playing';
-    b.onclick = () => { $('roomcode').value = code; };
+    const [cd, mp] = code.split('|'); b.textContent = cd + ' · ' + (mp === 'foundry' ? 'Foundry' : 'Cargo') + ' · ' + n + ' playing';
+    b.onclick = () => { $('roomcode').value = cd; pickMap(mp); };
     el.append(b);
   }
 }
@@ -6492,8 +6582,9 @@ async function joinMatch() {
   net.name = cleanName($('callsign').value) || net.name; $('callsign').value = net.name; store.set('fb-name', net.name);
   $('join').disabled = true; $('netstatus').textContent = 'Joining ' + code + '…';
   try {
-    if (net.match && net.code !== code) { await net.match.leave(); net.match = null; }
-    if (!net.match) net.match = await net.lobby.join('fb-' + code);
+    const mapK = net.mapSel === 'foundry' ? 'foundry' : 'ship';
+    if (net.match && (net.code !== code || net.mapJ !== mapK)) { await net.match.leave(); net.match = null; }
+    if (!net.match) { net.match = await net.lobby.join('fb-' + code + (mapK === 'foundry' ? '-f' : '')); net.mapJ = mapK; }
   } catch (e) {
     $('netstatus').className = 'status'; $('netstatus').textContent = 'Couldn\'t join that room. Try again in a moment.'; $('join').disabled = false; return;
   }
@@ -6507,9 +6598,9 @@ async function joinMatch() {
     for (const p of ch.updated) ingest(p);
     for (const p of ch.left) { const r = net.remotes.get(p.peer); if (r) removeRemote(r); }
   }, () => { leaveMatch(); $('netstatus').textContent = 'The match connection closed.'; });
-  net.lobby.presence({ m: code }).catch(() => {});
+  net.lobby.presence({ m: code, mp: net.mapJ }).catch(() => {});
   $('join').disabled = false;
-  mode = 'online'; clearSolo(); setMap('ship');
+  mode = 'online'; clearSolo(); setMap(net.mapJ === 'foundry' ? 'foundry' : 'ship'); for (const k in AREAS) setArea(k, false); try { resetTrap(); } catch (e) {}
   net.kills = 0; net.deaths = 0; net.killedBy = ''; net.shots = []; net.feed = []; renderFeed(); net.mi = 0; net.ended = 0; net.streak = 0; net.bestStreak = 0; net.nades = []; net.bx = []; matchXP = 0; $('mpEnd').hidden = true;
   respawn();
   setHudMode();
@@ -6950,11 +7041,289 @@ function bloatBurst(e) {
 }
 
 // =====================================================================================================================
+// ---------- Foundry, second pass: dressed side yards, moonlight through the windows, and the ladle trap ----------
+// =====================================================================================================================
+const FZ = new THREE.Group(); scene.add(FZ); fAdd(FZ);
+function zm(geo, mat, x, y, z, ry = 0, o = {}) {
+  const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.rotation.set(o.rx || 0, ry, o.rz || 0);
+  m.castShadow = o.cast !== false; m.receiveShadow = o.recv !== false; m.matrixAutoUpdate = false; m.updateMatrix(); (o.parent || FZ).add(m); if (o.hit) fWorld(m); return m;
+}
+function zsolid(x, z, w, d, h, mat, y0 = 0) { const m = zm(new THREE.BoxGeometry(w, h, d), mat, x, y0 + h / 2, z, 0, { hit: true }); fBlock(x - w / 2, x + w / 2, z - d / 2, z + d / 2, y0 + h); return m; }
+const ZMAT = {
+  water: new THREE.MeshStandardMaterial({ color: 0x2a6a74, roughness: 0.06, metalness: 0.5, emissive: 0x0b3a40, emissiveIntensity: 0.7, transparent: true, opacity: 0.92,
+    map: canvasTex(128, 128, (g) => { g.fillStyle = '#3d7f88'; g.fillRect(0, 0, 128, 128); for (let i = 0; i < 90; i++) { g.strokeStyle = `rgba(200,250,255,${0.05 + Math.random() * 0.12})`; g.lineWidth = 1 + Math.random() * 2; g.beginPath(); const x = Math.random() * 128, y = Math.random() * 128; g.ellipse(x, y, 4 + Math.random() * 14, 2 + Math.random() * 5, Math.random() * 3, 0, 7); g.stroke(); } }) }),
+  puddle: new THREE.MeshStandardMaterial({ color: 0x1a1e24, roughness: 0.12, metalness: 0.85, transparent: true, opacity: 0.45, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 }),
+  blueBar: new THREE.MeshBasicMaterial({ color: 0x9fdcff }), warmBar: new THREE.MeshBasicMaterial({ color: 0xffc98a }),
+  red: new THREE.MeshBasicMaterial({ color: 0xff3020 }), green: new THREE.MeshBasicMaterial({ color: 0x40ff70 }), dimRed: new THREE.MeshBasicMaterial({ color: 0x401010 }),
+  paint: new THREE.MeshStandardMaterial({ color: 0x8a3020, roughness: 0.7, metalness: 0.4 }), olive: new THREE.MeshStandardMaterial({ color: 0x4a5236, roughness: 0.7, metalness: 0.3 }),
+  rust: new THREE.MeshStandardMaterial({ color: 0x5a3622, roughness: 0.85, metalness: 0.4 }), tyre: new THREE.MeshStandardMaterial({ color: 0x141414, roughness: 0.9 }),
+  sack: new THREE.MeshStandardMaterial({ color: 0x8c7a5a, roughness: 1 }), glass: new THREE.MeshBasicMaterial({ color: 0xffd9a0 }),
+  chain: new THREE.MeshStandardMaterial({ color: 0x3a3c40, metalness: 0.8, roughness: 0.4 }),
+  shaft: new THREE.MeshBasicMaterial({ map: TX.glowFade, color: 0x9fb8e8, transparent: true, opacity: 0.11, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, fog: false }),
+  patch: new THREE.MeshBasicMaterial({ color: 0x7088b8, transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }),
+  coolCone: new THREE.MeshBasicMaterial({ map: TX.glowFade, color: 0xbfe6ff, transparent: true, opacity: 0.06, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, fog: false }),
+};
+ZMAT.water.map.wrapS = ZMAT.water.map.wrapT = THREE.RepeatWrapping; ZMAT.water.map.repeat.set(2, 2);
+const puddle = (x, z, rx, rz, a = 0) => { const m = zm(new THREE.CircleGeometry(1, 28), ZMAT.puddle, x, 0.016, z, a, { rx: -Math.PI / 2, cast: false }); m.scale.set(rx, rz, 1); m.updateMatrix(); return m; };
+const zChain = (x, z, top, len, hook = true) => { for (let i = 0; i < len / 0.12; i++) zm(new THREE.TorusGeometry(0.045, 0.012, 4, 8), ZMAT.chain, x, top - i * 0.12, z, i % 2 ? Math.PI / 2 : 0, { cast: false, recv: false }); if (hook) zm(new THREE.TorusGeometry(0.11, 0.03, 6, 12, Math.PI * 1.4), MW.steel, x, top - len - 0.12, z, 0, { rz: Math.PI * 0.8, cast: false }); };
+const hangLamp = (x, z, top, low, warm) => {
+  zm(new THREE.CylinderGeometry(0.015, 0.015, top - low, 4), MW.dark, x, (top + low) / 2, z, 0, { cast: false });
+  zm(new THREE.ConeGeometry(0.42, 0.32, 16, 1, true), new THREE.MeshStandardMaterial({ color: 0x2d3036, side: THREE.DoubleSide, metalness: 0.5, roughness: 0.5 }), x, low, z, 0, { cast: false });
+  zm(new THREE.SphereGeometry(0.12, 10, 6), warm ? ZMAT.glass : ZMAT.blueBar, x, low - 0.12, z, 0, { cast: false });
+  zm(new THREE.ConeGeometry(1.8, low - 0.1, 24, 1, true), warm ? MW.cone : ZMAT.coolCone, x, (low - 0.1) / 2, z, 0, { cast: false, recv: false });
+};
+// steam: a small private pool of sprites, so it never steals the gun smoke
+const STEAM = [], STEAM_EM = [];
+for (let i = 0; i < 26; i++) { const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: smokeTex, color: 0xdfe8ee, transparent: true, depthWrite: false, opacity: 0 })); s.visible = false; FZ.add(s); STEAM.push({ s, v: new THREE.Vector3(), life: 0, max: 1, sz: 1 }); }
+let steamHead = 0;
+function steamPuff(x, y, z, up, sz, life) { const o = STEAM[steamHead]; steamHead = (steamHead + 1) % STEAM.length; o.s.position.set(x + (Math.random() - 0.5) * 0.4, y, z + (Math.random() - 0.5) * 0.4); o.v.set((Math.random() - 0.5) * 0.3, up, (Math.random() - 0.5) * 0.3); o.life = o.max = life; o.sz = sz; o.s.visible = true; }
+
+// ---- Cooling Yard: a quench tank under a grate, a pipe rack, the big extractor fan, shelving, chains and steam ----
+{
+  const conc = MW.conc, cx = 33.5, cz = 10.5, W = 5, D = 4, H = 1.0;
+  for (const [x, z, w, d] of [[cx, cz - D / 2 + 0.15, W, 0.3], [cx, cz + D / 2 - 0.15, W, 0.3], [cx - W / 2 + 0.15, cz, 0.3, D], [cx + W / 2 - 0.15, cz, 0.3, D]]) zm(new THREE.BoxGeometry(w, H, d), conc, x, H / 2, z, 0, { hit: true });
+  fBlock(cx - W / 2, cx + W / 2, cz - D / 2, cz + D / 2, H);   // one block: you stand on the grate, the infected can still reach you
+  for (const [x, z, w, d] of [[cx, cz - D / 2 + 0.15, W + 0.04, 0.34], [cx, cz + D / 2 - 0.15, W + 0.04, 0.34], [cx - W / 2 + 0.15, cz, 0.34, D], [cx + W / 2 - 0.15, cz, 0.34, D]]) zm(new THREE.BoxGeometry(w, 0.06, d), MW.yellow, x, H + 0.03, z, 0, { cast: false });
+  const water = zm(new THREE.PlaneGeometry(W - 0.6, D - 0.6), ZMAT.water, cx, 0.72, cz, 0, { rx: -Math.PI / 2, cast: false }); water.userData.anim = true;
+  const gr = new THREE.MeshStandardMaterial({ map: rep(TX.grate, 6, 5), alphaTest: 0.5, side: THREE.DoubleSide, color: 0x6a7078, metalness: 0.7, roughness: 0.5 });
+  zm(new THREE.PlaneGeometry(W - 0.6, D - 0.6), gr, cx, H - 0.02, cz, 0, { rx: -Math.PI / 2, cast: false });
+  for (let i = 1; i < 5; i++) zm(new THREE.BoxGeometry(0.06, 0.1, D - 0.6), MW.steel, cx - W / 2 + 0.3 + i * (W - 0.6) / 5, H - 0.07, cz, 0, { cast: false });
+  zm(new THREE.PlaneGeometry(1.7, 0.42), new THREE.MeshStandardMaterial({ map: signTex('QUENCH 1', '#e0b020', '#151518', 256, 64, 'bold 30px "IBM Plex Mono", monospace') }), cx, 0.55, cz - D / 2 - 0.01, Math.PI, { cast: false });
+  STEAM_EM.push({ x: cx - 1, y: 1.1, z: cz, area: 'east', rate: 3, up: 0.9, sz: 1.6, life: 2.6 }, { x: cx + 1.2, y: 1.1, z: cz + 0.6, area: 'east', rate: 2, up: 0.8, sz: 1.3, life: 2.4 });
+  // the feed pipe from the rack above, with a valve wheel
+  zm(new THREE.CylinderGeometry(0.16, 0.16, 4.4, 12), MW.pipe2, cx + 1.6, 3.6, cz + 1.3, 0, { cast: false });
+  zm(new THREE.TorusGeometry(0.28, 0.04, 6, 16), ZMAT.paint, cx + 1.6, 2.2, cz + 1.05, 0, { cast: false });
+  // pipe rack along the yard at ceiling height
+  for (const [y, z, r, m] of [[5.9, -1.3, 0.22, MW.pipe], [5.9, -0.7, 0.16, MW.pipe2], [6.3, -1.0, 0.28, MW.dark]]) zm(new THREE.CylinderGeometry(r, r, 17, 12), m, 35, y, z, 0, { rz: Math.PI / 2, cast: false });
+  zm(new THREE.CylinderGeometry(0.22, 0.22, 13, 12), MW.pipe, 34.4, 5.9, 5.2, 0, { rx: Math.PI / 2, cast: false });
+  zm(new THREE.CylinderGeometry(0.16, 0.16, 11, 12), MW.pipe2, cx + 1.6, 5.8, 6.4, 0, { rx: Math.PI / 2, cast: false });
+  for (let x = 28; x <= 42; x += 3.5) zm(new THREE.BoxGeometry(0.08, 0.9, 1.2), MW.steel, x, 6.3, -1, 0, { cast: false });
+  // the extractor fan in the outer wall: spinning blades and a cold shaft of light falling through it
+  const fan = new THREE.Group(); fan.position.set(43.3, 4.2, 9.6); fan.rotation.y = -Math.PI / 2; FZ.add(fan);
+  const fr = new THREE.Mesh(new THREE.TorusGeometry(1.55, 0.14, 8, 32), MW.steel); fan.add(fr);
+  const back = new THREE.Mesh(new THREE.CircleGeometry(1.5, 32), new THREE.MeshBasicMaterial({ color: 0x8fb4d8 })); back.position.z = -0.1; fan.add(back);
+  const blades = new THREE.Group(); fan.add(blades); for (let i = 0; i < 5; i++) { const b = new THREE.Mesh(new THREE.BoxGeometry(0.34, 1.35, 0.04), MW.dark); b.position.y = 0.7; const p = new THREE.Group(); p.rotation.z = i / 5 * Math.PI * 2; b.rotation.y = 0.4; p.add(b); blades.add(p); }
+  blades.add(new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.2, 14).rotateX(Math.PI / 2), MW.steel));
+  for (let i = -3; i <= 3; i++) { const g0 = new THREE.Mesh(new THREE.BoxGeometry(0.03, 3.0 * Math.cos(i / 3.4), 0.03), MW.steel); g0.position.set(i * 0.42, 0, 0.1); fan.add(g0); }
+  FZ.userData.fan = blades;
+  { const L = 9, g = new THREE.BoxGeometry(2.6, L, 2.6); g.translate(0, -L / 2, 0); const m = new THREE.Mesh(g, ZMAT.coolCone); m.position.set(43.2, 4.6, 9.6); m.rotation.z = -1.0; FZ.add(m); }
+  // shelving along the north wall, loaded with cooled billets and small drums
+  { const x0 = 28.6, x1 = 37.6, z = -2.95;
+    for (let x = x0; x <= x1 + 0.01; x += 3) for (const dz of [-0.36, 0.36]) zm(new THREE.BoxGeometry(0.08, 2.6, 0.08), new THREE.MeshStandardMaterial({ color: 0x2a5ea8, metalness: 0.5, roughness: 0.5 }), x, 1.3, z + dz, 0, { cast: false });
+    for (const y of [0.15, 1.0, 1.85]) zm(new THREE.BoxGeometry(x1 - x0 + 0.1, 0.06, 0.8), MW.steel, (x0 + x1) / 2, y, z);
+    for (let x = x0 + 0.6; x < x1; x += 0.95) for (const y of [0.25, 1.1, 1.95]) { if (Math.random() < 0.25) continue; if (Math.random() < 0.3) zm(new THREE.CylinderGeometry(0.22, 0.22, 0.6, 12), drumMats[(x * 3 | 0) % 3][0], x, y + 0.3, z); else for (let k = 0; k < 2 + (Math.random() * 3 | 0); k++) zm(new THREE.BoxGeometry(0.7, 0.14, 0.22), MW.cold, x, y + 0.07 + k * 0.15, z + (k % 2 ? 0.12 : -0.12)); }
+    fBlock(x0 - 0.1, x1 + 0.1, z - 0.45, z + 0.45, 2.6); }
+  // chains with hooks off the rack, cold strip lights, drains, puddles, a second steam vent by the tanks
+  zChain(30, 4.5, 6.9, 3.2); zChain(38.5, 15, 6.9, 2.4); zChain(36.5, 18.5, 6.9, 3.6);
+  for (const z of [-3.44, 21.44]) for (const x of [30, 36, 42]) zm(new THREE.BoxGeometry(1.6, 0.08, 0.06), ZMAT.blueBar, x, 3.1, z, 0, { cast: false });
+  for (const [x, z] of [[29.5, 14.5], [38.6, -0.4]]) { zm(new THREE.PlaneGeometry(0.9, 0.9), new THREE.MeshStandardMaterial({ map: rep(TX.grate, 1, 1), alphaTest: 0.5, color: 0x2a2d32, metalness: 0.7 }), x, 0.02, z, 0, { rx: -Math.PI / 2, cast: false }); zm(new THREE.PlaneGeometry(0.86, 0.86), MW.black, x, 0.012, z, 0, { rx: -Math.PI / 2, cast: false }); STEAM_EM.push({ x, y: 0.1, z, area: 'east', rate: 1.6, up: 1.4, sz: 1.2, life: 2 }); }
+  puddle(30.2, 12.6, 1.4, 0.8, 0.3); puddle(37.5, 16.2, 1.1, 0.7, -0.4); puddle(40.2, 9.5, 1.6, 1.0, 1.1); puddle(28.6, 6, 0.8, 0.5);
+  hangLamp(30, 18, 7, 5.4, false); hangLamp(38.5, 4.2, 7, 5.4, false);
+}
+
+// ---- Rail Yard: an ore car, buffer stop, signal, switch house, sleepers, warm hanging lamps ----
+{
+  // ore wagon on the track, heaped with scrap
+  const cz = -1.3, L = 3.0;
+  for (const z of [cz - 0.9, cz + 0.9]) for (const x of [-37.2, -34.8]) zm(new THREE.CylinderGeometry(0.34, 0.34, 0.14, 14), MW.dark, x, 0.36, z, 0, { rz: Math.PI / 2 });
+  zm(new THREE.BoxGeometry(2.3, 0.3, L - 0.2), MW.dark, -36, 0.62, cz);
+  zm(new THREE.BoxGeometry(2.6, 1.15, L), ZMAT.rust, -36, 1.35, cz, 0, { hit: true });
+  for (let i = -1; i <= 1; i++) for (const s of [-1, 1]) zm(new THREE.BoxGeometry(0.04, 1.1, 0.1), MW.steel, -36 + s * 1.32, 1.35, cz + i * 0.9, 0, { cast: false });
+  for (let i = 0; i < 14; i++) { const r = Math.random(); zm(r < 0.4 ? new THREE.BoxGeometry(0.3 + Math.random() * 0.6, 0.12, 0.2 + Math.random() * 0.4) : r < 0.7 ? new THREE.CylinderGeometry(0.06, 0.06, 0.7 + Math.random() * 0.6, 8) : new THREE.IcosahedronGeometry(0.22 + Math.random() * 0.2, 0), [MW.cold, MW.steel, ZMAT.rust][i % 3], -36 + (Math.random() - 0.5) * 2, 1.95 + Math.random() * 0.25, cz + (Math.random() - 0.5) * 2.4, Math.random() * 6, { rz: Math.random() * 2, cast: false }); }
+  fBlock(-37.3, -34.7, cz - L / 2, cz + L / 2, 1.95);
+  // buffer stop at the end of the line
+  zm(new THREE.BoxGeometry(2.6, 0.9, 0.5), new THREE.MeshStandardMaterial({ map: TX.hazard, roughness: 0.6 }), -36, 0.75, -17.1, 0, { hit: true });
+  for (const x of [-36.9, -35.1]) zm(new THREE.CylinderGeometry(0.16, 0.16, 0.5, 12), MW.steel, x, 0.8, -16.65, 0, { rx: Math.PI / 2 });
+  zm(new THREE.SphereGeometry(0.1, 10, 6), ZMAT.red, -36, 1.35, -17.1, 0, { cast: false }); fBlock(-37.3, -34.7, -17.5, -16.4, 1.2);
+  // signal post
+  zm(new THREE.CylinderGeometry(0.07, 0.09, 3.6, 10), MW.dark, -33.2, 1.8, -16.6, 0, { hit: true }); fBlock(-33.4, -33.0, -16.8, -16.4, 3.6);
+  zm(new THREE.BoxGeometry(0.4, 0.9, 0.3), MW.dark, -33.2, 3.5, -16.45);
+  FZ.userData.sigR = zm(new THREE.CircleGeometry(0.11, 14), ZMAT.red, -33.2, 3.75, -16.29, 0, { cast: false }); FZ.userData.sigG = zm(new THREE.CircleGeometry(0.11, 14), ZMAT.dimRed, -33.2, 3.4, -16.29, 0, { cast: false });
+  // switch house in the north-west corner: lit window, door, a sign
+  zsolid(-42.1, -16.2, 2.6, 2.4, 2.8, new THREE.MeshStandardMaterial({ map: rep(TX.corr, 2, 1), color: 0x6a7058, roughness: 0.7, metalness: 0.4 }));
+  zm(new THREE.BoxGeometry(2.8, 0.12, 2.6), MW.dark, -42.1, 2.86, -16.2);
+  zm(new THREE.PlaneGeometry(1.1, 0.6), ZMAT.glass, -40.79, 1.75, -16.6, Math.PI / 2, { cast: false });
+  zm(new THREE.PlaneGeometry(0.8, 1.9), MW.dark, -42.4, 0.95, -14.99, 0, { cast: false });
+  zm(new THREE.PlaneGeometry(1.4, 0.32), new THREE.MeshStandardMaterial({ map: signTex('SWITCH 3', '#e0b020', '#151518', 256, 64, 'bold 30px "IBM Plex Mono", monospace') }), -42.1, 2.45, -14.99, 0, { cast: false });
+  // sleepers stacked on pallets, a pile of tyres, oil drums
+  for (let l = 0; l < 4; l++) for (let i = 0; i < 4; i++) zm(new THREE.BoxGeometry(2.4, 0.16, 0.24), new THREE.MeshStandardMaterial({ color: 0x3a2a1e, roughness: 1 }), -41.4, 0.2 + l * 0.17, 2.6 + (i - 1.5) * 0.3 + (l % 2) * 0.05, 0, { cast: l === 3 });
+  zm(new THREE.BoxGeometry(2.5, 0.12, 1.3), new THREE.MeshStandardMaterial({ color: 0x6b5235, roughness: 0.9 }), -41.4, 0.06, 2.6); fBlock(-42.65, -40.15, 1.95, 3.25, 0.85);
+  for (const [x, z, y] of [[-29.4, 4.6, 0.12], [-29.4, 4.6, 0.36], [-28.8, 3.9, 0.12]]) zm(new THREE.TorusGeometry(0.34, 0.13, 8, 16), ZMAT.tyre, x, y, z, 0, { rx: Math.PI / 2 });
+  fBlock(-29.9, -28.3, 3.4, 5.1, 0.5);
+  hangLamp(-36, -13.5, 7, 5.3, true); hangLamp(-31, -6, 7, 5.3, true); hangLamp(-36, 3.8, 7, 5.3, true);
+  puddle(-32.5, -9, 1.5, 0.9, 0.4); puddle(-39.6, -6.5, 1.0, 0.6); puddle(-30.5, 1.5, 1.2, 0.7, -0.6);
+  zm(new THREE.PlaneGeometry(2.6, 0.5), new THREE.MeshStandardMaterial({ map: signTex('PLATFORM 3 · NO PASSENGERS', '#1b1d22', '#e8b020', 512, 96, 'bold 32px "IBM Plex Mono", monospace') }), -26.6, 3.8, -8, -Math.PI / 2, { cast: false });
+}
+
+// ---- Main hall: moonlight shafts through the clerestory, puddles, a forklift, sacks, chains, vents, the safety board ----
+{
+  const d = new THREE.Vector3(14, -26, -12).normalize(), up = new THREE.Vector3(0, -1, 0);
+  for (const [x, z] of [[-25.2, -15], [-25.2, -3], [-25.2, 9.5], [-9, 25.2], [6, 25.2], [17, 25.2]]) {
+    const t = 7.9 / -d.y, L = t, g = new THREE.BoxGeometry(2.4, L, 0.7); g.translate(0, -L / 2, 0);
+    const m = new THREE.Mesh(g, ZMAT.shaft); m.position.set(x, 7.9, z); m.quaternion.setFromUnitVectors(up.clone().negate(), d.clone().negate()); m.renderOrder = 2; FZ.add(m);
+    const fx = x + d.x * t, fz = z + d.z * t;
+    if (Math.abs(fx) < 25 && Math.abs(fz) < 25) { const p = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 1.4), ZMAT.patch); p.rotation.set(-Math.PI / 2, 0, Math.atan2(d.x, d.z)); p.position.set(fx, 0.02, fz); FZ.add(p); }
+  }
+  puddle(-6.5, 10.5, 1.6, 0.8, 0.2); puddle(7.5, -7.5, 1.2, 0.7, -0.5); puddle(-15.5, -3, 1.0, 0.6, 1); puddle(14.5, 9.5, 1.4, 0.9, 0.7); puddle(-3.5, 19.5, 0.9, 0.5); puddle(21.5, -20.5, 1.3, 0.8, 0.3);
+  // forklift parked by the furnace, forks down with a crate on them
+  { const F = new THREE.Group(); F.position.set(9.6, 0, -20.4); FZ.add(F); const y = new THREE.MeshStandardMaterial({ color: 0xd8a020, roughness: 0.55, metalness: 0.3 });
+    const f = (geo, mat, x, yy, z, rx = 0) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, yy, z); m.rotation.x = rx; m.castShadow = m.receiveShadow = true; F.add(m); return m; };
+    f(new THREE.BoxGeometry(1.25, 0.8, 2.1), y, 0, 0.75, 0.2); f(new THREE.BoxGeometry(1.2, 0.55, 0.6), MW.dark, 0, 0.95, 1.1);   // body, counterweight
+    f(new THREE.BoxGeometry(0.5, 0.12, 0.45), MW.dark, 0, 1.2, 0.35); f(new THREE.BoxGeometry(0.5, 0.5, 0.08), MW.dark, 0, 1.45, 0.58);   // seat
+    for (const sx of [-0.55, 0.55]) for (const sz of [-0.55, 0.85]) f(new THREE.BoxGeometry(0.06, 1.4, 0.06), MW.dark, sx, 1.85, sz);
+    f(new THREE.BoxGeometry(1.2, 0.06, 1.5), MW.dark, 0, 2.56, 0.15);
+    for (const sx of [-0.62, 0.62]) for (const sz of [-0.55, 0.85]) f(new THREE.CylinderGeometry(0.3, 0.3, 0.22, 16).rotateZ(Math.PI / 2), ZMAT.tyre, sx, 0.3, sz);
+    for (const sx of [-0.4, 0.4]) f(new THREE.BoxGeometry(0.08, 2.4, 0.12), MW.dark, sx, 1.3, -0.95);
+    for (const sx of [-0.3, 0.3]) f(new THREE.BoxGeometry(0.12, 0.05, 1.2), MW.steel, sx, 0.12, -1.6);
+    f(new THREE.BoxGeometry(1.2, 1.2, 1.2), MW.crate, 0, 0.75, -1.65);
+    F.rotation.y = Math.PI / 2; fBlock(7.4, 11.05, -21.05, -19.75, 2.0); F.traverse(o => { if (o.isMesh) fWorld(o); }); }
+  // sacks on a pallet in the north-west corner
+  { const x = -20.6, z = -21.8; zm(new THREE.BoxGeometry(1.6, 0.14, 1.6), new THREE.MeshStandardMaterial({ color: 0x6b5235, roughness: 0.9 }), x, 0.07, z);
+    for (let l = 0; l < 3; l++) for (let i = 0; i < 3; i++) zm(new THREE.BoxGeometry(0.72, 0.3, 0.46), ZMAT.sack, x + (l % 2 ? (i - 1) * 0.5 : 0), 0.29 + l * 0.3, z + (l % 2 ? 0 : (i - 1) * 0.5), l % 2 ? Math.PI / 2 : 0.05 * (i - 1));
+    fBlock(x - 0.8, x + 0.8, z - 0.8, z + 0.8, 1.05); }
+  // chains hanging off the gantry, steam from vents by the conveyor, floor drains
+  zChain(-6, 0, 8.9, 2.6); zChain(6.5, 0, 8.9, 3.4); zChain(-15, 0, 8.9, 1.8, false);
+  for (const [x, z] of [[21.2, -9], [15, 8.5], [-9.5, -18.8]]) { zm(new THREE.PlaneGeometry(0.8, 0.8), new THREE.MeshStandardMaterial({ map: rep(TX.grate, 1, 1), alphaTest: 0.5, color: 0x2a2d32, metalness: 0.7 }), x, 0.02, z, 0, { rx: -Math.PI / 2, cast: false }); zm(new THREE.PlaneGeometry(0.76, 0.76), MW.black, x, 0.012, z, 0, { rx: -Math.PI / 2, cast: false }); STEAM_EM.push({ x, y: 0.1, z, area: 'main', rate: 1.4, up: 1.3, sz: 1.3, life: 2.2 }); }
+  // the safety board on the north wall
+  zm(new THREE.PlaneGeometry(2.6, 1.3), new THREE.MeshBasicMaterial({ map: canvasTex(512, 256, (g) => { g.fillStyle = '#163a22'; g.fillRect(0, 0, 512, 256); g.strokeStyle = '#e8e2d6'; g.lineWidth = 6; g.strokeRect(8, 8, 496, 240); g.fillStyle = '#e8e2d6'; g.textAlign = 'center'; g.font = 'bold 34px "IBM Plex Mono", monospace'; g.fillText('THIS PLANT HAS WORKED', 256, 64); g.fillStyle = '#ffd040'; g.font = 'bold 120px "IBM Plex Mono", monospace'; g.fillText('0', 256, 178); g.fillStyle = '#e8e2d6'; g.font = 'bold 30px "IBM Plex Mono", monospace'; g.fillText('DAYS WITHOUT AN INCIDENT', 256, 228); }), color: 0xb8b8b8 }), -19.5, 3.4, -25.43, 0, { cast: false });
+}
+
+// ---- the ladle trap: pull the lever by the pit, the ladle tips, molten metal pours and burns every infected around it ----
+const TRAP = { x: 5.0, z: 2.6, cost: 1000, dur: 6, cool: 40, st: 'idle', t: 0, R: 6.8, lever: null, stream: null, tilt: 0 };
+let nearTrap = false, trapKill = false;
+{
+  const G = new THREE.Group(); G.position.set(TRAP.x, 0, TRAP.z); G.rotation.y = Math.PI / 2; FZ.add(G);
+  const b = new THREE.Mesh(new THREE.BoxGeometry(1.0, 1.15, 0.55), new THREE.MeshStandardMaterial({ color: 0x2a2d33, metalness: 0.6, roughness: 0.45 })); b.position.y = 0.575; b.castShadow = b.receiveShadow = true; G.add(b); fWorld(b);
+  const face = new THREE.Mesh(new THREE.PlaneGeometry(0.86, 0.5), new THREE.MeshBasicMaterial({ map: canvasTex(256, 150, (g) => { g.fillStyle = '#1a0c06'; g.fillRect(0, 0, 256, 150); g.strokeStyle = '#ff8a1f'; g.lineWidth = 5; g.strokeRect(6, 6, 244, 138); g.fillStyle = '#ff8a1f'; g.textAlign = 'center'; g.font = 'bold 34px "IBM Plex Mono", monospace'; g.fillText('LADLE', 128, 52); g.font = 'bold 26px "IBM Plex Mono", monospace'; g.fillText('POUR', 128, 86); g.fillStyle = '#ffd27a'; g.font = '600 22px "IBM Plex Mono", monospace'; g.fillText('◆ 1000', 128, 124); }) }));
+  face.position.set(0, 0.82, 0.281); G.add(face);
+  for (const s of [-1, 1]) { const st = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.3, 0.06), MW.hazard); st.position.set(s * 0.52, 1.0, 0); G.add(st); }
+  const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 6), new THREE.MeshBasicMaterial({ color: 0x40ff70 })); lamp.position.set(0.36, 1.2, 0.1); G.add(lamp); TRAP.lamp = lamp;
+  const lv = new THREE.Group(); lv.position.set(-0.18, 1.15, 0.05); G.add(lv); TRAP.lever = lv;
+  const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.55, 8), MW.steel); arm.position.y = 0.27; lv.add(arm);
+  const knob = new THREE.Mesh(new THREE.SphereGeometry(0.075, 12, 8), new THREE.MeshStandardMaterial({ color: 0xd8322a, roughness: 0.4 })); knob.position.y = 0.56; lv.add(knob);
+  fBlock(TRAP.x - 0.3, TRAP.x + 0.3, TRAP.z - 0.52, TRAP.z + 0.52, 1.15);
+  // the pour: a glowing column from the ladle's lip into the pit, placed every frame while it runs
+  const s = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.34, 1, 14, 1, true), MW.molten); s.visible = false; FZ.add(s); TRAP.stream = s;
+  const fire = new THREE.Mesh(new THREE.RingGeometry(3.0, TRAP.R, 48).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0xff6a18, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false })); fire.position.y = 0.05; FZ.add(fire); TRAP.fire = fire;
+}
+function trapPrompt() {
+  const cash = score - spent;
+  if (TRAP.st === 'pour') return setPrompt(`<div class="ph"><span class="pt">Ladle pour</span><span class="pc own">Pouring</span></div><div class="pn">Stay off the rim</div><div class="pd">Everything inside the ring burns.</div>`);
+  if (TRAP.st === 'cool') return setPrompt(`<div class="ph"><span class="pt">Ladle pour</span><span class="pc own">${Math.ceil(TRAP.t)}s</span></div><div class="pn">Refilling</div><div class="pd">The ladle is filling back up from the furnace.</div>`);
+  setPrompt(`<div class="ph"><span class="pt">Ladle pour</span><span class="pc${cash >= TRAP.cost ? '' : ' no'}">${fmt(TRAP.cost)}</span></div><div class="pn"><kbd>${IK()}</kbd>Pull the lever</div><div class="pd">The ladle tips into the pit for ${TRAP.dur} s and burns every infected around it. Stay out of the ring yourself.</div>${cash >= TRAP.cost ? '' : `<div class="pd no">Need ${fmt(TRAP.cost - cash)} more</div>`}`);
+}
+function tryTrap() {
+  if (TRAP.st !== 'idle') { flashSub(TRAP.st === 'pour' ? 'Already pouring' : 'Ladle refilling · ' + Math.ceil(TRAP.t) + 's'); return; }
+  if (score - spent < TRAP.cost) { sfx('dry'); flashSub('Need ' + fmt(TRAP.cost - score + spent) + ' more scrap'); return; }
+  spent += TRAP.cost; sfx('buy'); sfx('forge'); TRAP.st = 'pour'; TRAP.t = 0; TRAP.ring = 0; showBanner('Ladle pour'); flashSub('Get clear of the pit!'); camS.kick(3, -0.3); updateHud();
+}
+function resetTrap() { TRAP.st = 'idle'; TRAP.t = 0; TRAP.tilt = 0; if (TRAP.stream) TRAP.stream.visible = false; if (TRAP.fire) TRAP.fire.material.opacity = 0; }
+const _tl = new THREE.Vector3(), _tl2 = new THREE.Vector3();
+function stepTrap(dt, t) {
+  const L = ladle.children[0], pouring = TRAP.st === 'pour';
+  if (pouring) {
+    TRAP.t += dt; const k = TRAP.t;
+    // burn: rings of fire pulse out, the infected inside go up one after another, the boss takes a beating
+    TRAP.ring -= dt; if (TRAP.ring <= 0 && k > 0.8) { TRAP.ring = 0.55; shockwave(0, 0, TRAP.R); sfxAt('sizzle', 0.9, _tl.set(0, 1, 0)); }
+    if (k > 0.8) {
+      for (const e of enemies.slice()) { if (e.dead || e.emerge > 0) continue; const p = e.root.position, d = Math.hypot(p.x, p.z); if (d > TRAP.R) continue;
+        if (e.Z.boss) { e.hp -= dt * 7; e.flV += dt * 3; if (e.hp <= 0) { trapKill = true; killEnemy(e, false, null); trapKill = false; } continue; }
+        e.burning = true; if (Math.random() < dt * 5) { trapKill = true; killEnemy(e, false, null); trapKill = false; } }
+      const pd = Math.hypot(player.pos.x, player.pos.z); if (pd < TRAP.R - 1.3 && player.pos.y - 1.6 < 1.0 && state === 'play') { TRAP.burnT = (TRAP.burnT || 0) + dt; if (TRAP.burnT > 0.3) { TRAP.burnT = 0; hurtSolo(9); flashSub('Out of the ring!'); } }
+      if (Math.random() < dt * 30) { const a = Math.random() * 7, r = 3 + Math.random() * (TRAP.R - 3); sparks(_tl.set(Math.cos(a) * r, 0.2, Math.sin(a) * r), 0xff8a2a, 2, 3); }
+    }
+    if (k > TRAP.dur) { TRAP.st = 'cool'; TRAP.t = TRAP.cool; }
+  } else if (TRAP.st === 'cool') { TRAP.t -= dt; if (TRAP.t <= 0) { TRAP.st = 'idle'; sfx('perk', 0.4); } }
+  // ladle tilt eases in and out; the stream runs from its lip down into the pool
+  const want = pouring && TRAP.t < TRAP.dur - 0.4 ? 1.15 : 0; TRAP.tilt += (want - TRAP.tilt) * Math.min(1, dt * (want ? 2.2 : 1.4)); L.rotation.z = TRAP.tilt;
+  const flow = pouring && TRAP.tilt > 0.75; TRAP.stream.visible = flow;
+  if (flow) { ladle.updateMatrixWorld(true); L.localToWorld(_tl.set(-1.25, 0.75, 0)); const bx = _tl.x * 0.55, bz = _tl.z * 0.55; _tl2.set(bx, 0.8, bz); const len = _tl.distanceTo(_tl2);
+    TRAP.stream.position.copy(_tl).add(_tl2).multiplyScalar(0.5); TRAP.stream.scale.set(1 + Math.sin(t * 30) * 0.08, len, 1 + Math.cos(t * 27) * 0.08);
+    _tl.sub(_tl2).normalize(); TRAP.stream.quaternion.setFromUnitVectors(_tl2.set(0, 1, 0), _tl);
+    if (Math.random() < dt * 20) sparks(_tl.set(bx, 0.95, bz), 0xffb040, 3, 4); }
+  const fo = pouring && TRAP.t > 0.8 ? 0.28 + Math.sin(t * 11) * 0.06 : 0; TRAP.fire.material.opacity += (fo - TRAP.fire.material.opacity) * Math.min(1, dt * 5);
+  poolLight.intensity += pouring ? 2.2 : 0;
+  TRAP.lever.rotation.z += ((TRAP.st === 'idle' ? 0.5 : -0.6) - TRAP.lever.rotation.z) * Math.min(1, dt * 8);
+  TRAP.lamp.material.color.setHex(TRAP.st === 'idle' ? 0x40ff70 : TRAP.st === 'pour' ? (Math.sin(t * 14) > 0 ? 0xff3020 : 0x401010) : 0xffa020);
+}
+function stepMapZ(dt, t) {
+  if (curMap === 'ship') return;
+  ZMAT.water.map.offset.set(t * 0.03, t * 0.017);
+  if (FZ.userData.fan) FZ.userData.fan.rotation.z = t * 5.5;
+  { const go = Math.sin(t * 0.25) > 0; FZ.userData.sigR.material = go ? ZMAT.dimRed : ZMAT.red; FZ.userData.sigG.material = go ? ZMAT.green : ZMAT.dimRed; }
+  for (const E of STEAM_EM) { if (E.area !== 'main' && !areaOpen[E.area]) continue; if (Math.hypot(player.pos.x - E.x, player.pos.z - E.z) > 32) continue; E.acc = (E.acc || 0) + dt * E.rate; while (E.acc >= 1) { E.acc -= 1; steamPuff(E.x, E.y, E.z, E.up, E.sz, E.life); } }
+  for (const o of STEAM) { if (o.life <= 0) continue; o.life -= dt; if (o.life <= 0) { o.s.visible = false; continue; } const k = 1 - o.life / o.max;
+    o.s.position.addScaledVector(o.v, dt); o.v.x += (Math.random() - 0.5) * dt * 0.6; o.s.scale.setScalar(0.3 + k * o.sz); o.s.material.opacity = Math.sin(k * Math.PI) * 0.16; }
+  if (mode === 'solo') stepTrap(dt, t);
+}
+
+// =====================================================================================================================
+// ---------- Cargo, third pass: a gantry crane straddling the yard and a thunderstorm; plus Foundry as a second online map ----------
+// =====================================================================================================================
+const SHIPX = { trolley: null, box: null, beam: null, warn: [], flash: 0, nextBolt: 9, thunder: [] };
+{
+  const C = new THREE.Group(); SHIP.add(C);
+  const paint = new THREE.MeshStandardMaterial({ color: 0xc89a1e, roughness: 0.55, metalness: 0.45 }), dk = new THREE.MeshStandardMaterial({ color: 0x23262b, roughness: 0.6, metalness: 0.6 });
+  const c = (geo, mat, x, y, z, rx = 0, ry = 0, rz = 0, parent = C) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.rotation.set(rx, ry, rz); m.matrixAutoUpdate = false; m.updateMatrix(); parent.add(m); return m; };
+  const H = 15.5, LX = 22.5;
+  // two A-frame legs outside the container walls, joined at the top by the main girder
+  for (const sx of [-1, 1]) {
+    for (const sz of [-1, 1]) c(new THREE.BoxGeometry(0.9, H, 0.9), paint, sx * LX, H / 2, sz * 3.4);
+    for (const y of [3, 8, 13]) c(new THREE.BoxGeometry(0.4, 0.5, 6.8), paint, sx * LX, y, 0);
+    for (let k = 0; k < 3; k++) { const y0 = 3 + k * 5, len = Math.hypot(5, 6.8); c(new THREE.BoxGeometry(0.22, len, 0.22), paint, sx * LX, y0 + 2.5, 0, Math.atan2(6.8, 5) * (k % 2 ? 1 : -1)); }
+    c(new THREE.BoxGeometry(3.2, 1.2, 8.4), dk, sx * LX, 0.6, 0);   // bogies on the quay rail
+    c(new THREE.BoxGeometry(2.6, 2.2, 2.4), dk, sx * LX, H + 1.1, -2.2);   // machinery house
+  }
+  // main girder: two box chords with a lattice between them
+  for (const z of [-0.9, 0.9]) { c(new THREE.BoxGeometry(LX * 2 + 1, 0.5, 0.5), paint, 0, H, z); c(new THREE.BoxGeometry(LX * 2 + 1, 0.5, 0.5), paint, 0, H + 1.6, z); }
+  for (let x = -LX; x < LX; x += 2) for (const z of [-0.9, 0.9]) c(new THREE.BoxGeometry(0.16, Math.hypot(2, 1.6), 0.16), paint, x + 1, H + 0.8, z, 0, 0, Math.atan2(2, 1.6) * ((x / 2) % 2 ? 1 : -1));
+  for (let x = -LX; x <= LX; x += 4) c(new THREE.BoxGeometry(0.16, 0.16, 1.8), paint, x, H + 1.6, 0);
+  c(new THREE.BoxGeometry(LX * 2, 0.12, 0.3), new THREE.MeshBasicMaterial({ color: 0x14161a }), 0, H + 1.88, 0);
+  for (const x of [-LX, -LX / 2, 0, LX / 2, LX]) { const w = c(new THREE.SphereGeometry(0.16, 10, 6), new THREE.MeshBasicMaterial({ color: 0xff2a1a }), x, H + 2.05, 0); SHIPX.warn.push(w); }
+  // trolley riding the girder, hoist cables down to a spreader carrying a container
+  const T = new THREE.Group(); T.position.set(0, H - 0.3, 0); C.add(T); SHIPX.trolley = T;
+  const tm = (geo, mat, x, y, z, parent = T) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); parent.add(m); return m; };
+  tm(new THREE.BoxGeometry(3.0, 0.9, 2.6), dk, 0, 0, 0); tm(new THREE.BoxGeometry(2.0, 0.5, 2.0), paint, 0, 0.6, 0);
+  const lampHead = tm(new THREE.CylinderGeometry(0.3, 0.42, 0.4, 14), dk, 0.9, -0.6, 1.0); tm(new THREE.CircleGeometry(0.3, 14), new THREE.MeshBasicMaterial({ color: 0xf6f2e6 }), 0.9, -0.81, 1.0).rotation.x = Math.PI / 2;
+  const B = new THREE.Group(); B.position.y = -5.4; T.add(B); SHIPX.box = B;
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) { const cab = tm(new THREE.CylinderGeometry(0.03, 0.03, 5.0, 4), dk, sx * 0.9, 2.6, sz * 0.7, B); }
+  tm(new THREE.BoxGeometry(6.2, 0.35, 2.5), paint, 0, 0.1, 0, B);
+  { const side = new THREE.MeshStandardMaterial({ map: containerTex('#2a5a8a', 'NRDU 640188'), roughness: 0.7, metalness: 0.4 }), end = new THREE.MeshStandardMaterial({ map: containerTex('#2a5a8a', '', true), roughness: 0.7, metalness: 0.4 }), pl = new THREE.MeshStandardMaterial({ color: '#2a5a8a', roughness: 0.75, metalness: 0.4 });
+    tm(new THREE.BoxGeometry(6.06, 2.6, 2.44), [end, end, pl, pl, side, side], 0, -1.4, 0, B); }
+  // a spotlight cone from the trolley and the pool it throws on the ground
+  { const L = H - 0.9, g = new THREE.ConeGeometry(4.2, L, 28, 1, true); g.translate(0, -L / 2, 0);
+    const cone = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ map: TX.glowFade, color: 0xfff2d8, transparent: true, opacity: 0.035, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, fog: false })); cone.position.set(0.9, -0.8, 1.0); cone.rotation.x = 0.06; T.add(cone);
+    const pool = new THREE.Mesh(new THREE.CircleGeometry(4.0, 32), new THREE.MeshBasicMaterial({ map: canvasTex(64, 64, (g) => { const r = g.createRadialGradient(32, 32, 2, 32, 32, 32); r.addColorStop(0, 'rgba(255,246,220,.3)'); r.addColorStop(1, 'rgba(255,246,220,0)'); g.fillStyle = r; g.fillRect(0, 0, 64, 64); }), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false })); pool.rotation.x = -Math.PI / 2; pool.position.y = 0.03; SHIP.add(pool); SHIPX.pool = pool; }
+  // the storm's light: a cold hemisphere light that's off until lightning strikes
+  const bolt = new THREE.HemisphereLight(0xdfe8ff, 0x3a4458, 0); SHIP.add(bolt); SHIPX.bolt = bolt;
+  const sky = new THREE.Mesh(new THREE.SphereGeometry(70, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0xbfd0ff, transparent: true, opacity: 0, side: THREE.BackSide, depthWrite: false, fog: false })); SHIP.add(sky); SHIPX.sky = sky;
+}
+function thunder(dist) {
+  if (!actx || !sfxBus) return; const t0 = actx.currentTime + dist, v = 0.55 * (1 - dist / 4);
+  nz(t0, 0.35, v * 0.7, 'lowpass', 900, 0.6, [sfxBus]);
+  for (let i = 0; i < 4; i++) nz(t0 + 0.15 + i * 0.32 + Math.random() * 0.1, 0.9, v * (0.9 - i * 0.18), 'lowpass', 140 + Math.random() * 90, 0.8, [sfxBus]);
+}
+function stepShipExtra(dt, t) {
+  if (curMap !== 'ship') return;
+  const tx = Math.sin(t * 0.045) * 9.5; SHIPX.trolley.position.x = tx;
+  SHIPX.box.rotation.z = Math.sin(t * 0.7) * 0.012; SHIPX.box.rotation.x = Math.sin(t * 0.53 + 1) * 0.015;
+  SHIPX.pool.position.set(tx + 0.9 + Math.sin(t * 0.7) * 0.1, 0.03, 1.0 + 0.9);
+  const on = Math.sin(t * 3) > 0.6; for (const w of SHIPX.warn) w.visible = on;
+  // lightning: a double flicker, a lit sky, then thunder a moment later
+  SHIPX.nextBolt -= dt;
+  if (SHIPX.nextBolt <= 0) { SHIPX.nextBolt = 14 + Math.random() * 22; SHIPX.flash = 1; SHIPX.flick = [0.09, 0.2, 0.31].slice(0, 2 + (Math.random() < 0.5)); SHIPX.fT = 0; thunder(0.5 + Math.random() * 2.5); }
+  if (SHIPX.flash > 0) { SHIPX.fT += dt; let k = Math.max(0, 1 - SHIPX.fT / 0.55); for (const f of SHIPX.flick) if (Math.abs(SHIPX.fT - f) < 0.03) k = 1;
+    const fl = SHIPX.fT < 0.06 || SHIPX.flick.some(f => SHIPX.fT > f && SHIPX.fT < f + 0.05) ? 1 : k * 0.35;
+    SHIPX.bolt.intensity = fl * 2.2; SHIPX.sky.material.opacity = fl * 0.22; if (SHIPX.fT > 0.6) { SHIPX.flash = 0; SHIPX.bolt.intensity = 0; SHIPX.sky.material.opacity = 0; } }
+}
+
+// =====================================================================================================================
 // ---------- per-frame hooks for all of the above ----------
 // =====================================================================================================================
 function stepFeatures(dt, t) {
   stepNades(dt); stepExplosions(dt); stepBarrels(dt);
   if (mode === 'solo') stepBox(dt, t);
+  stepMapZ(dt, t); stepShipExtra(dt, t);
   updateNadeHud(); renderPerks();
   if (mode === 'online') renderMpTop(); else if (!$('mpTop').hidden) $('mpTop').hidden = true;
   for (const r of net.remotes.values()) if (r.flashT > 0) { r.flashT = Math.max(0, r.flashT - dt); r.bodyMat.emissive.setRGB(r.flashT * 6, r.flashT * 1.2, 0); }
@@ -6996,6 +7365,13 @@ $('menu2').onclick = toMenu;
 $('quit').onclick = toMenu;
 $('resume').onclick = begin;
 $('join').onclick = joinMatch;
+// map picker: the choice is part of the room, so friends on the same code and map end up together
+function pickMap(m) { net.mapSel = m === 'foundry' ? 'foundry' : 'ship'; store.set('hz-map', net.mapSel);
+  for (const b of $('mapPick').children) { const on = b.dataset.m === net.mapSel; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); }
+  const sub = $('mpSub'); if (sub) sub.textContent = 'Deathmatch · ' + (net.mapSel === 'foundry' ? 'Foundry' : 'Cargo');
+  if (state === 'menu' && !$('mpPanel').hidden) setMap(net.mapSel); }
+$('mapPick').addEventListener('click', e => { const b = e.target.closest('button[data-m]'); if (b) { pickMap(b.dataset.m); sfx('click'); } });
+pickMap(store.get('hz-map') || 'ship');
 $('openSettings').onclick = () => openSettings('start');
 
 // ---- main menu life: embers rising through the light, tiles that tilt toward the cursor, live clock and best score ----
@@ -7029,7 +7405,7 @@ $('loList').addEventListener('click', e => {
 });
 $('mpBack').onclick = () => { $('mpPanel').hidden = true; $('msTiles').hidden = false; menuPeek(false); };
 // hovering Multiplayer swaps the backdrop to Cargo, the multiplayer map; Zombies (or leaving) brings the foundry back
-function menuPeek(on) { if (state !== 'menu') return; setMap(on ? 'ship' : 'foundry'); $('start').classList.toggle('peek', on); }
+function menuPeek(on) { if (state !== 'menu') return; setMap(on ? (net.mapSel === 'foundry' ? 'foundry' : 'ship') : 'foundry'); $('start').classList.toggle('peek', on); }
 $('mpOpen').addEventListener('mouseenter', () => menuPeek(true));
 $('mpOpen').addEventListener('focus', () => menuPeek(true));
 $('mpOpen').addEventListener('mouseleave', () => { if ($('mpPanel').hidden) menuPeek(false); });
@@ -7290,7 +7666,19 @@ renderHints(); applyVideo();
 // ---------- combat ----------
 const ray = new THREE.Raycaster(); ray.far = 90;
 const _v = new THREE.Vector3(), _v2 = new THREE.Vector3(), _start = new THREE.Vector3(), _end = new THREE.Vector3(), _ndc = new THREE.Vector2();
-function hitMarker(head) { const h = $('hit'); h.classList.toggle('head', !!head); h.style.opacity = 1; h.classList.remove('pop'); void h.offsetWidth; h.classList.add('pop'); clearTimeout(hitMarker.t); hitMarker.t = setTimeout(() => h.style.opacity = 0, 80); }
+// the hit marker sound: a short bright "tk" click with a clean ping on top; headshots add a higher, glassy ding.
+// Throttled so a shotgun's pellets or a fast SMG give one crisp tick per hit, not a buzz.
+function hitTick(head) {
+  if (!actx || !sfxBus || !S.hitSound) return; const now = actx.currentTime; if (now - (hitTick.t || 0) < 0.028 && !(head && !hitTick.h)) return; hitTick.t = now; hitTick.h = head;
+  const t = now + 0.004;
+  nz(t, 0.005, 0.5, 'highpass', 6500, 0.7, [sfxBus]);          // the click's edge
+  nz(t, 0.02, 0.3, 'bandpass', 3300, 2.6, [sfxBus]);           // the "tk" body
+  const ping = (f, g, d, at = 0) => { const o = actx.createOscillator(), gg = actx.createGain(), a = t + at; o.type = 'sine'; o.frequency.setValueAtTime(f, a); o.frequency.exponentialRampToValueAtTime(f * 0.94, a + d);
+    gg.gain.setValueAtTime(0.0001, a); gg.gain.linearRampToValueAtTime(g, a + 0.0015); gg.gain.exponentialRampToValueAtTime(0.0001, a + d); o.connect(gg); gg.connect(sfxBus); o.start(a); o.stop(a + d + 0.02); };
+  ping(2500, 0.15, 0.065); ping(5000, 0.045, 0.03);
+  if (head) { ping(3750, 0.13, 0.17, 0.01); ping(5620, 0.055, 0.13, 0.01); metal(t + 0.008, [[2950, 1], [4400, 0.55]], 0.15, 0.1); }
+}
+function hitMarker(head) { hitTick(!!head); const h = $('hit'); h.classList.toggle('head', !!head); h.style.opacity = 1; h.classList.remove('pop'); void h.offsetWidth; h.classList.add('pop'); clearTimeout(hitMarker.t); hitMarker.t = setTimeout(() => h.style.opacity = 0, 80); }
 function startReload() {
   if (knife.vis) return;
   const W = WEAPONS[cur];
@@ -7395,7 +7783,7 @@ function shoot() {
     }
     if (!e) sparks(hit.point, rm ? (net.remotes.get(rm.peer)?.color ?? 0xffc46b) : 0xffc46b, rm ? 10 : W.pellets ? 2 : 5);
     if (rm) { const R = (W.range || 20) * FX.range, fall = hit.distance <= R ? 1 : Math.max(0.6, 1 - 0.4 * (hit.distance - R) / (R * 1.2));
-      target = rm.peer; if (rm.head) headHit = true; { const R0 = net.remotes.get(rm.peer); if (R0) R0.flashT = 0.15; } dmg += Math.round(rm.dmg * W.pvpMul * FX.dmg * fall * (wallP ? 0.75 : 1)); if (S.hitSound) sfx(rm.head ? 'headshot' : 'hit'); hitMarker(!!rm.head); if (wallP) sparks(wallP, 0xffc46b, 6); }
+      target = rm.peer; if (rm.head) headHit = true; { const R0 = net.remotes.get(rm.peer); if (R0) R0.flashT = 0.15; } dmg += Math.round(rm.dmg * W.pvpMul * FX.dmg * fall * (wallP ? 0.75 : 1)); hitMarker(!!rm.head); if (wallP) sparks(wallP, 0xffc46b, 6); }
   }
   if (anyHit) shotsHit++;
   if (muz !== 'sup' && muz !== 'mono' && muz !== 'qdcan') { worldFlash.position.copy(_start); worldFlash.intensity = 2.4 * FX.flash; }
@@ -7547,7 +7935,7 @@ renderer.setAnimationLoop(now => {
   if (scopeK && scopeK !== lastScopeK) { lastScopeK = scopeK; $('scopeOv').innerHTML = SCOPE_SVG[scopeK]; }
   if (scoped !== lastScoped) { lastScoped = scoped; $('scopeOv').style.opacity = scoped; }
   scopeFx(scopeK, scoped > 0.6); if (scoped > 0.6 && scopeK === 'thermal') thermalPass(); if (scoped > 0.6 && scopeK === 'smart') smartPass();
-  if (scoped < 0.95) { renderer.clearDepth(); renderer.render(vmScene, vmCam); }
+  if (scoped < 0.95 && state !== 'menu') { renderer.clearDepth(); renderer.render(vmScene, vmCam); }   // no gun floating over the main menu
 });
 
 // ---------- multiplayer minimap: rotates with you; enemies show as red pings when they fire without a suppressor ----------
@@ -7928,7 +8316,7 @@ function tryWall(B) {
   else { const k = Math.max(0, loadout.indexOf(cur)); loadout[k] = i; mags[i] = W.mag; W.ready = false; switchTo(i); flashSub(W.name + ' bought'); }
   _hp.set(B.x + B.nx * 0.4, 1.6, B.z + B.nz * 0.4); sparks(_hp, 0xffc46b, 24, 2.5); updateHud();
 }
-function tryInteract() { if (nearBox) { tryBox(); return; } if (nearPerk) { tryPerk(nearPerk); return; } if (nearPod) { trySuitUp(); return; } if (nearBlast) { tryBlast(nearBlast); return; } if (nearStation) { tryStation(nearStation); return; } if (nearWall) { tryWall(nearWall); return; } if (nearForge) tryForge(); else if (nearBench) openGunsmith(); }
+function tryInteract() { if (nearBox) { tryBox(); return; } if (nearPerk) { tryPerk(nearPerk); return; } if (nearTrap) { tryTrap(); return; } if (nearPod) { trySuitUp(); return; } if (nearBlast) { tryBlast(nearBlast); return; } if (nearStation) { tryStation(nearStation); return; } if (nearWall) { tryWall(nearWall); return; } if (nearForge) tryForge(); else if (nearBench) openGunsmith(); }
 // ---------- Gunsmith menu ----------
 // Full-screen workbench view: the gun sits on the right, the camera eases to whichever part you're looking at, and
 // hovering an option fits it to the model so you can see it before you buy.
@@ -8364,15 +8752,16 @@ function stepSolo(dt, t) {
   nearForge = state === 'play' && Math.hypot(player.pos.x - FORGE.x, player.pos.z - FORGE.z) < 2.7; nearBench = null;
   nearBench = state === 'play' && !nearForge && Math.abs(player.pos.x - BENCH.x) < 2.4 && Math.abs(player.pos.z - BENCH.z) < 2.3;
   nearPod = state === 'play' && Math.hypot(player.pos.x - EXO_POD.x, player.pos.z - EXO_POD.z) < 2.3;
-  nearBlast = null; nearStation = null; nearWall = null; nearPerk = null; nearBox = false;
+  nearBlast = null; nearStation = null; nearWall = null; nearPerk = null; nearBox = false; nearTrap = false;
   if (state === 'play') {
     for (const B of WALLBUYS) { if (B.area && !areaOpen[B.area]) continue; const dx = player.pos.x - B.x, dz = player.pos.z - B.z, along = Math.abs(dx * B.nz - dz * B.nx), out = dx * B.nx + dz * B.nz; if (along < 1.4 && out > 0 && out < 2.2) nearWall = B; }
     for (const B of BLAST) if (!B.open && Math.abs(player.pos.x - B.A.sign * ARENA) < 2.8 && Math.abs(player.pos.z - B.A.gz) < 2.6) nearBlast = B;
     for (const S0 of STATIONS) if (Math.abs(player.pos.x - S0.x) < 1.8 && Math.abs(player.pos.z - S0.z) < 2.2) nearStation = S0;
     for (const P of PERKS) if (Math.hypot(player.pos.x - (P.x + P.nx * 0.9), player.pos.z - (P.z + P.nz * 0.9)) < 1.5) nearPerk = P;
     nearBox = Math.hypot(player.pos.x - BOX.x, player.pos.z - (BOX.z + 1.0)) < 1.7;
+    nearTrap = Math.hypot(player.pos.x - (TRAP.x + 1.0), player.pos.z - TRAP.z) < 1.6;
   }
-  if (nearBox) boxPrompt(); else if (nearPerk) perkPrompt(); else if (nearPod) podPrompt(); else if (nearBlast) blastPrompt(); else if (nearStation) areaStationPrompt(); else if (nearWall) wallPrompt(); else stationPrompt();
+  if (nearBox) boxPrompt(); else if (nearPerk) perkPrompt(); else if (nearTrap) trapPrompt(); else if (nearPod) podPrompt(); else if (nearBlast) blastPrompt(); else if (nearStation) areaStationPrompt(); else if (nearWall) wallPrompt(); else stationPrompt();
   { const bb = $('bossbar'), on = !!boss && !boss.dead; if (bb.hidden === on) bb.hidden = !on; if (on) $('bossfill').style.width = Math.max(0, boss.hp / boss.maxHp * 100).toFixed(1) + '%'; }
   if (bossDelay > 0) { bossDelay -= dt; if (bossDelay <= 0) { spawnEnemy('golem'); updateHud(); } }
   if (toSpawn > 0) { spawnTimer -= dt; if (spawnTimer <= 0 && enemies.length < 34) { spawnEnemy(); toSpawn--; spawnTimer = Math.max(0.28, 1.15 - wave * 0.07); updateHud(); } }
