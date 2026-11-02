@@ -6439,7 +6439,7 @@ function ingest(peer) {
   if (!Array.isArray(p.p) || p.p.length !== 3) return; // not in a match yet
   let r = net.remotes.get(peer.peer);
   if (!r) { r = makeRemote(peer.peer); net.remotes.set(peer.peer, r); }
-  r.name = cleanName(p.n) || 'Someone';
+  { const nm = cleanName(p.n) || 'Someone'; r.name = isProfane(nm) ? 'Player' : nm; }
   { const wi = Number.isInteger(p.w) && WEAPONS[p.w] ? p.w : 1; if (wi !== r.wi) setRemoteGun(r, wi); }
   r.color = COLORS[(p.c | 0) % COLORS.length];
   const key = r.name + r.color;
@@ -6730,6 +6730,7 @@ async function cloudPush(force) {
 }
 const cloudErr = (e) => /relation|does not exist|schema cache/i.test(e.message || '') ? 'The saves table isn\'t set up in Supabase yet.' : /JWT|auth/i.test(e.message || '') ? 'Your sign-in expired. Sign in again.' : 'Couldn\'t reach the cloud: ' + (e.message || 'unknown error');
 async function cloudPull() {
+  if (cloud.pState === 'idle' || cloud.pState === 'error') loadProfile();
   const sb = await getSb(); if (!sb || !cloud.user) return;
   cloud.state = 'syncing'; renderSaveIfOpen();
   const { data, error } = await sb.from('saves').select('data, updated_at').eq('user_id', cloud.user.id).maybeSingle();
@@ -6760,8 +6761,65 @@ async function cloudSignIn(email) {
   const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.href.split('#')[0].split('?')[0] } });
   cloud.state = error ? 'error' : 'sent'; cloud.msg = error ? (/rate|seconds/i.test(error.message) ? 'Too many sign-in emails right now. Try again in a bit.' : error.message) : email; renderSaveIfOpen();
 }
-async function cloudSignOut() { const sb = await getSb(); if (sb) await sb.auth.signOut(); cloud.user = null; cloud.conflict = null; cloud.state = 'idle'; renderSaveIfOpen(); }
+async function cloudSignOut() { const sb = await getSb(); if (sb) await sb.auth.signOut(); cloud.user = null; cloud.conflict = null; cloud.state = 'idle'; cloud.profile = null; cloud.pState = 'idle'; applyUsername(); renderSaveIfOpen(); }
 
+// ---- usernames: one per account, unique across everyone (case doesn't matter); it's your leaderboard name and callsign ----
+const UNAME_RE = /^[A-Za-z0-9_]{3,16}$/;
+cloud.profile = null; cloud.pState = 'idle'; cloud.pMsg = '';
+async function loadProfile() {
+  const sb = await getSb(); if (!sb || !cloud.user) return; cloud.pState = 'loading';
+  const { data, error } = await sb.from('profiles').select('username').eq('user_id', cloud.user.id).maybeSingle();
+  if (error) { cloud.pState = 'error'; cloud.pMsg = /relation|does not exist|schema cache/i.test(error.message || '') ? 'Usernames aren\'t set up in Supabase yet.' : 'Couldn\'t load your username.'; }
+  else { cloud.profile = data && data.username ? data : null; cloud.pState = cloud.profile ? 'ok' : 'none';
+    if (!cloud.profile) { try { toast('Welcome', 'Pick a username', 'Settings › Save · it\'s your name on the leaderboard'); } catch (e) {} } }
+  applyUsername(); renderSaveIfOpen();
+}
+// profanity blocker for usernames: leetspeak and repeated letters are normalised first; strong words are blocked
+// anywhere in the name, short words only when they're a whole word (so "class", "Hancock" and "grape" stay fine)
+const BAD_ANY = ['fuck', 'fuk', 'fck', 'shit', 'cunt', 'bitch', 'biatch', 'nigg', 'niga', 'nigr', 'faggot', 'fagot', 'whore', 'slut', 'pussy', 'penis', 'vagina', 'porn', 'retard', 'nazi', 'hitler', 'kkk', 'chink', 'kike', 'tranny', 'dildo', 'rapist', 'molest', 'pedo', 'bastard', 'asshole', 'dickhead', 'motherf', 'blowjob', 'handjob', 'boner', 'horny', 'semen', 'testicle', 'jerkoff', 'wanker', 'twat', 'jizz', 'gook', 'wetback', 'spick', 'beaner', 'raghead', 'towelhead', 'isis', 'heil', 'sexy', 'negro', 'nignog', 'jigaboo', 'jiggaboo', 'sambo', 'porchmonkey', 'zipperhead', 'chingchong', 'golliwog', 'gollywog', 'kyke', 'shemale', 'trannie', 'faggy', 'fagg', 'dyke', 'mongoloid', 'spastic', 'honky', 'gypsy', 'redskin', 'squaw', 'injun', 'halfbreed', 'darkie', 'darky', 'tarbaby', 'cameljockey', 'sandnig', 'slanteye', 'kraut', 'polack', 'gringo', 'hymie', 'kaffir', 'kafir', 'coolie'];
+const BAD_WORD = ['ass', 'arse', 'cock', 'rape', 'cum', 'sex', 'sexy', 'tit', 'tits', 'fag', 'dick', 'wank', 'anal', 'hoe', 'hoes', 'spic', 'nut', 'nuts', 'butt', 'balls', 'piss', 'damn', 'crap', 'prick', 'boob', 'boobs', 'kys', 'nsfw', 'xxx', 'milf', 'thot', 'coon', 'coons', 'fags', 'spaz', 'retard', 'tard', 'nig', 'nigs', 'jap', 'japs', 'chinks', 'spics', 'gooks', 'homo', 'homos', 'lesbo', 'queer', 'paki', 'pakis', 'wop', 'wops', 'dago', 'dagos', 'yid', 'yids', 'abbo', 'abbos'];
+function deLeet(t) { return String(t).normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[аеорсхуіїјӏ]/gi, (c) => ({ а: 'a', е: 'e', о: 'o', р: 'p', с: 'c', х: 'x', у: 'y', і: 'i', ї: 'i', ј: 'j', ӏ: 'l' })[c.toLowerCase()] || c).toLowerCase().replace(/[0@]/g, m => m === '0' ? 'o' : 'a').replace(/1|!|\|/g, 'i').replace(/3/g, 'e').replace(/4/g, 'a').replace(/5|\$/g, 's').replace(/7/g, 't').replace(/8/g, 'b').replace(/9/g, 'g'); }
+function isProfane(name) {
+  const raw = String(name || ''), flat = deLeet(raw).replace(/[^a-z]/g, ''), once = flat.replace(/(.)\1+/g, '$1');
+  for (const w of BAD_ANY) { const wc = w.replace(/(.)\1+/g, '$1'); if (flat.includes(w) || ((wc === w || wc.length >= 4) && once.includes(wc))) return true; }
+  const words = raw.replace(/([a-z])([A-Z])/g, '$1 $2').split(/[^A-Za-z0-9]+|(?<=[A-Za-z])(?=[0-9])|(?<=[0-9])(?=[A-Za-z])/).map(w => deLeet(w).replace(/[^a-z]/g, '')).filter(Boolean);
+  for (const w of words.concat([flat])) { const w1 = w.replace(/(.)\1+/g, '$1'); if (BAD_WORD.includes(w) || BAD_WORD.includes(w1)) return true; }
+  return false;
+}
+// blocked names are logged to Supabase (table name_flags) so the owner can see who tried what; players can't read the log
+async function flagName(name, where) { try { if (!cloud.user) return; const sb = await getSb(); if (!sb) return; await sb.from('name_flags').insert({ user_id: cloud.user.id, attempted: String(name).slice(0, 40), place: where }); } catch (e) {} }
+async function claimUsername(name) {
+  name = String(name || '').trim();
+  if (!UNAME_RE.test(name)) { cloud.pMsg = 'Use 3–16 letters, numbers or _ (no spaces).'; cloud.pState = cloud.profile ? 'ok' : 'none'; cloud.pBad = true; renderSaveIfOpen(); return; }
+  if (isProfane(name)) { cloud.pMsg = 'That username isn\'t allowed. Pick something else.'; cloud.pBad = true; renderSaveIfOpen(); flagName(name, 'username'); return; }
+  const sb = await getSb(); if (!sb || !cloud.user) return; cloud.pBusy = true; renderSaveIfOpen();
+  const q = cloud.profile ? sb.from('profiles').update({ username: name }).eq('user_id', cloud.user.id) : sb.from('profiles').insert({ user_id: cloud.user.id, username: name });
+  const { error } = await q; cloud.pBusy = false;
+  if (error) { cloud.pBad = true; cloud.pMsg = error.code === '23505' || /duplicate|unique/i.test(error.message || '') ? `"${name}" is taken. Try another.` : /check/i.test(error.message || '') ? 'Use 3–16 letters, numbers or _ (no spaces).' : 'Couldn\'t save that username.'; renderSaveIfOpen(); return; }
+  cloud.profile = { username: name }; cloud.pState = 'ok'; cloud.pBad = false; cloud.pMsg = 'Username saved.'; cloud.pEdit = false;
+  applyUsername(); lbPost().catch(() => {}); renderSaveIfOpen(); try { renderLvl(); } catch (e) {}
+}
+function applyUsername() {
+  const cs = $('callsign'); if (!cs) return;
+  if (cloud.profile) { net.name = cloud.profile.username; cs.value = net.name; cs.disabled = true; cs.title = 'Your username · change it in Settings › Save'; }
+  else { cs.disabled = false; cs.title = ''; }
+  try { renderLvl(); } catch (e) {}
+}
+function usernameRow(row) {
+  const msg = mk('div', 'sv-msg' + (cloud.pBad ? ' no' : ''), cloud.pMsg || '');
+  if (cloud.pState === 'error') { msg.textContent = cloud.pMsg; msg.classList.add('no'); row.append(msg); return; }
+  if (cloud.profile && !cloud.pEdit) {
+    const r = mk('div', 'sv-btns'), nm = mk('div', 'lbl', 'Username: ' + cloud.profile.username), b = mk('button', 'sv-btn ghost', 'Change'); b.type = 'button';
+    b.onclick = () => { cloud.pEdit = true; cloud.pMsg = ''; cloud.pBad = false; renderSaveIfOpen(); }; r.append(nm, b); row.append(r, msg); return;
+  }
+  const inp = mk('input', 'sv-in'); inp.type = 'text'; inp.maxLength = 16; inp.placeholder = 'Pick a username'; inp.autocomplete = 'off'; inp.spellcheck = false; inp.setAttribute('aria-label', 'Username');
+  if (cloud.profile) inp.value = cloud.profile.username;
+  const b = mk('button', 'sv-btn', cloud.pBusy ? 'Checking…' : cloud.profile ? 'Save username' : 'Claim username'); b.type = 'button'; b.disabled = !!cloud.pBusy;
+  b.onclick = () => claimUsername(inp.value); inp.onkeydown = (e) => { e.stopPropagation(); if (e.key === 'Enter') b.click(); };
+  const r = mk('div', 'sv-btns'); r.append(inp, b); if (cloud.profile) { const c = mk('button', 'sv-btn ghost', 'Cancel'); c.type = 'button'; c.onclick = () => { cloud.pEdit = false; cloud.pMsg = ''; renderSaveIfOpen(); }; r.append(c); }
+  if (!cloud.pMsg) msg.textContent = 'Unique to you: no one else can take it. 3–16 letters, numbers or _.';
+  row.append(r, msg);
+}
 // ---- the Save tab in Settings ----
 function renderSaveIfOpen() { if (!$('settings').hidden && settingsTab === 'save') renderSettings(); }
 const ago = (t) => { const s = Math.round((Date.now() - t) / 1000); return s < 60 ? 'just now' : s < 3600 ? Math.round(s / 60) + ' min ago' : s < 86400 ? Math.round(s / 3600) + ' h ago' : new Date(t).toLocaleDateString(); };
@@ -6798,7 +6856,7 @@ function renderSavePane(pane) {
       msg.textContent = cloud.state === 'sent' ? `Check ${cloud.msg} for a link from Supabase. Open it in this browser and you're signed in.` : cloud.state === 'error' ? cloud.msg : 'No password. We email you a link; your progress then saves to the cloud automatically.';
       if (cloud.state === 'error') msg.classList.add('no');
     } else {
-      const who = mk('div', 'lbl', 'Signed in as ' + (cloud.user.email || 'player'));
+      const who = mk('div', 'lbl', 'Signed in as ' + (cloud.user.email || 'player')); usernameRow(row);
       const st = cloud.state === 'synced' ? 'Synced ' + ago(cloud.last || Date.now()) : cloud.state === 'syncing' ? 'Syncing…' : cloud.state === 'conflict' ? 'Your cloud save and this device disagree' : cloud.state === 'error' ? cloud.msg : 'Waiting';
       const s = mk('div', 'sv-msg' + (cloud.state === 'error' || cloud.state === 'conflict' ? ' no' : ''), st);
       row.append(who, s);
@@ -6823,9 +6881,9 @@ function renderSavePane(pane) {
 const lb = { tab: 'xp', rows: null, err: '', loading: false };
 const LB_TABS = [['xp', 'Top level', 'xp'], ['best_wave', 'Best wave', 'best_wave'], ['kills', 'Most kills', 'kills']];
 async function lbPost() {
-  if (!cloud.user) return; const sb = await getSb(); if (!sb) return;
+  if (!cloud.user || !cloud.profile) return; const sb = await getSb(); if (!sb) return;   // no username yet, no leaderboard row
   const snap = saveSnapshot(), sm = saveSummary(snap);
-  const name = (cleanName(net.name) || 'Player').slice(0, 16);
+  const name = cloud.profile.username;
   await sb.from('leaderboard').upsert({ user_id: cloud.user.id, name, level: sm.L, xp: Math.round(sm.xp), best_wave: sm.best, kills: sm.kills, updated_at: new Date().toISOString() });
 }
 async function lbLoad() {
@@ -6845,7 +6903,7 @@ function renderLb() {
   if (lb.err) { el.innerHTML = `<p class="lb-note">${lb.err}</p>`; return; }
   const rows = lb.rows || [], me = cloud.user && cloud.user.id, val = (r) => lb.tab === 'xp' ? `Lv ${r.level}` : lb.tab === 'best_wave' ? `Wave ${r.best_wave}` : `${(r.kills || 0).toLocaleString()} kills`;
   el.innerHTML = (rows.length ? `<ol class="lb-list">${rows.map((r, i) => `<li class="${r.user_id === me ? 'me' : ''}"><span class="rk">${i + 1}</span><span class="nm"></span><span class="v">${val(r)}</span></li>`).join('')}</ol>` : `<p class="lb-note">No one on the board yet. Be the first.</p>`)
-    + (me ? '' : `<p class="lb-note">Sign in under Settings › Save to get your name on the board.</p>`);
+    + (me && cloud.profile ? '' : me ? `<p class="lb-note">Pick a username under Settings › Save to get on the board.</p>` : `<p class="lb-note">Sign in under Settings › Save to get your name on the board.</p>`);
   el.querySelectorAll('.lb-list .nm').forEach((n, i) => { n.textContent = rows[i].name || 'Player'; });   // names as text, never HTML
 }
 $('lbOpen').onclick = openLb; $('lbBack').onclick = closeLb;
@@ -6892,7 +6950,8 @@ function renderLobby(peers) {
 async function joinMatch() {
   const code = cleanCode($('roomcode').value) || 'arena';
   $('roomcode').value = code;
-  net.name = cleanName($('callsign').value) || net.name; $('callsign').value = net.name; store.set('fb-name', net.name);
+  { const want = cleanName($('callsign').value) || net.name; if (isProfane(want)) { flagName(want, 'callsign'); net.name = 'Rivet' + (100 + Math.floor(Math.random() * 900)); flashSub('That callsign isn\'t allowed'); } else net.name = want; }
+  $('callsign').value = net.name; store.set('fb-name', net.name);
   $('join').disabled = true; $('netstatus').textContent = 'Joining ' + code + '…';
   try {
     const mapK = net.mapSel === 'foundry' ? 'foundry' : 'ship';
@@ -6966,7 +7025,7 @@ function nextToast() {
 }
 function renderLvl() {
   const v = levelOf(prog.xp), pct = v.L >= LV_MAX ? 100 : Math.round(v.into / v.need * 100);
-  const html = `<div class="lv-n"><small>Level</small><b>${v.L}</b></div><div class="lv-b"><span>${rankName(v.L)}<em>${v.L >= LV_MAX ? 'Max level' : v.into.toLocaleString() + ' / ' + v.need.toLocaleString() + ' XP'}</em></span><i><u style="width:${pct}%"></u></i></div>`;
+  const html = `<div class="lv-n"><small>Level</small><b>${v.L}</b></div><div class="lv-b"><span>${(typeof cloud !== 'undefined' && cloud.profile ? cloud.profile.username + ' · ' : '')}${rankName(v.L)}<em>${v.L >= LV_MAX ? 'Max level' : v.into.toLocaleString() + ' / ' + v.need.toLocaleString() + ' XP'}</em></span><i><u style="width:${pct}%"></u></i></div>`;
   const m = $('msLvl'); if (m && m.dataset.h !== html) { m.dataset.h = html; m.innerHTML = html; }
 }
 // camos: earned by kills with each gun, picked in the Gunsmith, saved across both modes
