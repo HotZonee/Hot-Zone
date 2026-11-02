@@ -337,6 +337,9 @@ canvas { display: block; width: 100%; height: 100%; }
 .field input[type=text] { font: 600 15px var(--mono); color: var(--bone); background: var(--ink); border: 1px solid #ffffff26; padding: 9px 10px; width: 100%; box-sizing: border-box; text-transform: none; }
 .field input:focus-visible { outline: 2px solid var(--coolant); outline-offset: 1px; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+/* UI scale: every menu and HUD panel is laid out for ~1366x800 and shrinks with smaller windows (set from JS as --uis) */
+.overlay, #gunsmith, .hud, #prompt, #lvlToast, #medals, #mpTop, #deathCard, #mpEnd, #mmap, #bossbar, #banner, #sub, #xpPops, #pops, #hints, #fps { zoom: var(--uis, 1); }
+#start .ms-mp { bottom: 9% !important; max-height: 80% !important; } /* % rather than vh: vh units grow under zoom */
 .mapPick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } .mapPick button { all: unset; box-sizing: border-box; cursor: pointer; display: grid; gap: 2px; padding: 10px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); transition: border-color .15s, background .15s; }
 .mapPick button b { font: 400 18px var(--display); letter-spacing: .03em; color: #ece6da; } .mapPick button small { font: 500 11px var(--mono); color: #9aa6a0; }
 .mapPick button:hover { border-color: rgba(63,240,214,.5); } .mapPick button.on { border-color: var(--coolant); background: rgba(63,240,214,.1); box-shadow: inset 0 0 0 1px var(--coolant); } .mapPick button:focus-visible { outline: 2px solid var(--coolant); outline-offset: 2px; }
@@ -943,7 +946,7 @@ button:focus-visible { outline: 3px solid var(--bone); outline-offset: 4px; }
     <div class="ms-title"><div class="ms-badge"><i></i>Season 1 · Furnace &amp; Cargo</div><h1 data-t="Hot Zone">Hot <span>Zone</span></h1><p>Fight anyone. Outlast everything.</p><div class="ms-heat"></div></div>
     <div class="ms-tiles" id="msTiles">
       <button class="tile z" id="play" type="button"><svg class="emb" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6c-12 0-20 8-20 19 0 7 3 11 6 14v7h6v-5h4v5h8v-5h4v5h6v-7c3-3 6-7 6-14 0-11-8-19-20-19z" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="24" cy="27" r="5" fill="currentColor"/><circle cx="40" cy="27" r="5" fill="currentColor"/><path d="M30 36l2-4 2 4z" fill="currentColor"/></svg><div class="tchips"><em class="tchip" id="msBest">Best 0</em><em class="tchip">Waves · Forge · Wall buys</em></div><small>Solo</small><b>Zombies</b><span>Hold Furnace Hall 2 against endless waves of the infected. Buy guns off the walls, forge them, open the yards.</span><em>Play <i>›</i></em></button>
-      <button class="tile m" id="mpOpen" type="button"><svg class="emb" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="18" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="32" cy="32" r="3" fill="currentColor"/><path d="M32 4v14M32 46v14M4 32h14M46 32h14" stroke="currentColor" stroke-width="2.5"/></svg><div class="tchips"><em class="tchip live"><i></i>Deathmatch · 2 maps</em><em class="tchip">3 loadouts · first to 30</em></div><small>Online</small><b>Multiplayer</b><span>Free-for-all deathmatch on Cargo or the Foundry with anyone who has this page open. Build your loadout in the Gunsmith.</span><em>Play <i>›</i></em></button>
+      <button class="tile m" id="mpOpen" type="button"><svg class="emb" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="18" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="32" cy="32" r="3" fill="currentColor"/><path d="M32 4v14M32 46v14M4 32h14M46 32h14" stroke="currentColor" stroke-width="2.5"/></svg><div class="tchips"><em class="tchip live"><i></i>Deathmatch · Cargo</em><em class="tchip">3 loadouts · first to 30</em></div><small>Online</small><b>Multiplayer</b><span>Free-for-all deathmatch on Cargo, a rain-soaked container yard and the ship docked beside it, with anyone who has this page open. Build your loadout in the Gunsmith.</span><em>Play <i>›</i></em></button>
     </div>
     <div class="ms-mp" id="mpPanel" hidden>
       <button class="ms-back" id="mpBack" type="button">‹ Back</button>
@@ -952,7 +955,6 @@ button:focus-visible { outline: 3px solid var(--bone); outline-offset: 4px; }
         <div class="field"><label for="callsign">Callsign</label><input type="text" id="callsign" maxlength="14" autocomplete="off" spellcheck="false"></div>
         <div class="field"><label for="roomcode">Room code</label><input type="text" id="roomcode" maxlength="16" autocomplete="off" spellcheck="false" value="arena"></div>
       </div>
-      <div class="mapPick" id="mapPick" role="radiogroup" aria-label="Map"><button type="button" data-m="ship" role="radio"><b>Cargo</b><small>Tight container yard · 2–6 players</small></button><button type="button" data-m="foundry" role="radio"><b>Foundry</b><small>The zombies hall · bigger, 4+ players</small></button></div>
       <div class="lo-sec"><div class="lo-title">Loadouts <small>Click one to open and edit it · that one is what you spawn with</small></div><div class="lo-list" id="loList"></div></div>
       <div class="chips" id="matches"></div>
       <button class="go" id="join" disabled>Join match</button>
@@ -1013,6 +1015,9 @@ button:focus-visible { outline: 3px solid var(--bone); outline-offset: 4px; }
 (() => {
 const $ = id => document.getElementById(id);
 const wrap = $('wrap');
+// UI scale for small windows: 1 at 1366x800 and up, down to 0.55
+function uiScale() { const k = Math.max(0.55, Math.min(1, innerWidth / 1366, innerHeight / 800)); document.documentElement.style.setProperty('--uis', k.toFixed(3)); }
+uiScale(); addEventListener('resize', uiScale);
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 
 // ---------- renderer / scene ----------
@@ -4025,7 +4030,7 @@ WEAPONS[1].wall = 1000;
 const MAPB = { x: WORLD_X, z: ARENA };
 const FOUNDRY_SET = scene.children.filter(o => o !== camera && o !== worldFlash);
 const FOUNDRY_WORLD = world.slice(), FOUNDRY_OBS = obstacles.slice();
-const SHIP = new THREE.Group(); SHIP.visible = false; scene.add(SHIP);
+const SHIP = new THREE.Group(); SHIP.visible = false; scene.add(SHIP); const SHIPX_WF = {};
 const SHIP_WORLD = [], SHIP_OBS = [], SHIP_HALF = 17.9;
 let curMap = 'foundry', shipTick = () => {}, shipQuiet = () => {};
 {
@@ -4113,7 +4118,7 @@ let curMap = 'foundry', shipTick = () => {}, shipQuiet = () => {};
   let k = 0; const pick = () => cols[(k++ * 5 + 3) % cols.length];
   const E = SHIP_HALF + Wd / 2 - 0.4;
   for (let i = 0; i < 6; i++) { const p = -18.3 + L / 2 + i * L;
-    for (const tier of [0, 1]) { box(p, -E, 'x', pick(), tier * H); box(p, E, 'x', pick(), tier * H); box(-E, p, 'z', pick(), tier * H); box(E, p, 'z', pick(), tier * H); }
+    for (const tier of [0, 1]) { box(p, -E, 'x', pick(), tier * H); if (i === 0 || i === 5) box(p, E, 'x', pick(), tier * H); else pick(); box(-E, p, 'z', pick(), tier * H); box(E, p, 'z', pick(), tier * H); }   // the south wall opens onto the quay
     if (i % 2 === 0) { box(p, -E, 'x', pick(), 2 * H); box(E, p, 'z', pick(), 2 * H); } }
   for (const [x, z] of [[-E, -E], [E, -E], [-E, E], [E, E]]) for (const tier of [0, 1]) box(x, z, 'x', pick(), tier * H);
   // the middle: a 2x2 block, one of them stacked
@@ -4156,7 +4161,7 @@ let curMap = 'foundry', shipTick = () => {}, shipQuiet = () => {};
   const poleMat = new THREE.MeshStandardMaterial({ color: 0x2a2d33, metalness: 0.7, roughness: 0.5 }), headMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
   const glowTex = canvasTex(64, 64, (g) => { const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.25, 'rgba(230,240,255,.55)'); gr.addColorStop(1, 'rgba(200,220,255,0)'); g.fillStyle = gr; g.fillRect(0, 0, 64, 64); });
   const coneMat = new THREE.MeshBasicMaterial({ map: TX.glowFade, color: 0xdfe8ff, transparent: true, opacity: 0.05, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, fog: false });
-  for (const [x, z, sh] of [[-21, -21, true], [21, -21, false], [-21, 21, false], [21, 21, true], [0, -21.5, false], [0, 21.5, false]]) {
+  for (const [x, z, sh] of [[-21, -21, true], [21, -21, false], [-21, 21, false], [21, 21, true], [0, -21.5, false], [0, 37.4, false]]) {
     const top = 13; add(new THREE.CylinderGeometry(0.15, 0.22, top, 10), poleMat, x, top / 2, z, 0, false);
     const hx = x * 0.93, hz = z * 0.93; add(new THREE.BoxGeometry(1.6, 0.6, 0.35), poleMat, hx, top, hz, Math.atan2(x, z), false);
     add(new THREE.BoxGeometry(1.4, 0.4, 0.05), headMat, hx - Math.sign(x) * 0.2 * (x ? 1 : 0), top - 0.05, hz - Math.sign(z) * 0.2, Math.atan2(x, z), false);
@@ -4328,7 +4333,7 @@ let curMap = 'foundry', shipTick = () => {}, shipQuiet = () => {};
     const logo = (x, y, z, ry) => { const m = new THREE.Mesh(lg, logoMats[li++ % logoMats.length]); m.position.set(x, y, z); m.rotation.y = ry; m.matrixAutoUpdate = false; m.updateMatrix(); SHIP.add(m); };
     const fIn = Wd / 2 + 0.03;
     for (let i = 0; i < 6; i++) { const p = -18.3 + L / 2 + i * L, tier = (i % 2) * H, y = tier + 1.35;
-      if (Math.abs(p) > 4) logo(p, y, -E + fIn, 0); logo(p, H - tier + 1.35, E - fIn, Math.PI);
+      if (Math.abs(p) > 4) logo(p, y, -E + fIn, 0); if (i === 0 || i === 5) logo(p, H - tier + 1.35, E - fIn, Math.PI);
       if (Math.abs(p) > 4) logo(-E + fIn, y + (i % 3 === 0 ? H : 0), p, Math.PI / 2); if (Math.abs(p) > 4) logo(E - fIn, H - tier + 1.35, p, -Math.PI / 2); }
     for (const [x, z] of [[-4.6, -3.8], [4.5, -3.8], [-4.8, 3.7], [4.5, 3.7]]) for (const sz of [-1, 1]) logo(x, 1.35 + (z > 0 ? (sz > 0 ? 0 : H) : 0), z + sz * fIn, sz > 0 ? 0 : Math.PI);
     logo(-14.4 + fIn, 1.35, 0, Math.PI / 2); }
@@ -4397,10 +4402,91 @@ let curMap = 'foundry', shipTick = () => {}, shipQuiet = () => {};
     }
   };
   shipQuiet = () => { if (rainGain && actx) rainGain.gain.setTargetAtTime(0, actx.currentTime, 0.2); };
+  // ================= the waterfront: the south wall opens onto a quay, and a container ship is moored alongside =================
+  // Quay z 20..28 (open ground with cover), ship's deck z 28..36 at 4.2 m up, reached by two gangways. The deck overlooks
+  // the quay and the yard's south lane; the quay has cover so the deck doesn't own it.
+  {
+    const DECK = 4.2, Z0 = 28, Z1 = 36, X0 = -17.2, X1 = 17.2;
+    const hullTex = canvasTex(1024, 256, (g) => {
+      g.fillStyle = '#1b1d22'; g.fillRect(0, 0, 1024, 256);
+      for (let i = 0; i < 1400; i++) { g.fillStyle = `rgba(${Math.random() < 0.5 ? '120,60,30' : '0,0,0'},${Math.random() * 0.12})`; g.fillRect(Math.random() * 1024, Math.random() * 256, 2 + Math.random() * 6, 2 + Math.random() * 30); }
+      g.fillStyle = '#7a1e18'; g.fillRect(0, 196, 1024, 60); g.fillStyle = '#e8e2d6'; g.fillRect(0, 190, 1024, 6);       // red boot-top, white waterline
+      for (let x = 0; x < 1024; x += 64) { g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(x, 0, 3, 190); }                     // hull plates
+      for (let y = 40; y < 190; y += 48) { g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(0, y, 1024, 2); }
+      g.fillStyle = '#e8e2d6'; g.font = '900 92px "Saira Stencil One", "IBM Plex Mono", monospace'; g.textAlign = 'center'; g.fillText('ORCA STAR', 512, 130);
+      g.font = '700 26px "IBM Plex Mono", monospace'; g.fillText('PANAMA · IMO 9732418', 512, 168);
+      for (let i = 0; i < 9; i++) { g.fillStyle = '#e8e2d6'; g.fillRect(40 + i * 14, 150 - i * 12, 18, 3); g.fillRect(984 - i * 14 - 18, 150 - i * 12, 18, 3); }   // draft marks
+      for (let i = 0; i < 60; i++) { const x = Math.random() * 1024, gr = g.createLinearGradient(0, 0, 0, 180); gr.addColorStop(0, 'rgba(110,52,22,.5)'); gr.addColorStop(1, 'rgba(110,52,22,0)'); g.fillStyle = gr; g.fillRect(x, Math.random() * 40, 2 + Math.random() * 3, 60 + Math.random() * 120); } });
+    const hullM = new THREE.MeshStandardMaterial({ map: hullTex, roughness: 0.65, metalness: 0.45 }), hullDark = new THREE.MeshStandardMaterial({ color: 0x1b1d22, roughness: 0.7, metalness: 0.4 });
+    const deckTex = canvasTex(256, 256, (g) => { g.fillStyle = '#3e4a3c'; g.fillRect(0, 0, 256, 256); for (let i = 0; i < 900; i++) { g.fillStyle = `rgba(${Math.random() < 0.5 ? '20,24,20' : '140,90,50'},${Math.random() * 0.25})`; g.fillRect(Math.random() * 256, Math.random() * 256, 3 + Math.random() * 6, 2 + Math.random() * 4); }
+      g.strokeStyle = 'rgba(0,0,0,.35)'; g.lineWidth = 3; for (let x = 0; x < 256; x += 64) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 256); g.stroke(); } });
+    deckTex.wrapS = deckTex.wrapT = THREE.RepeatWrapping; deckTex.repeat.set(9, 2);
+    const deckM = new THREE.MeshStandardMaterial({ map: deckTex, roughness: 0.75, metalness: 0.35 });
+    // hull: the long side facing the yard carries the name; the deck is solid and walkable
+    add(new THREE.BoxGeometry(X1 - X0, DECK + 2, Z1 - Z0), [hullDark, hullDark, deckM, hullDark, hullDark, hullM], 0, (DECK - 2) / 2, (Z0 + Z1) / 2);
+    blk(X0, X1, Z0, Z1, DECK);
+    // fenders squashed between hull and quay, mooring lines to bollards
+    const tyreM = new THREE.MeshStandardMaterial({ color: 0x111214, roughness: 0.95 }), ropeM = new THREE.MeshStandardMaterial({ color: 0x8a7a5a, roughness: 0.9 });
+    for (const x of [-13, -3, 9]) { const f = add(new THREE.CylinderGeometry(0.55, 0.55, 2.2, 16), tyreM, x, 1.0, Z0 - 0.5, 0, false); f.rotation.set(0, 0, Math.PI / 2); f.updateMatrix(); }
+    for (const x of [-15.5, -1, 13.5]) { add(new THREE.CylinderGeometry(0.22, 0.28, 0.7, 14), hullDark, x, 0.35, Z0 - 1.6); add(new THREE.CylinderGeometry(0.32, 0.32, 0.08, 14), hullDark, x, 0.72, Z0 - 1.6); blk(x - 0.3, x + 0.3, Z0 - 1.9, Z0 - 1.3, 0.75);
+      bar([x, 0.6, Z0 - 1.6], [x + 0.6, DECK - 0.4, Z0 + 0.1], 0.04, ropeM); bar([x, 0.5, Z0 - 1.6], [x - 0.8, DECK - 0.6, Z0 + 0.1], 0.04, ropeM); }
+    // bulwark rails along the deck's edges: waist-high, bullets pass
+    const rail = (xa, xb, z) => { bar([xa, DECK + 1.0, z], [xb, DECK + 1.0, z], 0.035, railMat); bar([xa, DECK + 0.5, z], [xb, DECK + 0.5, z], 0.025, railMat);
+      for (let x = xa; x <= xb + 0.01; x += 1.5) bar([x, DECK, z], [x, DECK + 1.0, z], 0.03, railMat); SHIP_OBS.push({ minX: xa, maxX: xb, minZ: z - 0.06, maxZ: z + 0.06, h: DECK + 1.0, y0: DECK }); };
+    const GW = [-6.2, 5.0], GWW = 1.3;
+    rail(X0 + 0.2, GW[0] - GWW / 2, Z0 + 0.12); rail(GW[0] + GWW / 2, GW[1] - GWW / 2, Z0 + 0.12); rail(GW[1] + GWW / 2, X1 - 0.2, Z0 + 0.12); rail(X0 + 0.2, X1 - 0.2, Z1 - 0.15);
+    // gangways: 21 steps of 0.2 m from the quay up to the deck, with handrails
+    for (const gx of GW) { const n = 21, run = 5.6 / n, zA = Z0 - 5.6;
+      for (let i = 0; i < n; i++) { const h = (i + 1) * DECK / n, za = zA + i * run;
+        add(new THREE.BoxGeometry(GWW, 0.05, run), tread, gx, h - 0.025, za + run / 2);
+        add(new THREE.BoxGeometry(GWW - 0.06, Math.min(h, 0.2), 0.02), hazard, gx, h - 0.1, za + 0.01, 0, false);
+        blk(gx - GWW / 2, gx + GWW / 2, za, za + run, h); SHIP_OBS[SHIP_OBS.length - 1].step = true; }
+      const sh = new THREE.Shape([new THREE.Vector2(0, 0), new THREE.Vector2(5.6, DECK - 0.03), new THREE.Vector2(5.6, 0)]), sg = new THREE.ExtrudeGeometry(sh, { depth: 0.06, bevelEnabled: false });
+      for (const sx of [-1, 1]) { const st = add(sg, steel, gx + sx * (GWW / 2 + 0.03), 0, zA, -Math.PI / 2, false); }
+      for (const sx of [-1, 1]) { const x = gx + sx * (GWW / 2 - 0.04); bar([x, 1.2, zA + 0.2], [x, DECK + 1.0, Z0], 0.03, railMat); for (let i = 2; i < n; i += 4) { const z = zA + (i + 0.5) * run; bar([x, (i + 1) * DECK / n, z], [x, (i + 1) * DECK / n + 1.0, z], 0.025, railMat); }
+        SHIP_OBS.push({ minX: x - 0.05, maxX: x + 0.05, minZ: zA, maxZ: Z0, h: DECK + 1.0, y0: 0.2 }); } }
+    // cargo on deck: stacked containers, low hatch covers, a winch; the bridge tower on the east end
+    box(-11.5, 32.4, 'x', 'blue', DECK); box(-11.5, 32.4, 'x', 'cream', DECK + H);
+    box(1.2, 33.2, 'x', 'rust', DECK);
+    { const hatch = (x, z, w, d) => { add(new THREE.BoxGeometry(w, 0.7, d), mats('green').plain, x, DECK + 0.35, z); blk(x - w / 2, x + w / 2, z - d / 2, z + d / 2, DECK + 0.7); };
+      hatch(-4.6, 31.2, 3.2, 2.2); hatch(7.4, 31.0, 2.6, 2.4); }
+    { const x = -1.2, z = 30.2; add(new THREE.CylinderGeometry(0.45, 0.45, 1.4, 16), hullDark, x, DECK + 0.6, z, 0); const w = add(new THREE.CylinderGeometry(0.5, 0.5, 1.2, 16), ropeM, x, DECK + 0.6, z, 0, false); w.rotation.set(0, 0, Math.PI / 2); w.updateMatrix(); blk(x - 0.8, x + 0.8, z - 0.5, z + 0.5, DECK + 1.1); }
+    // bridge tower: white block, rows of lit windows, wings, mast with a blinking light
+    const tower = new THREE.MeshStandardMaterial({ color: 0xd8d4c8, roughness: 0.6, metalness: 0.2 });
+    const winTex = canvasTex(256, 256, (g) => { g.fillStyle = '#d8d4c8'; g.fillRect(0, 0, 256, 256); for (let r = 0; r < 4; r++) for (let c = 0; c < 6; c++) { const lit = Math.random() < 0.6; g.fillStyle = lit ? '#ffd890' : '#1a2230'; g.fillRect(12 + c * 41, 18 + r * 60, 30, 26); if (lit) { g.fillStyle = 'rgba(255,200,120,.35)'; g.fillRect(8 + c * 41, 14 + r * 60, 38, 34); } } });
+    const winM = new THREE.MeshStandardMaterial({ map: winTex, roughness: 0.5, emissive: 0xffffff, emissiveMap: winTex, emissiveIntensity: 0.55 });
+    add(new THREE.BoxGeometry(6, 8, 7), [tower, tower, tower, tower, winM, winM], 14, DECK + 4, 32.2); blk(11, 17, 28.7, 35.7, DECK + 8);
+    add(new THREE.BoxGeometry(7.6, 0.3, 1.4), tower, 14, DECK + 8.15, 28.4, 0, false);
+    add(new THREE.CylinderGeometry(0.08, 0.1, 5, 8), steel, 14, DECK + 10.5, 32.2, 0, false);
+    const blinkM = new THREE.MeshBasicMaterial({ color: 0xff2a1a }); SHIPX_WF.blink = add(new THREE.SphereGeometry(0.18, 10, 6), blinkM, 14, DECK + 13.1, 32.2, 0, false);
+    add(new THREE.BoxGeometry(2.2, 3.4, 2.2), mats('red').plain, 14, DECK + 9.7, 34.4, 0, false);    // funnel
+    // the quay: ground paint, crane rails, cover
+    const paint = new THREE.MeshBasicMaterial({ color: 0xd8b022, transparent: true, opacity: 0.8, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 });
+    { const m = add(new THREE.PlaneGeometry(X1 - X0, 0.18), paint, 0, 0.015, Z0 - 0.35, 0, false); m.rotation.x = -Math.PI / 2; m.updateMatrix(); }
+    for (const z of [21.2, 25.6]) add(new THREE.BoxGeometry(36, 0.06, 0.14), steel, 0, 0.03, z, 0, false);
+    box(-12.6, 23.9, 'x', 'teal'); box(-12.6, 23.9, 'x', 'yellow', H);      // a stack on the west quay
+    open(11.2, 23.4, 'x', 'red');                                           // walk-through on the east quay
+    barrels(-1.6, 22.3, 5, false); crates(1.2, 25.6, true); crates(-9.4, 26.6, false);
+    const gbags = (x0, x1, z, rows) => { const n = Math.round((x1 - x0) / 0.54);   // sandbag walls on the ground (bags() builds on roofs)
+      for (let r = 0; r < rows; r++) for (let i = 0; i < n - (r % 2); i++) addR(bagG, bagM, x0 + 0.27 + i * 0.54 + (r % 2) * 0.27, 0.085 + r * 0.16, z, 0, ((i * 7 + r * 3) % 5 - 2) * 0.04, ((i * 3 + r) % 3 - 1) * 0.03);
+      blk(x0, x1, z - 0.16, z + 0.16, rows * 0.16); };
+    gbags(-4.9, -3.0, 24.3, 6); gbags(6.6, 8.4, 26.9, 6);
+    // quay-side walls: two-high containers close the quay off at the east and west ends
+    for (const sx of [-1, 1]) for (const tier of [0, 1]) box(sx * (SHIP_HALF + Wd / 2 - 0.4), 23.6, 'z', tier ? 'rust' : 'green', tier * H);
+    // dark harbour water past the stern, and the bow/stern ends of the deck closed by steel
+    const waterTex = canvasTex(256, 256, (g) => { g.fillStyle = '#06090d'; g.fillRect(0, 0, 256, 256); for (let i = 0; i < 260; i++) { g.fillStyle = `rgba(${150 + Math.random() * 80 | 0},${170 + Math.random() * 60 | 0},200,${Math.random() * 0.2})`; g.fillRect(Math.random() * 256, Math.random() * 256, 6 + Math.random() * 30, 1); } });
+    waterTex.wrapS = waterTex.wrapT = THREE.RepeatWrapping; waterTex.repeat.set(10, 8); SHIPX_WF.water = waterTex;
+    const wm = add(new THREE.PlaneGeometry(220, 120), new THREE.MeshStandardMaterial({ map: waterTex, color: 0x9ab0c8, roughness: 0.15, metalness: 0.7 }), 0, 0.04, Z1 + 60, 0, false); wm.rotation.x = -Math.PI / 2; wm.updateMatrix(); wm.receiveShadow = false;
+    // light: sodium floods off the tower onto the quay, deck lamps
+    const qs = new THREE.SpotLight(0xffb066, 1.3, 40, 0.75, 0.6, 1.4); qs.position.set(11, DECK + 7.6, 28.6); qs.target.position.set(-4, 0, 22); SHIP.add(qs, qs.target);
+    const ql = new THREE.PointLight(0xffc27a, 0.8, 14, 2); ql.position.set(-8, DECK + 2.6, 30); SHIP.add(ql);
+    add(new THREE.SphereGeometry(0.1, 10, 6), new THREE.MeshBasicMaterial({ color: 0xffd9a0 }), -8, DECK + 2.6, 30, 0, false);
+    add(new THREE.CylinderGeometry(0.05, 0.05, 2.6, 6), steel, -8, DECK + 1.3, 30.4, 0, false);
+  }
   // light: low warm sun and a big sky
   const hemi = new THREE.HemisphereLight(0x6a7c98, 0x221c16, 0.5); SHIP.add(hemi);
   const sunS = new THREE.DirectionalLight(0x9ab2dc, 0.45); sunS.position.set(-18, 30, -12); sunS.castShadow = true;
-  Object.assign(sunS.shadow.camera, { left: -26, right: 26, top: 26, bottom: -26, near: 1, far: 80 }); sunS.shadow.mapSize.set(2048, 2048); sunS.shadow.bias = -0.0006;
+  Object.assign(sunS.shadow.camera, { left: -36, right: 36, top: 36, bottom: -36, near: 1, far: 100 }); sunS.shadow.mapSize.set(2048, 2048); sunS.shadow.bias = -0.0006;
   SHIP.add(sunS, sunS.target);
 }
 const SHIP_SKY = canvasTex(16, 256, (g) => { const gr = g.createLinearGradient(0, 0, 0, 256); gr.addColorStop(0, '#05070b'); gr.addColorStop(0.55, '#121820'); gr.addColorStop(0.72, '#1c222a'); gr.addColorStop(1, '#0c0d0f'); g.fillStyle = gr; g.fillRect(0, 0, 16, 256); });
@@ -4412,7 +4498,7 @@ function setMap(name) {
   world.length = 0; world.push(...(ship ? SHIP_WORLD : FOUNDRY_WORLD));
   obstacles.length = 0; obstacles.push(...(ship ? SHIP_OBS : FOUNDRY_OBS));
   if (!ship) { shipQuiet(); for (const B of BLAST) if (B.open) setArea(B.key, true); }
-  MAPB.x = ship ? SHIP_HALF : WORLD_X; MAPB.z = ship ? SHIP_HALF : ARENA;
+  MAPB.x = ship ? SHIP_HALF : WORLD_X; MAPB.z = ship ? SHIP_HALF : ARENA; MAPB.zS = ship ? 36.6 : undefined;   // Cargo runs south past the quay onto the ship
   scene.background = ship ? SHIP_SKY : FOUNDRY_BG; scene.fog = ship ? SHIP_FOG : FOUNDRY_FOG;
   renderer.shadowMap.needsUpdate = true;
 }
@@ -6169,7 +6255,7 @@ function groan(e, kind) {
 const COLORS = [0xff8a1f, 0x3fe08a, 0x4fb3ff, 0xff4fd2, 0xffe27a, 0xb08cff, 0xff5a5a, 0x5ae6e6];
 const CSS = c => '#' + c.toString(16).padStart(6, '0');
 const SPAWNS = [[-20,-20],[20,-21],[-21,20],[21,20],[-8,-21],[0,21],[-21,0],[21,0]];
-const SHIP_SPAWNS = [[-15.5,-15.5],[15.5,-15.5],[-15.5,15.5],[15.5,15.5],[-8,-15.6],[8,15.6],[-15.6,8],[15.6,-8],[0,-16.2],[0,16.2],[-16.6,0],[16.6,-0.2]];
+const SHIP_SPAWNS = [[-15.5,-15.5],[15.5,-15.5],[-15.5,15.5],[15.5,15.5],[-8,-15.6],[8,15.6],[-15.6,8],[15.6,-8],[0,-16.2],[0,16.2],[-16.6,0],[16.6,-0.2],[-14.4,26.9],[15.0,26.8],[0.8,20.6],[-8,21.4]];
 const net = {
   lobby: null, match: null, code: '', me: null,
   name: (store.get('fb-name') || 'Rivet' + Math.floor(100 + Math.random() * 900)).slice(0, 14),
@@ -7030,7 +7116,7 @@ function stepNades(dt) {
         if (pen[1] === 'y') { p.y = o.h + 0.06; if (v.y < 0) { v.y = -v.y * 0.32; v.x *= 0.72; v.z *= 0.72; } }
         else { p[pen[1]] += pen[2] * pen[0]; if (Math.sign(v[pen[1]]) !== pen[2]) { v[pen[1]] = -v[pen[1]] * 0.42; v.x *= 0.85; v.z *= 0.85; } if (Math.abs(v[pen[1]]) > 2 && n.bounceT !== performance.now()) { n.bounceT = performance.now(); sfxAt('tap', 0.5, p); } } }
       const fl = nadeFloor(p.x, p.z, p.y); if (p.y < fl + 0.06) { p.y = fl + 0.06; if (v.y < -2.5) sfxAt('tap', Math.min(0.6, -v.y * 0.06), p); if (v.y < 0) v.y = -v.y * 0.3; v.x *= 0.72; v.z *= 0.72; if (Math.abs(v.y) < 0.6) v.y = 0; }
-      const lx = MAPB.x - 0.3, lz = MAPB.z - 0.3; if (Math.abs(p.x) > lx) { p.x = Math.sign(p.x) * lx; v.x = -v.x * 0.4; } if (Math.abs(p.z) > lz) { p.z = Math.sign(p.z) * lz; v.z = -v.z * 0.4; }
+      const lx = MAPB.x - 0.3, lz = MAPB.z - 0.3, lzS = (MAPB.zS || MAPB.z) - 0.3; if (Math.abs(p.x) > lx) { p.x = Math.sign(p.x) * lx; v.x = -v.x * 0.4; } if (p.z < -lz || p.z > lzS) { p.z = p.z < 0 ? -lz : lzS; v.z = -v.z * 0.4; }
     }
     n.m.rotation.x += v.z * dt * 3; n.m.rotation.z -= v.x * dt * 3;
     n.beep -= dt; if (n.beep <= 0 && n.t < 1.2) { n.beep = 0.25; sparks(p, 0xff3a20, 1, 0.5); }
@@ -7464,6 +7550,7 @@ function stepShipExtra(dt, t) {
   SHIPX.box.rotation.z = Math.sin(t * 0.7) * 0.012; SHIPX.box.rotation.x = Math.sin(t * 0.53 + 1) * 0.015;
   SHIPX.pool.position.set(tx + 0.9 + Math.sin(t * 0.7) * 0.1, 0.03, 1.0 + 0.9);
   const on = Math.sin(t * 3) > 0.6; for (const w of SHIPX.warn) w.visible = on;
+  if (SHIPX_WF.blink) SHIPX_WF.blink.visible = Math.sin(t * 2.2) > 0.3; if (SHIPX_WF.water) SHIPX_WF.water.offset.set(t * 0.004, t * 0.011);
   // lightning: a double flicker, a lit sky, then thunder a moment later
   SHIPX.nextBolt -= dt;
   if (SHIPX.nextBolt <= 0) { SHIPX.nextBolt = 14 + Math.random() * 22; SHIPX.flash = 1; SHIPX.flick = [0.09, 0.2, 0.31].slice(0, 2 + (Math.random() < 0.5)); SHIPX.fT = 0; thunder(0.5 + Math.random() * 2.5); }
@@ -7521,12 +7608,10 @@ $('quit').onclick = toMenu;
 $('resume').onclick = begin;
 $('join').onclick = joinMatch;
 // map picker: the choice is part of the room, so friends on the same code and map end up together
-function pickMap(m) { net.mapSel = m === 'foundry' ? 'foundry' : 'ship'; store.set('hz-map', net.mapSel);
-  for (const b of $('mapPick').children) { const on = b.dataset.m === net.mapSel; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); }
+function pickMap(m) { net.mapSel = 'ship';
   const sub = $('mpSub'); if (sub) sub.textContent = 'Deathmatch · ' + (net.mapSel === 'foundry' ? 'Foundry' : 'Cargo');
   if (state === 'menu' && !$('mpPanel').hidden) setMap(net.mapSel); }
-$('mapPick').addEventListener('click', e => { const b = e.target.closest('button[data-m]'); if (b) { pickMap(b.dataset.m); sfx('click'); } });
-pickMap(store.get('hz-map') || 'ship');
+pickMap('ship');   // online play is Cargo only
 $('openSettings').onclick = () => openSettings('start');
 
 // ---- main menu life: embers rising through the light, tiles that tilt toward the cursor, live clock and best score ----
@@ -7974,8 +8059,8 @@ function gameOver() {
 
 // ---------- collision ----------
 function collide(p, r) {
-  const lx = MAPB.x - 0.5 - r, lz = MAPB.z - 0.5 - r;
-  p.x = Math.max(-lx, Math.min(lx, p.x)); p.z = Math.max(-lz, Math.min(lz, p.z));
+  const lx = MAPB.x - 0.5 - r, lz = MAPB.z - 0.5 - r, lzS = (MAPB.zS || MAPB.z) - 0.5 - r;
+  p.x = Math.max(-lx, Math.min(lx, p.x)); p.z = Math.max(-lz, Math.min(lzS, p.z));
   for (const o of obstacles) {
     if (p.y - 1.5 > o.h) continue;
     if (o.y0 !== undefined && p.y + 0.15 < o.y0) continue;
@@ -8116,7 +8201,7 @@ function drawMinimap() {
   const g = mmCtx, W0 = 352, c = W0 / 2, sc = 6.2, yaw = player.yaw, cs = Math.cos(yaw), sn = Math.sin(yaw), px = player.pos.x, pz = player.pos.z;
   const P = (x, z) => { const dx = x - px, dz = z - pz; return [c + (dx * cs - dz * sn) * sc, c + (dx * sn + dz * cs) * sc]; };
   g.clearRect(0, 0, W0, W0); g.save(); g.beginPath(); g.roundRect ? g.roundRect(0, 0, W0, W0, 22) : g.rect(0, 0, W0, W0); g.clip();
-  g.fillStyle = 'rgba(40,36,32,.55)'; const B = MAPB.x; { const q = [P(-B, -B), P(B, -B), P(B, B), P(-B, B)]; g.beginPath(); g.moveTo(...q[0]); for (const v of q.slice(1)) g.lineTo(...v); g.closePath(); g.fill(); }
+  g.fillStyle = 'rgba(40,36,32,.55)'; const B = MAPB.x, BS = MAPB.zS || B; { const q = [P(-B, -B), P(B, -B), P(B, BS), P(-B, BS)]; g.beginPath(); g.moveTo(...q[0]); for (const v of q.slice(1)) g.lineTo(...v); g.closePath(); g.fill(); }
   for (const o of obstacles) { if (o.y0 !== undefined && o.y0 > 1) continue; if (o.h < 0.8) continue;
     const q = [P(o.minX, o.minZ), P(o.maxX, o.minZ), P(o.maxX, o.maxZ), P(o.minX, o.maxZ)];
     g.fillStyle = o.h > 2.4 ? 'rgba(150,158,168,.75)' : 'rgba(110,116,124,.6)'; g.beginPath(); g.moveTo(...q[0]); for (const v of q.slice(1)) g.lineTo(...v); g.closePath(); g.fill(); }
