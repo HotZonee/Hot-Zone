@@ -6673,12 +6673,12 @@ function decodeSave(code) {
 function applySave(snap, why) {
   for (const k of SAVE_KEYS) { if (typeof snap.d[k] === 'string') store.set(k, snap.d[k]); else try { localStorage.removeItem(k); } catch (e) {} }
   _rawSet('hz-saved-at', String(snap.at || Date.now())); _rawSet('hz-synced-at', String(snap.at || Date.now()));
-  try { sessionStorage.setItem('hz-note', why || 'Save loaded'); } catch (e) {}
+  try { sessionStorage.setItem('hz-note', why || 'Save loaded'); sessionStorage.setItem('hz-loaded-at', String(Date.now())); } catch (e) {}
   location.reload();
 }
 // every write to a saved key stamps the local save time and queues a cloud upload
 const _rawSet = store.set.bind(store);
-store.set = (k, v) => { _rawSet(k, v); if (SAVE_KEYS.includes(k)) { _rawSet('hz-saved-at', String(Date.now())); cloudQueue(); } };
+store.set = (k, v) => { const was = store.get(k); _rawSet(k, v); if (SAVE_KEYS.includes(k) && was !== String(v)) { _rawSet('hz-saved-at', String(Date.now())); cloudQueue(); } };
 
 // ---- cloud ----
 const cloud = { on: !!(SUPABASE_URL && SUPABASE_KEY), user: null, state: 'idle', msg: '', conflict: null, timer: 0, busy: false };
@@ -6702,7 +6702,9 @@ async function cloudPull() {
   if (!data || !data.data || !data.data.d) { await cloudPush(true); return; }          // first sign-in: this device's progress goes up
   const remote = data.data, rAt = +remote.at || 0;
   if (rAt === lAt) { cloud.state = 'synced'; _rawSet('hz-synced-at', String(rAt)); cloud.last = Date.now(); renderSaveIfOpen(); return; }
-  const fresh = ls.xp === 0 && ls.best === 0;
+  const rs = saveSummary(remote), fresh = ls.xp === 0 && ls.best === 0 && (rs.xp > 0 || rs.best > 0);
+  let justLoaded = false; try { justLoaded = Date.now() - +(sessionStorage.getItem('hz-loaded-at') || 0) < 60000; } catch (e) {}
+  if (justLoaded || (rs.xp === ls.xp && rs.best === ls.best && rs.kills === ls.kills)) { await cloudPush(true); return; }   // never reload twice in a row; same progress: just sync
   if (fresh || (rAt > lAt && lAt <= synced)) { applySave(remote, 'Cloud save loaded'); return; }      // only the cloud changed: take it
   if (lAt > rAt && rAt <= synced) { await cloudPush(true); return; }                                  // only this device changed: send it
   cloud.conflict = remote; cloud.state = 'conflict'; renderSaveIfOpen(); try { toast('Cloud save', 'Pick a save', 'Your cloud save and this device differ · Settings › Save'); } catch (e) {}
