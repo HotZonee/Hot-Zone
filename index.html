@@ -6395,8 +6395,8 @@ function interpRemotes() {
 // Paste your Supabase project's URL and its anon / publishable key here (Project Settings -> API). Both are safe to ship in a
 // public page: the anon key only lets people use Realtime channels. Leave them empty and online play only works inside Claude.
 // =====================================================================================================================
-const SUPABASE_URL = '';
-const SUPABASE_KEY = '';
+const SUPABASE_URL = 'https://fqdrnpotnsmwlkwqxoif.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_er3I9VkndR_qhz_zdt7tKg_av9MEIdx';
 function loadScript(src) { return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.append(s); }); }
 async function supaRoom() {
   if (!SUPABASE_URL || !SUPABASE_KEY) return null;
