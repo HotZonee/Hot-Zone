@@ -483,6 +483,16 @@ button:focus-visible { outline: 3px solid var(--bone); outline-offset: 4px; }
 .tog:hover { background: #000; } .tog[aria-checked="true"]:hover { background: #46464c; }
 .sheet-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; padding-top: 22px; }
 .sheet-foot .note { font: 400 13px "Fira Sans", system-ui, sans-serif; color: #77777d; }
+.srow.sv-col { flex-direction: column; align-items: stretch; gap: 10px; padding: 14px 22px; } .sv-dim { font: 500 12px var(--mono); color: #8a8a90; }
+.sv-btns { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.sv-btn { all: unset; box-sizing: border-box; cursor: pointer; padding: 9px 16px; border-radius: 4px; background: var(--coolant, #3ff0d6); color: #071614; font: 700 12px var(--ui, system-ui); letter-spacing: .08em; text-transform: uppercase; }
+.sv-btn.ghost { background: transparent; color: #e9e4da; box-shadow: inset 0 0 0 1px rgba(255,255,255,.22); } .sv-btn:hover { filter: brightness(1.1); } .sv-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; } .sv-btn[disabled] { opacity: .5; cursor: default; }
+.sv-ta, .sv-in { box-sizing: border-box; width: 100%; background: rgba(0,0,0,.35); color: #e9e4da; border: 1px solid rgba(255,255,255,.15); border-radius: 4px; padding: 9px 11px; font: 500 12px var(--mono); }
+.sv-ta { min-height: 64px; resize: vertical; } .sv-in { flex: 1 1 220px; width: auto; } .sv-ta:focus, .sv-in:focus { outline: none; border-color: var(--coolant, #3ff0d6); }
+.sv-msg { font: 400 13px "Fira Sans", system-ui, sans-serif; color: #9aa6a0; } .sv-msg.no { color: #ff8a6a; } .sv-msg:empty { display: none; }
+.sv-pick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } .sv-card { all: unset; box-sizing: border-box; cursor: pointer; display: grid; gap: 3px; padding: 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.04); }
+.sv-card:hover, .sv-card:focus-visible { border-color: var(--coolant, #3ff0d6); } .sv-card b { font: 700 13px var(--ui, system-ui); color: #ece6da; } .sv-card span { font: 500 12px var(--mono); color: #c8c2b8; } .sv-card small { font: 400 11px var(--mono); color: #8a8a90; }
+@media (max-width: 560px) { .sv-pick { grid-template-columns: 1fr; } }
 .sheet-foot .btns button { font: 700 14px "Fira Sans", system-ui, sans-serif; letter-spacing: .12em; text-transform: uppercase; padding: 12px 20px; clip-path: none; }
 #sback { background: var(--s-head); color: #111; }
 #sback:hover { background: #fff; }
@@ -987,11 +997,12 @@ button:focus-visible { outline: 3px solid var(--bone); outline-offset: 4px; }
         <button type="button" role="tab" id="tab-keys" aria-selected="false">Keybinds</button>
         <button type="button" role="tab" id="tab-video" aria-selected="false">Video</button>
         <button type="button" role="tab" id="tab-audio" aria-selected="false">Audio</button>
+        <button type="button" role="tab" id="tab-save" aria-selected="false">Save</button>
       </div>
     </div>
     <div id="spane"></div>
     <div class="sheet-foot">
-      <span class="note">Settings save in this browser.</span>
+      <span class="note">Settings save in this browser · Save tab to move progress</span>
       <div class="btns"><button type="button" id="sreset">Reset to defaults</button><button type="button" id="sback">Back</button></div>
     </div>
   </div>
@@ -6490,9 +6501,7 @@ const SUPABASE_KEY = 'sb_publishable_er3I9VkndR_qhz_zdt7tKg_av9MEIdx';
 function loadScript(src) { return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.append(s); }); }
 async function supaRoom() {
   if (!SUPABASE_URL || !SUPABASE_KEY) return null;
-  try { if (!window.supabase) await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.80.0/dist/umd/supabase.js'); } catch (e) { return null; }
-  if (!window.supabase || !window.supabase.createClient) return null;
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { realtime: { params: { eventsPerSecond: 40 } } });
+  const sb = await getSb(); if (!sb) return null;
   const myId = 'p' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
   // one channel = one room. The lobby keeps everyone's {m: room code} in Supabase presence (rarely changes); a match room
   // uses presence only to know who's there and sends the fast-moving player state as broadcasts, paced so the whole room
@@ -6541,6 +6550,152 @@ async function supaRoom() {
   }
   const L = makeRoom('hz-lobby', true); return L.api;
 }
+
+// =====================================================================================================================
+// ---------- saves: a save code anyone can copy between browsers, plus optional cloud saves behind a Supabase sign-in ----------
+// =====================================================================================================================
+const SAVE_KEYS = ['hz-prog', 'fb-mploadouts', 'fb-best', 'fb-settings', 'fb-name', 'hz-map'];
+// one shared Supabase client for rooms and sign-in
+let _sbP = null;
+function getSb() {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return Promise.resolve(null);
+  if (!_sbP) _sbP = (async () => {
+    try { if (!window.supabase) await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.80.0/dist/umd/supabase.js'); } catch (e) { return null; }
+    if (!window.supabase || !window.supabase.createClient) return null;
+    return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { realtime: { params: { eventsPerSecond: 40 } }, auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
+  })();
+  return _sbP;
+}
+function saveSnapshot() { const d = {}; for (const k of SAVE_KEYS) { const v = store.get(k); if (v != null) d[k] = v; } return { v: 1, at: +(store.get('hz-saved-at') || 0) || Date.now(), d }; }
+function saveSummary(snap) {
+  let p = {}; try { p = JSON.parse((snap && snap.d && snap.d['hz-prog']) || '{}') || {}; } catch (e) {}
+  const xp = +p.xp || 0, gk = Array.isArray(p.gk) ? p.gk.reduce((a, b) => a + (+b || 0), 0) : 0;
+  return { L: levelOf(xp).L, xp, best: +((snap && snap.d && snap.d['fb-best']) || 0), camos: Object.keys(p.camo || {}).length, kills: gk, at: snap && snap.at || 0 };
+}
+const sumText = (s) => `Level ${s.L} · ${s.kills.toLocaleString()} gun kills · best wave ${s.best}`;
+function encodeSave(snap) { return 'HZ1.' + btoa(unescape(encodeURIComponent(JSON.stringify(snap)))); }
+function decodeSave(code) {
+  code = String(code || '').trim();
+  let s;
+  if (code.startsWith('{')) s = JSON.parse(code);      // a downloaded save file, opened or pasted in
+  else { code = code.replace(/\s+/g, ''); if (!code.startsWith('HZ1.')) throw new Error('That isn\'t a Hot Zone save code'); s = JSON.parse(decodeURIComponent(escape(atob(code.slice(4))))); }
+  if (!s || typeof s !== 'object' || !s.d || typeof s.d !== 'object') throw new Error('That save code is damaged');
+  const d = {}; for (const k of SAVE_KEYS) if (typeof s.d[k] === 'string' && s.d[k].length < 200000) d[k] = s.d[k];
+  if (d['hz-prog']) JSON.parse(d['hz-prog']);   // must be valid
+  return { v: 1, at: +s.at || Date.now(), d };
+}
+function applySave(snap, why) {
+  for (const k of SAVE_KEYS) { if (typeof snap.d[k] === 'string') store.set(k, snap.d[k]); else try { localStorage.removeItem(k); } catch (e) {} }
+  _rawSet('hz-saved-at', String(snap.at || Date.now())); _rawSet('hz-synced-at', String(snap.at || Date.now()));
+  try { sessionStorage.setItem('hz-note', why || 'Save loaded'); } catch (e) {}
+  location.reload();
+}
+// every write to a saved key stamps the local save time and queues a cloud upload
+const _rawSet = store.set.bind(store);
+store.set = (k, v) => { _rawSet(k, v); if (SAVE_KEYS.includes(k)) { _rawSet('hz-saved-at', String(Date.now())); cloudQueue(); } };
+
+// ---- cloud ----
+const cloud = { on: !!(SUPABASE_URL && SUPABASE_KEY), user: null, state: 'idle', msg: '', conflict: null, timer: 0, busy: false };
+function cloudQueue() { if (!cloud.user || cloud.conflict) return; clearTimeout(cloud.timer); cloud.timer = setTimeout(() => cloudPush(), 4000); }
+async function cloudPush(force) {
+  if (!cloud.user || (cloud.conflict && !force) || cloud.busy) return; const sb = await getSb(); if (!sb) return;
+  cloud.busy = true; const snap = saveSnapshot();
+  const { error } = await sb.from('saves').upsert({ user_id: cloud.user.id, data: snap, updated_at: new Date().toISOString() });
+  cloud.busy = false;
+  if (error) { cloud.state = 'error'; cloud.msg = cloudErr(error); }
+  else { cloud.state = 'synced'; cloud.msg = ''; _rawSet('hz-synced-at', String(snap.at)); cloud.last = Date.now(); }
+  renderSaveIfOpen();
+}
+const cloudErr = (e) => /relation|does not exist|schema cache/i.test(e.message || '') ? 'The saves table isn\'t set up in Supabase yet.' : /JWT|auth/i.test(e.message || '') ? 'Your sign-in expired. Sign in again.' : 'Couldn\'t reach the cloud: ' + (e.message || 'unknown error');
+async function cloudPull() {
+  const sb = await getSb(); if (!sb || !cloud.user) return;
+  cloud.state = 'syncing'; renderSaveIfOpen();
+  const { data, error } = await sb.from('saves').select('data, updated_at').eq('user_id', cloud.user.id).maybeSingle();
+  if (error) { cloud.state = 'error'; cloud.msg = cloudErr(error); renderSaveIfOpen(); return; }
+  const local = saveSnapshot(), lAt = +(store.get('hz-saved-at') || 0), synced = +(store.get('hz-synced-at') || 0), ls = saveSummary(local);
+  if (!data || !data.data || !data.data.d) { await cloudPush(true); return; }          // first sign-in: this device's progress goes up
+  const remote = data.data, rAt = +remote.at || 0;
+  if (rAt === lAt) { cloud.state = 'synced'; _rawSet('hz-synced-at', String(rAt)); cloud.last = Date.now(); renderSaveIfOpen(); return; }
+  const fresh = ls.xp === 0 && ls.best === 0;
+  if (fresh || (rAt > lAt && lAt <= synced)) { applySave(remote, 'Cloud save loaded'); return; }      // only the cloud changed: take it
+  if (lAt > rAt && rAt <= synced) { await cloudPush(true); return; }                                  // only this device changed: send it
+  cloud.conflict = remote; cloud.state = 'conflict'; renderSaveIfOpen(); try { toast('Cloud save', 'Pick a save', 'Your cloud save and this device differ · Settings › Save'); } catch (e) {}
+}
+async function cloudInit() {
+  if (!cloud.on) return; const sb = await getSb(); if (!sb) { cloud.state = 'error'; cloud.msg = 'Couldn\'t load the sign-in service.'; return; }
+  sb.auth.onAuthStateChange((ev, session) => {
+    const u = session && session.user || null, was = cloud.user && cloud.user.id;
+    cloud.user = u; if (u && u.id !== was) { cloud.conflict = null; cloudPull(); } else if (!u) { cloud.state = 'idle'; renderSaveIfOpen(); }
+  });
+  const { data } = await sb.auth.getSession(); if (data && data.session && !cloud.user) { cloud.user = data.session.user; cloudPull(); }
+  addEventListener('beforeunload', () => { if (cloud.user && +(store.get('hz-saved-at') || 0) > +(store.get('hz-synced-at') || 0)) cloudPush(); });
+}
+async function cloudSignIn(email) {
+  const sb = await getSb(); if (!sb) return;
+  cloud.state = 'sending'; renderSaveIfOpen();
+  const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.href.split('#')[0].split('?')[0] } });
+  cloud.state = error ? 'error' : 'sent'; cloud.msg = error ? (/rate|seconds/i.test(error.message) ? 'Too many sign-in emails right now. Try again in a bit.' : error.message) : email; renderSaveIfOpen();
+}
+async function cloudSignOut() { const sb = await getSb(); if (sb) await sb.auth.signOut(); cloud.user = null; cloud.conflict = null; cloud.state = 'idle'; renderSaveIfOpen(); }
+
+// ---- the Save tab in Settings ----
+function renderSaveIfOpen() { if (!$('settings').hidden && settingsTab === 'save') renderSettings(); }
+const ago = (t) => { const s = Math.round((Date.now() - t) / 1000); return s < 60 ? 'just now' : s < 3600 ? Math.round(s / 60) + ' min ago' : s < 86400 ? Math.round(s / 3600) + ' h ago' : new Date(t).toLocaleDateString(); };
+function renderSavePane(pane) {
+  const local = saveSnapshot(), ls = saveSummary(local);
+  pane.append(mk('div', 'sec', 'This device'));
+  { const row = mk('div', 'srow sv-row'); row.append(mk('span', 'lbl', sumText(ls)), mk('span', 'sv-dim', ls.camos + ' camo' + (ls.camos === 1 ? '' : 's') + ' equipped')); pane.append(row); }
+  pane.append(mk('div', 'sec', 'Save code · works anywhere, no account'));
+  { const row = mk('div', 'srow sv-col'), msg = mk('div', 'sv-msg');
+    const b1 = mk('button', 'sv-btn', 'Copy save code'), b2 = mk('button', 'sv-btn ghost', 'Download save file'); b1.type = b2.type = 'button';
+    b1.onclick = async () => { const code = encodeSave(local); try { await navigator.clipboard.writeText(code); msg.textContent = 'Copied. Paste it into Hot Zone on any other browser or device.'; } catch (e) { ta.value = code; ta.select(); msg.textContent = 'Copy the code from the box below.'; } };
+    b2.onclick = async () => { const data = JSON.stringify(local);
+      // inside Claude the page asks the viewer to save the file; on the website it's a normal download
+      let dl = null; try { dl = window.claude ? await window.claude.use('downloads') : null; } catch (e) { dl = null; }
+      if (dl) { try { await dl.save({ filename: 'hot-zone-save.json', data }); msg.textContent = 'Saved hot-zone-save.json'; } catch (e) { msg.textContent = 'Download cancelled. Use Copy save code instead.'; } return; }
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = 'hot-zone-save.json'; document.body.append(a); a.click(); a.remove(); msg.textContent = 'Saved hot-zone-save.json'; };
+    const ta = mk('textarea', 'sv-ta'); ta.onkeydown = (e) => e.stopPropagation(); ta.placeholder = 'Paste a save code (HZ1.…) here to load it'; ta.spellcheck = false; ta.setAttribute('aria-label', 'Save code to load');
+    const b3 = mk('button', 'sv-btn', 'Load this save'); b3.type = 'button';
+    const file = mk('input'); file.type = 'file'; file.accept = '.json,application/json'; file.hidden = true; const b4 = mk('button', 'sv-btn ghost', 'Open save file'); b4.type = 'button'; b4.onclick = () => file.click();
+    const tryLoad = (txt) => { try { const s = decodeSave(txt), ss = saveSummary(s); if (!confirmLoad(ss)) return; applySave(s, 'Save code loaded · ' + sumText(ss)); } catch (e) { msg.textContent = e.message || 'That save code didn\'t work.'; msg.classList.add('no'); } };
+    let armed = 0; const confirmLoad = (ss) => { if (Date.now() - armed < 4000) return true; armed = Date.now(); msg.classList.remove('no'); msg.textContent = `This replaces this device's progress with: ${sumText(ss)}. Press load again to confirm.`; return false; };
+    b3.onclick = () => tryLoad(ta.value); file.onchange = () => { const f = file.files[0]; if (f) f.text().then(tryLoad); };
+    const r1 = mk('div', 'sv-btns'); r1.append(b1, b2); const r2 = mk('div', 'sv-btns'); r2.append(b3, b4, file);
+    row.append(r1, ta, r2, msg); pane.append(row); }
+  pane.append(mk('div', 'sec', 'Cloud save · sign in once, plays on every device'));
+  { const row = mk('div', 'srow sv-col'), msg = mk('div', 'sv-msg');
+    if (!cloud.on) { msg.textContent = 'Cloud saves work on the website version of Hot Zone. Here, use a save code to move your progress.'; row.append(msg); pane.append(row); return; }
+    if (!cloud.user) {
+      const inp = mk('input', 'sv-in'); inp.type = 'email'; inp.placeholder = 'you@example.com'; inp.autocomplete = 'email'; inp.setAttribute('aria-label', 'Email for sign-in link');
+      const b = mk('button', 'sv-btn', cloud.state === 'sending' ? 'Sending…' : 'Email me a sign-in link'); b.type = 'button'; b.disabled = cloud.state === 'sending';
+      b.onclick = () => { const e = inp.value.trim(); if (!/^\S+@\S+\.\S+$/.test(e)) { msg.textContent = 'Enter a real email address.'; msg.classList.add('no'); return; } cloudSignIn(e); };
+      inp.onkeydown = (e) => { e.stopPropagation(); if (e.key === 'Enter') b.click(); };
+      const r = mk('div', 'sv-btns'); r.append(inp, b); row.append(r);
+      msg.textContent = cloud.state === 'sent' ? `Check ${cloud.msg} for a link from Supabase. Open it in this browser and you're signed in.` : cloud.state === 'error' ? cloud.msg : 'No password. We email you a link; your progress then saves to the cloud automatically.';
+      if (cloud.state === 'error') msg.classList.add('no');
+    } else {
+      const who = mk('div', 'lbl', 'Signed in as ' + (cloud.user.email || 'player'));
+      const st = cloud.state === 'synced' ? 'Synced ' + ago(cloud.last || Date.now()) : cloud.state === 'syncing' ? 'Syncing…' : cloud.state === 'conflict' ? 'Your cloud save and this device disagree' : cloud.state === 'error' ? cloud.msg : 'Waiting';
+      const s = mk('div', 'sv-msg' + (cloud.state === 'error' || cloud.state === 'conflict' ? ' no' : ''), st);
+      row.append(who, s);
+      if (cloud.conflict) {
+        const rs = saveSummary(cloud.conflict), box = mk('div', 'sv-pick');
+        const c1 = mk('button', 'sv-card'), c2 = mk('button', 'sv-card'); c1.type = c2.type = 'button';
+        c1.append(mk('b', '', 'Use the cloud save'), mk('span', '', sumText(rs)), mk('small', '', 'saved ' + ago(rs.at)));
+        c2.append(mk('b', '', 'Keep this device'), mk('span', '', sumText(ls)), mk('small', '', 'saved ' + ago(ls.at)));
+        c1.onclick = () => applySave(cloud.conflict, 'Cloud save loaded');
+        c2.onclick = () => { cloud.conflict = null; cloudPush(true); };
+        box.append(c1, c2); row.append(box);
+      }
+      const b1 = mk('button', 'sv-btn', 'Sync now'), b2 = mk('button', 'sv-btn ghost', 'Sign out'); b1.type = b2.type = 'button';
+      b1.onclick = () => cloudPull(); b2.onclick = () => cloudSignOut();
+      const r = mk('div', 'sv-btns'); r.append(b1, b2); row.append(r);
+    }
+    row.append(msg); pane.append(row); }
+}
+// note after a reload that loaded a save
+try { const n = sessionStorage.getItem('hz-note'); if (n) { sessionStorage.removeItem('hz-note'); setTimeout(() => { try { toast('Save', 'Loaded', n); } catch (e) {} }, 900); } } catch (e) {}
+cloudInit();
 
 async function initNet() {
   const status = $('netstatus');
@@ -7574,14 +7729,16 @@ $('sback').onclick = closeSettings;
 $('sreset').onclick = () => { cancelRebind(); Object.assign(S, JSON.parse(JSON.stringify(DEFAULTS))); aiming = false; leanToggle = 0; saveSettings(); renderSettings(); };
 $('tab-controls').onclick = () => { settingsTab = 'controls'; renderSettings(); };
 $('tab-audio').onclick = () => { settingsTab = 'audio'; renderSettings(); };
+$('tab-save').onclick = () => { settingsTab = 'save'; renderSettings(); };
 $('tab-keys').onclick = () => { settingsTab = 'keys'; renderSettings(); };
 $('tab-video').onclick = () => { settingsTab = 'video'; renderSettings(); };
 function mk(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 function renderSettings() {
   cancelRebind();
-  $('stitle').textContent = { controls: 'Controls', keys: 'Keybinds', video: 'Video', audio: 'Audio' }[settingsTab];
-  for (const t of ['controls', 'keys', 'video', 'audio']) $('tab-' + t).setAttribute('aria-selected', settingsTab === t);
-  const pane = $('spane'); pane.textContent = '';
+  $('stitle').textContent = { controls: 'Controls', keys: 'Keybinds', video: 'Video', audio: 'Audio', save: 'Save' }[settingsTab];
+  for (const t of ['controls', 'keys', 'video', 'audio', 'save']) $('tab-' + t).setAttribute('aria-selected', settingsTab === t);
+  const pane = $('spane'); pane.textContent = ''; $('sreset').hidden = settingsTab === 'save';
+  if (settingsTab === 'save') { renderSavePane(pane); return; }
   for (const [title, items] of SCHEMA[settingsTab]) {
     pane.append(mk('div', 'sec', title));
     for (const it of items) pane.append(settingRow(it));
