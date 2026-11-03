@@ -898,6 +898,22 @@ button:focus-visible { outline: 3px solid var(--bone); outline-offset: 4px; }
 #mpEnd .me-x small { display: block; font: 700 10px var(--ui); letter-spacing: .18em; text-transform: uppercase; color: #a8978a; } #mpEnd .me-x b { font: 400 28px var(--display); color: #ffcf5a; }
 #mpEnd .me-x i { display: block; height: 6px; margin-top: 6px; background: rgba(255,255,255,.08); } #mpEnd .me-x u { display: block; height: 100%; background: linear-gradient(90deg, #ff5a1c, #ffcf5a); }
 #mpEnd .me-f { margin-top: 14px; text-align: right; font: 600 12px var(--ui); letter-spacing: .14em; text-transform: uppercase; color: #a8978a; } #mpEnd .me-f b { color: #fff; }
+/* zombies panel: solo / co-op */
+#zPanel .z-modes { display: grid; grid-template-columns: 1fr 1.6fr; gap: 14px; margin-top: 14px; }
+#zPanel .z-card { text-align: left; display: flex; flex-direction: column; gap: 8px; padding: 18px; border: 1px solid #ffffff1f; background: #0e1013cc; border-radius: 10px; color: #e9e4da; font: inherit; }
+#zPanel button.z-card { cursor: pointer; transition: border-color .15s, transform .15s; } #zPanel button.z-card:hover { border-color: #ff8a1f; transform: translateY(-2px); }
+#zPanel .z-card b { font-size: 22px; letter-spacing: .02em; } #zPanel .z-card b small { font: 600 11px var(--mono); color: #ff8a1f; margin-left: 6px; text-transform: uppercase; }
+#zPanel .z-card span { color: #b8b2a8; font-size: 13px; line-height: 1.4; } #zPanel .z-card em { margin-top: auto; font-style: normal; color: #ff8a1f; font-weight: 700; }
+#zPanel .z-card .row2 { margin-top: 4px; } #zPanel .z-card .go { margin-top: 2px; }
+@media (max-width: 760px) { #zPanel .z-modes { grid-template-columns: 1fr; } }
+#puHud { position: absolute; left: 50%; bottom: 13%; transform: translateX(-50%); display: flex; gap: 8px; pointer-events: none; }
+#puHud span { font: 700 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 5px 10px; border-radius: 4px; background: #000000a6; color: var(--c); border: 1px solid var(--c); box-shadow: 0 0 14px color-mix(in srgb, var(--c) 40%, transparent); }
+#puHud span b { color: #fff; margin-left: 6px; }
+#downHud { position: absolute; left: 50%; top: 58%; transform: translateX(-50%); text-align: center; pointer-events: none; font: 600 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: #e9e4da; }
+#downHud b { display: block; font: 800 34px var(--display, inherit); color: #ff4a3a; letter-spacing: .06em; text-shadow: 0 0 18px #ff2a1a88; }
+#downHud i { display: block; width: 220px; height: 5px; margin: 8px auto 0; background: #ffffff22; } #downHud i u { display: block; height: 100%; background: #ff4a3a; }
+#wrap.down::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, transparent 30%, #5a0000cc 120%); }
+#roster div.dn span:last-child { color: #ff5a4a; } #roster div em { font-style: normal; color: #ffcf5a; margin-left: 4px; }
 #streakHud { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; margin-top: 6px; font: 600 10px var(--mono); letter-spacing: .04em; text-transform: uppercase; color: #b8b2a8; }
 #streakHud b { color: #ffcf5a; display: flex; gap: 5px; align-items: center; } #streakHud kbd { font: 700 10px var(--mono); padding: 1px 5px; border-radius: 3px; background: #ff8a1f; color: #1b0a02; } #streakHud .on { color: #ff6a50; }
 #nadeHud { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-top: 6px; }
@@ -932,7 +948,7 @@ button:focus-visible { outline: 3px solid var(--bone); outline-offset: 4px; }
   <div class="hud tr" id="trPanel"><div class="label" id="trLabel">Score</div><div class="big" id="trVal">0</div><div class="label" style="margin-top:6px" id="trSub">Best 0</div><div id="roster"></div><div id="feed"></div></div>
   <div class="hud bl"><div class="hprow"><span class="hpicon"></span><div><div class="label">Integrity</div><div class="mid" id="hpnum">100</div></div></div><div id="hpbar"><div id="hpghost"></div><div id="hpfill"></div></div><div id="perkRow"></div><div class="chip" id="scrap"><i></i><b id="scrapVal">0</b> scrap</div><div id="exo"><span id="exoLbl">Exo 0/50</span><div id="exobar"><i id="exofill"></i></div></div></div>
   <div class="hud br"><div id="slots"></div><div class="wrow"><div class="label" id="wname">The Blicky</div><span id="wtier" hidden></span></div><div class="big ammo"><span id="ammo">17</span><span class="magn"><span class="sl"> / </span><span id="wmag">17</span></span></div><div id="ammobar"><i id="ammofill"></i></div><div id="nadeHud"></div><div id="streakHud" hidden></div><div id="atts"><i data-s="optic">Optic</i><i data-s="muzzle">Muz</i><i data-s="barrel">Brl</i><i data-s="rail">Rail</i><i data-s="under">Under</i><i data-s="grip">Grip</i><i data-s="stock">Stock</i><i data-s="mag">Mag</i><i data-s="ammo">Ammo</i></div></div>
-  <div id="cross"><i class="t"></i><i class="b"></i><i class="l"></i><i class="r"></i></div><div id="fps" hidden></div><canvas id="mmap" width="352" height="352" hidden></canvas><div id="dot"></div><div id="hints" hidden></div><div id="hit"></div><div id="hurt"></div><div id="banner"></div><div id="sub"></div><div id="pops"></div><div id="smartOv"></div><div id="dmgDir"></div><div id="killX"></div><div id="medals"></div><div id="xpPops"></div><div id="lvlToast" hidden></div><div id="mpTop" hidden><div class="lim">FIRST TO 30</div><div class="bars"><div class="row me"><span>YOU</span><div><u id="mtMeBar"></u></div><b id="mtMe">0</b></div><div class="row ld"><span>TOP</span><div><u id="mtLdBar"></u></div><b id="mtLd">0</b></div></div><small id="mtLdName"></small></div><div id="deathCard" hidden></div><div id="mpEnd" hidden></div><div id="prompt" hidden></div><div id="bossbar" hidden><div class="bb-h"><span>Foundry Golem</span><small>Core takes triple damage · jump the slam</small></div><div class="bb"><i id="bossfill"></i></div></div><div id="gunsmith" hidden>
+  <div id="cross"><i class="t"></i><i class="b"></i><i class="l"></i><i class="r"></i></div><div id="fps" hidden></div><canvas id="mmap" width="352" height="352" hidden></canvas><div id="dot"></div><div id="hints" hidden></div><div id="hit"></div><div id="hurt"></div><div id="banner"></div><div id="sub"></div><div id="pops"></div><div id="smartOv"></div><div id="dmgDir"></div><div id="killX"></div><div id="medals"></div><div id="xpPops"></div><div id="lvlToast" hidden></div><div id="mpTop" hidden><div class="lim">FIRST TO 30</div><div class="bars"><div class="row me"><span>YOU</span><div><u id="mtMeBar"></u></div><b id="mtMe">0</b></div><div class="row ld"><span>TOP</span><div><u id="mtLdBar"></u></div><b id="mtLd">0</b></div></div><small id="mtLdName"></small></div><div id="deathCard" hidden></div><div id="mpEnd" hidden></div><div id="prompt" hidden></div><div id="puHud"></div><div id="downHud" hidden></div><div id="bossbar" hidden><div class="bb-h"><span>Foundry Golem</span><small>Core takes triple damage · jump the slam</small></div><div class="bb"><i id="bossfill"></i></div></div><div id="gunsmith" hidden>
     <div class="gs2-heat"></div><div class="gs2-flash" id="gsFlash"></div><div class="gs2-scan"></div><div class="gs2-haz"></div><div class="gs2-sweep"></div><div class="gs2-call" id="gsCall"></div>
     <div class="gs2-top"><div class="gs2-title"><span>Gunsmith</span><b id="gsTitle">MP5</b></div>
       <div class="gs2-los" id="gsLos" hidden></div>
@@ -956,8 +972,23 @@ button:focus-visible { outline: 3px solid var(--bone); outline-offset: 4px; }
     <canvas id="msFx" aria-hidden="true"></canvas><div class="ms-vign" aria-hidden="true"></div><div class="ms-lvl" id="msLvl"></div>
     <div class="ms-title"><div class="ms-badge"><i></i>Season 1 · Furnace &amp; Cargo</div><h1 data-t="Hot Zone">Hot <span>Zone</span></h1><p>Fight anyone. Outlast everything.</p><div class="ms-heat"></div></div>
     <div class="ms-tiles" id="msTiles">
-      <button class="tile z" id="play" type="button"><svg class="emb" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6c-12 0-20 8-20 19 0 7 3 11 6 14v7h6v-5h4v5h8v-5h4v5h6v-7c3-3 6-7 6-14 0-11-8-19-20-19z" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="24" cy="27" r="5" fill="currentColor"/><circle cx="40" cy="27" r="5" fill="currentColor"/><path d="M30 36l2-4 2 4z" fill="currentColor"/></svg><div class="tchips"><em class="tchip" id="msBest">Best 0</em><em class="tchip">Waves · Forge · Wall buys</em></div><small>Solo</small><b>Zombies</b><span>Survive endless waves in the foundry. Buy guns off the walls, forge them, open the yards.</span><em>Play <i>›</i></em></button>
+      <button class="tile z" id="play" type="button"><svg class="emb" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6c-12 0-20 8-20 19 0 7 3 11 6 14v7h6v-5h4v5h8v-5h4v5h6v-7c3-3 6-7 6-14 0-11-8-19-20-19z" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="24" cy="27" r="5" fill="currentColor"/><circle cx="40" cy="27" r="5" fill="currentColor"/><path d="M30 36l2-4 2 4z" fill="currentColor"/></svg><div class="tchips"><em class="tchip" id="msBest">Best 0</em><em class="tchip">Waves · Forge · Wall buys</em></div><small>Solo · Co-op</small><b>Zombies</b><span>Survive endless waves in the foundry, alone or with up to 3 friends. Buy guns off the walls, forge them, open the yards.</span><em>Play <i>›</i></em></button>
       <button class="tile m" id="mpOpen" type="button"><svg class="emb" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="18" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="32" cy="32" r="3" fill="currentColor"/><path d="M32 4v14M32 46v14M4 32h14M46 32h14" stroke="currentColor" stroke-width="2.5"/></svg><div class="tchips"><em class="tchip live"><i></i>Deathmatch · Cargo</em><em class="tchip">3 loadouts · first to 30</em></div><small>Online</small><b>Multiplayer</b><span>Free-for-all on Cargo, first to 30. Build your loadout in the Gunsmith, earn killstreaks, climb the leaderboard.</span><em>Play <i>›</i></em></button>
+    </div>
+    <div class="ms-mp" id="zPanel" hidden>
+      <button class="ms-back" id="zBack" type="button">‹ Back</button>
+      <h2>Zombies <small>Furnace Hall 2</small></h2>
+      <div class="z-modes">
+        <button class="z-card" id="zSolo" type="button"><b>Solo</b><span>Just you and the night shift.</span><em>Play ›</em></button>
+        <div class="z-card co">
+          <b>Co-op <small>up to 4</small></b><span>Same room code, same horde. Revive each other, share the doors, keep your own scrap.</span>
+          <div class="row2"><div class="field"><label for="zName">Callsign</label><input type="text" id="zName" maxlength="14" autocomplete="off" spellcheck="false"></div>
+          <div class="field"><label for="zCode">Room code</label><input type="text" id="zCode" maxlength="16" autocomplete="off" spellcheck="false" value="horde"></div></div>
+          <div class="chips" id="zMatches"></div>
+          <button class="go" id="zJoin" type="button" disabled>Join co-op</button>
+          <div class="status" id="zStatus">Connecting…</div>
+        </div>
+      </div>
     </div>
     <div class="ms-mp" id="mpPanel" hidden>
       <button class="ms-back" id="mpBack" type="button">‹ Back</button>
@@ -996,6 +1027,7 @@ button:focus-visible { outline: 3px solid var(--bone); outline-offset: 4px; }
     <div class="panel narrow">
       <h1>Shift <span>over</span></h1>
       <div class="stat">Score <b id="fscore">0</b> &nbsp;·&nbsp; Reached wave <b id="fwave">1</b> &nbsp;·&nbsp; Infected put down <b id="fkills">0</b></div>
+      <div class="stat" id="overNote" hidden></div>
       <div class="btns"><button id="again">Clock in again</button><button class="ghost" id="menu2">Back to menu</button></div>
     </div>
   </div>
@@ -5977,6 +6009,13 @@ let heads = 0, shotsFired = 0, shotsHit = 0, exoKills = 0, exoOn = false, nearPo
 let wave = 0, score = 0, kills = 0, toSpawn = 0, spawnTimer = 0, waveGap = 0;
 let best = +(store.get('fb-best') || 0);
 const enemies = [], corpses = [], orbs = [], pickups = [];
+// co-op state (zombies with friends): the host runs the horde, everyone else mirrors it
+const coop = { go: false, gi: 0, zt: 0, host: null, tag: 1 + Math.floor(Math.random() * 20000), seq: 0, ev: { ch: [], hu: [], rv: [], pk: [], pa: [], so: [], tp: [], sk: [] },
+  hitAcc: new Map(), deadZ: new Set(), zById: new Map(), lastZw: null, reviveT: 0, nearDown: null, bleed: 0, fresh: false };
+let zSeq = 0, downK = 0;
+const isAuth = () => !net.coop || !coop.go || coop.host === net.me;
+const coopClient = () => !isAuth();
+const zSimOn = () => state === 'play' || state === 'shop' || (net.coop && state === 'paused');
 const ZT = {
   walker: { hp: 3, speed: [1.4, 2.1], reach: 1.2, dmg: 15, score: 100, scale: 1, lean: 0.3, hitAt: 0.42, atkDur: 0.75 },
   runner: { hp: 2, speed: [4.3, 5.1], reach: 1.15, dmg: 10, score: 125, scale: 0.95, lean: 0.55, run: true, hitAt: 0.3, atkDur: 0.55 },
@@ -6084,48 +6123,66 @@ function buildZombie(type) {
   const sc = Z.scale * (0.94 + Math.random() * 0.12); root.scale.setScalar(sc);
   return { root, parts, hips, torso, head, jaw, shL, shR, elL, elR, hipL: hipL[0], knL: hipL[1], hipR: hipR[0], knR: hipR[1], sc };
 }
-function spawnEnemy(forceType) {
-  const r = Math.random();
-  const type = forceType || (wave >= 3 && Math.random() < 0.11 ? 'bloater' : wave >= 4 && r < 0.14 ? 'brute' : wave >= 3 && r < 0.32 ? 'burner' : wave >= 2 && r < 0.56 ? 'runner' : 'walker');
+// one zombie, ready to walk: used for the ones this game spawns and for the copies of the host's horde in co-op
+function makeEnemy(type, x, y, z, yaw, zid, rep) {
   const Z = ZT[type], b = buildZombie(type);
-  const live = DOORS.filter(d => !d.area || areaOpen[d.area]);
-  const far = live.filter(d => d.spawn.distanceTo(_v.set(player.pos.x, 0, player.pos.z)) > 12);
-  const d = (far.length ? far : live)[Math.random() * (far.length || live.length) | 0];
-  b.root.position.copy(d.spawn).addScaledVector(d.side, (Math.random() - 0.5) * 2.4);
-  let yaw = Math.atan2(d.nx, d.nz);
-  if (type === 'golem') { b.root.position.set(0, -2.6, 3.2); yaw = 0; }   // climbs out of the pit
-  b.root.rotation.y = yaw;
-  scene.add(b.root);
+  b.root.position.set(x, y, z); b.root.rotation.y = yaw; scene.add(b.root);
   const e = Object.assign(b, {
-    type, Z, hp: Z.boss ? Z.hp + (Math.floor(wave / 5) - 1) * 60 : Z.hp + Math.floor(wave / 4) * (Z.brute ? 3 : 1), rise: Z.boss ? 2.4 : 0, speed: (Z.speed[0] + Math.random() * (Z.speed[1] - Z.speed[0])) * (1 + wave * 0.025),
+    type, Z, hp: Z.boss ? Z.hp + (Math.floor(wave / 5) - 1) * 60 : Z.hp + Math.floor(wave / 4) * (Z.brute ? 3 : 1), rise: Z.boss && !rep ? 2.4 : 0, speed: (Z.speed[0] + Math.random() * (Z.speed[1] - Z.speed[0])) * (1 + wave * 0.025),
     yaw, ph: Math.random() * 6, ph0: Math.random() * 6, atkT: -1, atkCd: 0, hitDone: false, thT: -1, throwCd: 2 + Math.random() * 2,
     fl: 0, flV: 0, stagger: 0, emerge: 1, tilt: (Math.random() - 0.5) * 0.5, limp: Math.random() < 0.35, groanT: 1 + Math.random() * 4,
     lastP: b.root.position.clone(), stuckT: 0, detour: null, detourT: 0, burn: 0,
+    flank: (Math.random() - 0.5) * 2, zid, rep: !!rep, tx: x, ty: y, tz: z, tyaw: yaw, zf: 0, rsp: 0,
   });
   e.maxHp = e.hp;
   for (const m of e.parts) m.userData.enemy = e;
   e.root.traverse(o => { if (o.isMesh && o.material !== ZM.blob) o.layers.enable(1); });   // thermal scopes see them
-  enemies.push(e);
+  enemies.push(e); coop.zById.set(zid, e);
   if (Z.boss) { boss = e; sfx('alarm'); sfx('forge'); forgeGlow = 1; showBanner('Foundry Golem'); flashSub('Shoot the glowing core · jump its ground slam'); }
+  return e;
+}
+function spawnEnemy(forceType) {
+  const r = Math.random();
+  const type = forceType || (wave >= 3 && Math.random() < 0.11 ? 'bloater' : wave >= 4 && r < 0.14 ? 'brute' : wave >= 3 && r < 0.32 ? 'burner' : wave >= 2 && r < 0.56 ? 'runner' : 'walker');
+  const live = DOORS.filter(d => !d.area || areaOpen[d.area]);
+  const far = live.filter(d => d.spawn.distanceTo(_v.set(player.pos.x, 0, player.pos.z)) > 12);
+  const d = (far.length ? far : live)[Math.random() * (far.length || live.length) | 0];
+  _v.copy(d.spawn).addScaledVector(d.side, (Math.random() - 0.5) * 2.4);
+  let yaw = Math.atan2(d.nx, d.nz), x = _v.x, y = _v.y, z = _v.z;
+  if (type === 'golem') { x = 0; y = -2.6; z = 3.2; yaw = 0; }   // climbs out of the pit
+  return makeEnemy(type, x, y, z, yaw, coop.tag * 100000 + (++zSeq % 100000), false);
 }
 let boss = null, bossDelay = -1, intermission = false;
 const INTERMISSION = 25;
+// more infected when there are more of you: +55% per extra player
+const coopN = () => 1 + (net.coop && coop.go ? team().length : 0);
 function startWave() {
-  wave++; toSpawn = 8 + wave * 3; spawnTimer = 0.6; sfx('alarm');
-  if (wave % 5 === 0) { toSpawn = Math.round(toSpawn * 0.6); bossDelay = 4; showBanner('Wave ' + wave + ' · Boss'); flashSub('Something is climbing out of the pit'); }
+  wave++; toSpawn = Math.round((8 + wave * 3) * (1 + 0.55 * (coopN() - 1))); spawnTimer = 0.6;
+  if (wave % 5 === 0) { toSpawn = Math.round(toSpawn * 0.6); bossDelay = 4; }
+  waveStartFx();
+}
+function waveStartFx() {
+  sfx('alarm'); puWave = 0;
+  if (wave > +(store.get('hz-bestwave') || 0)) store.set('hz-bestwave', String(wave));   // best wave reached (fb-best is the best score)
+  if (wave % 5 === 0) { showBanner('Wave ' + wave + ' · Boss'); flashSub('Something is climbing out of the pit'); }
   else showBanner('Wave ' + wave);
+  if (player.dead) coopRespawn();
+}
+function waveClearRewards() {
+  score += wave * 250; addXP(40 * wave, 'Wave ' + wave + ' cleared'); nadeCount = Math.min(nadeMax(), nadeCount + 1); showBanner('Wave cleared'); flashSub('Next wave in ' + INTERMISSION + 's · press N to start now'); dropPickup();
 }
 function clearSolo() {
-  enemies.forEach(e => scene.remove(e.root)); enemies.length = 0;
+  enemies.forEach(e => scene.remove(e.root)); enemies.length = 0; coop.zById.clear(); coop.deadZ.clear(); coop.hitAcc.clear();
+  try { clearPU(); } catch (e) {}
   corpses.forEach(e => scene.remove(e.root)); corpses.length = 0;
   orbs.forEach(o => scene.remove(o.m)); orbs.length = 0;
   pickups.forEach(p => scene.remove(p.m)); pickups.length = 0;
 }
-function resetSolo() {
-  clearSolo();
+function resetSolo(asClient) {
+  clearSolo(); player.down = false; player.dead = false; coop.bleed = 0;
   player.pos.set(0, 1.6, 20); player.vy = 0; setView(0, 0); player.hp = 100; aiming = false; leanToggle = 0;
-  $('bossbar').hidden = true; resetPerks(); resetTrap(); nadeCount = 2; BOX.st = 'idle'; BOX.spr.visible = false; for (const k in AREAS) setArea(k, false); wave = 0; score = 0; kills = 0; spent = 0; boss = null; bossDelay = -1; intermission = false; heads = 0; shotsFired = 0; shotsHit = 0; exoKills = 0; setExo(false); resetGuns(); refillWeapons(); waveGap = 0;
-  startWave(); updateHud();
+  $('bossbar').hidden = true; resetPerks(); resetTrap(); nadeCount = 2; BOX.st = 'idle'; BOX.spr.visible = false; for (const k in AREAS) setArea(k, false); wave = 0; score = 0; kills = 0; spent = 0; boss = null; bossDelay = -1; intermission = false; heads = 0; shotsFired = 0; shotsHit = 0; exoKills = 0; setExo(false); resetGuns(); refillWeapons(); waveGap = 0; toSpawn = 0;
+  if (!asClient) startWave(); updateHud();
 }
 // blood decals on the floor
 const decals = [];
@@ -6139,7 +6196,9 @@ function stepDecals(dt) { for (const d of decals) if (d.life > 0) { d.life -= dt
 const _hp = new THREE.Vector3();
 function damageEnemy(e, dmg, zone, point, dir) {
   const mult = zone === 'head' ? 3 : zone === 'limb' ? 0.7 : 1;
-  e.hp -= dmg * mult;
+  let dd = dmg * mult; if (instaOn() && !e.Z.boss) dd = Math.max(dd, e.hp + 1);   // Insta-Kill power-up
+  e.hp -= dd;
+  if (e.rep && e.hp > 0) coopHitAcc(e.zid, dd, zone === 'head' ? 1 : 0);
   if (e.Z.boss) { e.flV += zone === 'head' ? 0.8 : 0.2; if (zone === 'head') sparks(point || _hp, 0xffd27a, 6, 3); }
   else { e.flV += (zone === 'head' ? 6 : 3.5) * (0.6 + dmg * 0.6); e.stagger = Math.max(e.stagger, 0.12 + dmg * 0.25); }
   if (point) { sparks(point, 0x7a0c0c, zone === 'head' ? 16 : 10, 3.5); if (Math.random() < 0.35) bloodDecal(point.x, point.z, 0.4 + Math.random() * 0.4); }
@@ -6150,9 +6209,12 @@ function popPoints(n, head) {
   const d = document.createElement('div'); d.className = 'pop' + (head ? ' head' : ''); d.textContent = '+' + n;
   d.style.left = (Math.random() * 14 - 4) + 'px'; $('pops').appendChild(d); setTimeout(() => d.remove(), 950);
 }
-function killEnemy(e, headshot, dir) {
+function killEnemy(e, headshot, dir, ghost) {
+  if (e.dead) return;
   const i = enemies.indexOf(e); if (i >= 0) enemies.splice(i, 1);
-  e.dead = true; e.deathT = 0;
+  e.dead = true; e.deathT = 0; if (e.zid) coop.zById.delete(e.zid);
+  // co-op: a copy of the host's zombie we killed here: tell the host, and don't let its next snapshot bring it back
+  if (e.rep && !ghost) { coop.deadZ.add(e.zid); coop.hitAcc.delete(e.zid); coopEv('ch', [e.zid, 0, 2 | (headshot ? 1 : 0)]); }
   const fwdX = Math.sin(e.yaw), fwdZ = Math.cos(e.yaw);
   e.fallDir = dir && (dir.x * fwdX + dir.z * fwdZ) > 0 ? 1 : -1; if (e.Z.run && Math.random() < 0.6) e.fallDir = 1;
   if (e.Z.boss) {
@@ -6167,26 +6229,35 @@ function killEnemy(e, headshot, dir) {
   bloodDecal(e.root.position.x + Math.sin(e.yaw) * e.fallDir * 0.9, e.root.position.z + Math.cos(e.yaw) * e.fallDir * 0.9, 1.1 + e.sc * 0.4);
   zDeath(e);
   corpses.push(e); if (corpses.length > 14) { const c = corpses.shift(); scene.remove(c.root); }
-  const pts = e.Z.score * (1 + Math.floor(wave / 3)) + (headshot ? 50 : 0);
+  maybeDropPU(e);
+  if (!ghost) {
+  const dp = dblOn() ? 2 : 1, pts = (e.Z.score * (1 + Math.floor(wave / 3)) + (headshot ? 50 : 0)) * dp;
   score += pts; kills++; if (headshot) heads++; popPoints(pts, headshot);
-  addXP(e.Z.boss ? 500 : 10 + (headshot ? 5 : 0), e.Z.boss ? 'Golem down' : headshot ? 'Headshot' : ''); if (!knife.on && !trapKill) gunKill(cur, headshot ? 35 : 25); if (e.Z.bloat) bloatBurst(e);
-  if (Math.random() < 0.015 && !e.Z.boss) dropAmmo(e.root.position.x, e.root.position.z);
+  addXP(e.Z.boss ? 500 : 10 + (headshot ? 5 : 0), e.Z.boss ? 'Golem down' : headshot ? 'Headshot' : ''); if (!knife.on && !trapKill) gunKill(cur, headshot ? 35 : 25);
   if (!exoOn && exoKills < EXO_NEED) { exoKills++; if (exoKills === EXO_NEED) { showBanner('Exo suit charged'); flashSub('Return to the exo pod by the pit and press G'); sfx('streak'); } }
   const now = performance.now(); mkN = now - mkT < 1500 ? mkN + 1 : 1; mkT = now;
-  if (mkN >= 2) { const b = 75 * mkN; score += b; flashSub((['', '', 'Double kill', 'Triple kill', 'Quad kill'][mkN] || 'Massacre x' + mkN) + ' +' + b); sfx('streak'); }
+  if (mkN >= 2) { const b = 75 * mkN * dp; score += b; flashSub((['', '', 'Double kill', 'Triple kill', 'Quad kill'][mkN] || 'Massacre x' + mkN) + ' +' + b); sfx('streak'); }
+  }
+  if (e.Z.bloat) bloatBurst(e);
   if (e.burning || WEAPONS[cur].tier) { e.torso.getWorldPosition(_hp); sparks(_hp, WEAPONS[cur].tier >= 3 ? 0xbfe8ff : 0xff8a2a, 26, 4); }
   updateHud();
 }
 // slag thrown by burners: arcs, splashes, burns
 const slagGeo = new THREE.IcosahedronGeometry(0.13, 1), slagMat = new THREE.MeshBasicMaterial({ color: 0xff8a2a });
 const SLAG_G = 12;
-function throwSlag(e, spread = 0) {
+function throwSlag(e, spread = 0, Tg) {
   e.elR.getWorldPosition(_hp); _hp.y += 0.1;
-  const tgt = _v2.copy(player.pos); tgt.y -= 0.5; tgt.addScaledVector(playerVel, 0.5); tgt.x += (Math.random() - 0.5) * spread; tgt.z += (Math.random() - 0.5) * spread;
+  const tgt = _v2, T0 = Tg; if (!T0 || T0.me) { tgt.copy(player.pos); tgt.y -= 0.5; tgt.addScaledVector(playerVel, 0.5); } else tgt.set(T0.x, T0.feet + 1.1, T0.z);
+  tgt.x += (Math.random() - 0.5) * spread; tgt.z += (Math.random() - 0.5) * spread;
   const d = Math.hypot(tgt.x - _hp.x, tgt.z - _hp.z), T = Math.max(0.55, Math.min(1.4, d / 11));
   const v = new THREE.Vector3((tgt.x - _hp.x) / T, (tgt.y - _hp.y) / T + 0.5 * SLAG_G * T, (tgt.z - _hp.z) / T);
   const m = new THREE.Mesh(slagGeo, slagMat); m.position.copy(_hp); scene.add(m);
   orbs.push({ m, v, life: 4 }); sfx('throw');
+  if (net.coop && coop.go) coopEv('so', [r2(_hp.x), r2(_hp.y), r2(_hp.z), r2(v.x), r2(v.y), r2(v.z)]);
+}
+function spawnOrb(a) {
+  const v = a.map(Number); if (v.length < 6 || v.some(x => !isFinite(x))) return;
+  const m = new THREE.Mesh(slagGeo, slagMat); m.position.set(v[0], v[1], v[2]); scene.add(m); orbs.push({ m, v: new THREE.Vector3(v[3], v[4], v[5]), life: 4 }); sfxAt('throw', 0.7, m.position);
 }
 const waves = [], waveMat = new THREE.MeshBasicMaterial({ color: 0xff8a2a, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide });
 const waveGeo = new THREE.RingGeometry(0.85, 1, 48); waveGeo.rotateX(-Math.PI / 2);
@@ -6534,6 +6605,7 @@ function respawn() {
   updateHud(); sendPresence(true);
 }
 function sendPresence(force) {
+  if (net.coop) return sendCoop(force);
   if (!net.match) return;
   const now = performance.now();
   if (!force && now - net.sendT < 50) return; // 20 updates a second
@@ -6609,7 +6681,9 @@ function interpRemotes() {
     r.g.rotation.z = -((a.l || 0) + ((b.l || 0) - (a.l || 0)) * f) * 0.33;
     poseRemote(r, a.r[1] + (b.r[1] - a.r[1]) * f);
     animRemoteLegs(r, a, b); remoteFootsteps(r);
-    r.g.visible = r.alive && !(r.inv && Math.floor(performance.now() / 90) % 2);
+    r.g.visible = r.alive && !(r.inv && Math.floor(performance.now() / 90) % 2) && (!net.coop || (r.go && r.gi === coop.gi));
+    if (net.coop) { r.lie = (r.lie || 0) + ((r.dn ? 1 : 0) - (r.lie || 0)) * 0.12; const th = r.lie * 1.35; r.g.rotation.x = th; r.g.position.y += r.lie * 0.22;
+      if (r.tag) { const H = 2.25 * (1 - r.lie) + 1.1 * r.lie; r.tag.position.set(0, H * Math.cos(th), -H * Math.sin(th)); } }
   }
 }
 
@@ -6676,7 +6750,7 @@ async function supaRoom() {
 // =====================================================================================================================
 // ---------- saves: a save code anyone can copy between browsers, plus optional cloud saves behind a Supabase sign-in ----------
 // =====================================================================================================================
-const SAVE_KEYS = ['hz-prog', 'fb-mploadouts', 'fb-best', 'fb-settings', 'fb-name', 'hz-map'];
+const SAVE_KEYS = ['hz-prog', 'fb-mploadouts', 'fb-best', 'hz-bestwave', 'fb-settings', 'fb-name', 'hz-map'];
 // one shared Supabase client for rooms and sign-in
 let _sbP = null;
 function getSb() {
@@ -6692,7 +6766,7 @@ function saveSnapshot() { const d = {}; for (const k of SAVE_KEYS) { const v = s
 function saveSummary(snap) {
   let p = {}; try { p = JSON.parse((snap && snap.d && snap.d['hz-prog']) || '{}') || {}; } catch (e) {}
   const xp = +p.xp || 0, gk = Array.isArray(p.gk) ? p.gk.reduce((a, b) => a + (+b || 0), 0) : 0;
-  return { L: levelOf(xp).L, xp, best: +((snap && snap.d && snap.d['fb-best']) || 0), camos: Object.keys(p.camo || {}).length, kills: gk, at: snap && snap.at || 0 };
+  return { L: levelOf(xp).L, xp, best: +((snap && snap.d && snap.d['hz-bestwave']) || 0), score: +((snap && snap.d && snap.d['fb-best']) || 0), camos: Object.keys(p.camo || {}).length, kills: gk, at: snap && snap.at || 0 };
 }
 const sumText = (s) => `Level ${s.L} · ${s.kills.toLocaleString()} gun kills · best wave ${s.best}`;
 function encodeSave(snap) { return 'HZ1.' + btoa(unescape(encodeURIComponent(JSON.stringify(snap)))); }
@@ -6917,14 +6991,14 @@ async function initNet() {
   const status = $('netstatus');
   try { net.lobby = window.claude ? await window.claude.use('room') : null; } catch (e) { net.lobby = null; }
   if (!net.lobby) { status.textContent = 'Connecting…'; try { net.lobby = await supaRoom(); } catch (e) { net.lobby = null; } }
-  if (!net.lobby) { status.textContent = SUPABASE_URL ? 'Couldn\'t reach the game server. Check the Supabase URL and key, then refresh.' : 'Online play isn\'t available in this view. Open the page in Claude while signed in to play with others.'; return; }
+  if (!net.lobby) { zStatusLine(); status.textContent = SUPABASE_URL ? 'Couldn\'t reach the game server. Check the Supabase URL and key, then refresh.' : 'Online play isn\'t available in this view. Open the page in Claude while signed in to play with others.'; return; }
   const lobby = net.lobby;
   lobby.onPeers(ch => {
     for (const p of ch.peers) if (p.sameTab) net.me = p.peer;
     renderLobby(ch.peers);
   }, () => { status.textContent = 'Online play isn\'t available for you on this page.'; $('join').disabled = true; });
   lobby.onConnection(ok => {
-    if (ok) { status.className = 'status ok'; $('join').disabled = false; renderLobby(lobby.peers()); }
+    if (ok) { status.className = 'status ok'; $('join').disabled = false; if (!coop.joining) $('zJoin').disabled = false; renderLobby(lobby.peers()); }
     else { status.className = 'status'; status.textContent = 'Reconnecting…'; }
   });
 }
@@ -6932,15 +7006,15 @@ function renderLobby(peers) {
   const counts = {}; let here = 0;
   for (const p of peers) {
     if (p.kind !== 'viewer') continue; here++;
-    const m = cleanCode(p.presence && p.presence.m), mp = p.presence && p.presence.mp === 'foundry' ? 'foundry' : 'ship';
+    const m = cleanCode(p.presence && p.presence.m), mp = p.presence && p.presence.mp === 'coop' ? 'coop' : p.presence && p.presence.mp === 'foundry' ? 'foundry' : 'ship';
     if (m) counts[m + '|' + mp] = (counts[m + '|' + mp] || 0) + 1;
   }
   if (net.lobby && net.lobby.connected()) {
     $('netstatus').className = 'status ok';
     $('netstatus').textContent = here <= 1 ? 'Connected. You\'re the only one here right now. Share this page so friends can join.' : `Connected. ${here} people have this page open.`;
   }
-  const el = $('matches'); el.textContent = '';
-  for (const [code, n] of Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 6)) {
+  const el = $('matches'); el.textContent = ''; renderCoopRooms(counts); zStatusLine();
+  for (const [code, n] of Object.entries(counts).filter(([k]) => !k.endsWith('|coop')).sort((a, b) => b[1] - a[1]).slice(0, 6)) {
     const b = document.createElement('button'); b.type = 'button';
     const [cd, mp] = code.split('|'); b.textContent = cd + ' · ' + (mp === 'foundry' ? 'Foundry' : 'Cargo') + ' · ' + n + ' playing';
     b.onclick = () => { $('roomcode').value = cd; pickMap(mp); };
@@ -6948,6 +7022,7 @@ function renderLobby(peers) {
   }
 }
 async function joinMatch() {
+  await leaveCoop();
   const code = cleanCode($('roomcode').value) || 'arena';
   $('roomcode').value = code;
   { const want = cleanName($('callsign').value) || net.name; if (isProfane(want)) { flagName(want, 'callsign'); net.name = 'Rivet' + (100 + Math.floor(Math.random() * 900)); flashSub('That callsign isn\'t allowed'); } else net.name = want; }
@@ -7266,6 +7341,7 @@ function nadeDip() { if (nadeT < 0) return 0; return nadeT < 0.12 ? _sm3(nadeT /
 function throwNade() {
   if (state !== 'play' || nadeCount <= 0 || nadeT >= 0) return;
   if (mode === 'online' && (!net.alive || net.ended)) return;
+  if (mode === 'solo' && (player.dead || player.down)) return;
   if (act && (act.reload || act.kind === 'holster')) return;
   nadeCount--; updateNadeHud(); nadeT = 0; nadeOut = false; NA.visible = true; NA.userData.nade.visible = true;
   sfx('pin'); swayS.kick(1, -0.6);
@@ -7275,7 +7351,7 @@ function releaseNade() {
   const p = camera.position.clone().addScaledVector(_nd, 0.45).addScaledVector(_nr, -0.1); p.y -= 0.05;
   const v = _nd.clone().multiplyScalar(15.5); v.y += 3.6; v.addScaledVector(playerVel, 0.6);
   const id = ++net.nadeSeq; spawnNade(p, v, 'me', id);
-  if (mode === 'online') { net.nades.push([id, r2(p.x), r2(p.y), r2(p.z), r2(v.x), r2(v.y), r2(v.z)]); if (net.nades.length > 4) net.nades.shift(); net.invUntil = 0; sendPresence(true); }
+  if (mode === 'online' || net.coop) { net.nades.push([id, r2(p.x), r2(p.y), r2(p.z), r2(v.x), r2(v.y), r2(v.z)]); if (net.nades.length > 4) net.nades.shift(); net.invUntil = 0; sendPresence(true); }
   sfx('throw'); camS.kick(3, -0.3); swayS.kick(0, 0.6);
 }
 function stepNadeThrow(dt) {
@@ -7325,7 +7401,7 @@ function explode(p, owner, w) {
   // the local player takes damage from every explosion they're near; the thrower gets the kill
   const chest = _nr.set(player.pos.x, player.pos.y - 0.6, player.pos.z), dc = p.distanceTo(chest);
   if (dc < R && state === 'play' && !(owner === 'me' && (w === 95 || w === 94))) { let dmg = 130 * Math.pow(1 - dc / R, 1.15); if (exBlocked(p, chest)) dmg *= 0.25;
-    if (dmg >= 4) { if (mode === 'solo') hurtSolo(dmg * 0.35); else if (net.alive && !net.ended) { dmgArc(p.x, p.z, dmg / 100); takeHit(Math.min(140, dmg), owner === 'me' ? '' : owner, { w, head: false }); } } }
+    if (dmg >= 4) { if (mode === 'solo') { if (owner === 'me' || !net.coop) hurtSolo(dmg * 0.35); } else if (net.alive && !net.ended) { dmgArc(p.x, p.z, dmg / 100); takeHit(Math.min(140, dmg), owner === 'me' ? '' : owner, { w, head: false }); } } }
   if (mode === 'solo' && owner === 'me') for (const e of enemies.slice()) { if (e.dead) continue; e.torso.getWorldPosition(_ex); const de = _ex.distanceTo(p); if (de > R) continue;
     let dz = 16 * Math.pow(1 - de / R, 0.8) + 2; if (exBlocked(p, _ex)) dz *= 0.3; damageEnemy(e, e.Z.boss ? dz * 0.8 : dz, 'body', _ex.clone(), _ex.clone().sub(p).normalize()); }
   if (curMap === 'ship') for (const B of XBAR) if (B.live && B.m.position.distanceTo(p) < 3.2) igniteBarrel(B.id, owner === 'me' ? 'me' : owner, 0.25);
@@ -7535,7 +7611,7 @@ function bloatBurst(e) {
   sparks(p, 0x9aff2a, 60, 6); sparks(p, 0x4a6a10, 40, 4); for (let i = 0; i < 4; i++) puff(p.clone(), _nr.set((Math.random() - 0.5) * 1.5, 0.6 + Math.random(), (Math.random() - 0.5) * 1.5).clone(), 2.5, 0.6, 2.8, 0.45);
   sfx('splat'); sfxAt('boom', 0.45, p); camS.kick(3, -0.5 * Math.max(0, 1 - p.distanceTo(player.pos) / 12));
   const dp = Math.hypot(player.pos.x - p.x, player.pos.z - p.z); if (dp < 3.8 && player.pos.y - 1.6 < 1.8) { hurtSolo(10 + 26 * (1 - dp / 3.8)); flashSub('Acid!'); }
-  for (const o of enemies.slice()) if (o !== e && !o.dead) { const d2 = o.root.position.distanceTo(e.root.position); if (d2 < 3.2) damageEnemy(o, 3, 'body', null, null); }
+  if (!coopClient()) for (const o of enemies.slice()) if (o !== e && !o.dead) { const d2 = o.root.position.distanceTo(e.root.position); if (d2 < 3.2) damageEnemy(o, 3, 'body', null, null); }
 }
 
 // =====================================================================================================================
@@ -7713,8 +7789,10 @@ function trapPrompt() {
 function tryTrap() {
   if (TRAP.st !== 'idle') { flashSub(TRAP.st === 'pour' ? 'Already pouring' : 'Ladle refilling · ' + Math.ceil(TRAP.t) + 's'); return; }
   if (score - spent < TRAP.cost) { sfx('dry'); flashSub('Need ' + fmt(TRAP.cost - score + spent) + ' more scrap'); return; }
-  spent += TRAP.cost; sfx('buy'); sfx('forge'); TRAP.st = 'pour'; TRAP.t = 0; TRAP.ring = 0; showBanner('Ladle pour'); flashSub('Get clear of the pit!'); camS.kick(3, -0.3); updateHud();
+  spent += TRAP.cost; sfx('buy'); startTrap(true); updateHud();
+  if (net.coop && coop.go) coopEv('tp', []);
 }
+function startTrap(mine, who) { sfx('forge'); TRAP.st = 'pour'; TRAP.t = 0; TRAP.ring = 0; TRAP.mine = mine; showBanner('Ladle pour'); flashSub(who ? who + ' pulled the ladle · get clear!' : 'Get clear of the pit!'); camS.kick(3, -0.3); }
 function resetTrap() { TRAP.st = 'idle'; TRAP.t = 0; TRAP.tilt = 0; if (TRAP.stream) TRAP.stream.visible = false; if (TRAP.fire) TRAP.fire.material.opacity = 0; }
 const _tl = new THREE.Vector3(), _tl2 = new THREE.Vector3();
 function stepTrap(dt, t) {
@@ -7724,9 +7802,9 @@ function stepTrap(dt, t) {
     // burn: rings of fire pulse out, the infected inside go up one after another, the boss takes a beating
     TRAP.ring -= dt; if (TRAP.ring <= 0 && k > 0.8) { TRAP.ring = 0.55; shockwave(0, 0, TRAP.R); sfxAt('sizzle', 0.9, _tl.set(0, 1, 0)); }
     if (k > 0.8) {
-      for (const e of enemies.slice()) { if (e.dead || e.emerge > 0) continue; const p = e.root.position, d = Math.hypot(p.x, p.z); if (d > TRAP.R) continue;
-        if (e.Z.boss) { e.hp -= dt * 7; e.flV += dt * 3; if (e.hp <= 0) { trapKill = true; killEnemy(e, false, null); trapKill = false; } continue; }
-        e.burning = true; if (Math.random() < dt * 5) { trapKill = true; killEnemy(e, false, null); trapKill = false; } }
+      if (!coopClient()) for (const e of enemies.slice()) { if (e.dead || e.emerge > 0) continue; const p = e.root.position, d = Math.hypot(p.x, p.z); if (d > TRAP.R) continue;
+        if (e.Z.boss) { e.hp -= dt * 7; e.flV += dt * 3; if (e.hp <= 0) { trapKill = true; killEnemy(e, false, null, TRAP.mine === false); trapKill = false; } continue; }
+        e.burning = true; if (Math.random() < dt * 5) { trapKill = true; killEnemy(e, false, null, TRAP.mine === false); trapKill = false; } }
       const pd = Math.hypot(player.pos.x, player.pos.z); if (pd < TRAP.R - 1.3 && player.pos.y - 1.6 < 1.0 && state === 'play') { TRAP.burnT = (TRAP.burnT || 0) + dt; if (TRAP.burnT > 0.3) { TRAP.burnT = 0; hurtSolo(9); flashSub('Out of the ring!'); } }
       if (Math.random() < dt * 30) { const a = Math.random() * 7, r = 3 + Math.random() * (TRAP.R - 3); sparks(_tl.set(Math.cos(a) * r, 0.2, Math.sin(a) * r), 0xff8a2a, 2, 3); }
     }
@@ -7821,7 +7899,7 @@ function stepShipExtra(dt, t) {
 // =====================================================================================================================
 function stepFeatures(dt, t) {
   stepNades(dt); stepExplosions(dt); stepBarrels(dt);
-  if (mode === 'solo') stepBox(dt, t);
+  if (mode === 'solo') { stepBox(dt, t); stepPU(dt, t); stepCoop(dt, t); }
   if (mode === 'online') stepStreaks(dt);
   stepMapZ(dt, t); stepShipExtra(dt, t);
   updateNadeHud(); renderPerks();
@@ -7835,8 +7913,8 @@ function setHudMode() { try { renderHints(); } catch (e) {}
   const on = mode === 'online'; $('wrap').classList.toggle('mp', on);
   $('tlLabel').textContent = on ? 'Room' : 'Wave';
   $('trLabel').textContent = on ? 'Kills / deaths' : 'Score';
-  $('roster').hidden = !on; $('feed').hidden = !on; rosterKey = '';
-  $('pausenote').hidden = !on;
+  $('roster').hidden = !(on || net.coop); $('feed').hidden = !on; rosterKey = '';
+  $('pausenote').hidden = !(on || net.coop);
   updateHud();
 }
 const canvas = renderer.domElement;
@@ -7852,6 +7930,7 @@ function begin() {
 }
 function toMenu() {
   if (mode === 'online') leaveMatch();
+  leaveCoop(); $('zPanel').hidden = true;
   setMap('foundry');
   mode = 'solo'; state = 'menu'; clearSolo(); boss = null; $('bossbar').hidden = true; $('gunsmith').hidden = true; $('mpPanel').hidden = true; $('msTiles').hidden = false; $('start').classList.remove('peek');
   $('paused').hidden = true; $('over').hidden = true; $('settings').hidden = true; $('start').hidden = false;
@@ -7859,8 +7938,13 @@ function toMenu() {
   if (document.pointerLockElement) document.exitPointerLock();
   setHudMode();
 }
-$('play').onclick = () => { if (mode === 'online') leaveMatch(); setMap('foundry'); mode = 'solo'; setHudMode(); resetSolo(); begin(); };
-$('again').onclick = () => { resetSolo(); begin(); };
+$('play').onclick = () => { $('msTiles').hidden = true; $('zPanel').hidden = false; menuPeek(false); const zn = $('zName'); zn.value = net.name; zn.disabled = !!cloud.profile; zStatusLine(); };
+$('zBack').onclick = () => { $('zPanel').hidden = true; $('msTiles').hidden = false; };
+$('zSolo').onclick = () => { leaveCoop(); if (mode === 'online') leaveMatch(); setMap('foundry'); mode = 'solo'; setHudMode(); resetSolo(); begin(); };
+$('zJoin').onclick = () => joinCoop();
+$('zCode').addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter' && !$('zJoin').disabled) joinCoop(); });
+$('zName').addEventListener('keydown', e => e.stopPropagation());
+$('again').onclick = () => { if (net.coop) { coopAgain(); return; } resetSolo(); begin(); };
 $('menu2').onclick = toMenu;
 $('quit').onclick = toMenu;
 $('resume').onclick = begin;
@@ -7915,10 +7999,10 @@ function pause() { if (state !== 'play') return; state = 'paused'; releaseInputs
 function fillPause() {
   const on = mode === 'online';
   setText('pmMap', on ? 'Cargo' : 'Furnace Hall 2');
-  setText('pmMode', on ? 'Deathmatch · Room ' + (net.code || '–') : 'Zombies · Shift ' + wave);
+  setText('pmMode', on ? 'Deathmatch · Room ' + (net.code || '–') : net.coop ? 'Zombies co-op · Room ' + net.code + ' · wave ' + wave : 'Zombies · Shift ' + wave);
   setText('pmObjL', on ? 'Scoreboard' : 'Objective');
   setText('pmObj', on ? `${net.kills} kills · ${net.deaths} deaths` : intermission ? 'Get ready for wave ' + (wave + 1) : `Survive wave ${wave} · ${kills} infected down`);
-  $('pauseLoadout').hidden = !on; $('pauseRestart').hidden = on;
+  $('pauseLoadout').hidden = !on; $('pauseRestart').hidden = on || net.coop;
   setText('pauseRespawn', on ? 'Respawn (counts as a death)' : 'Respawn at the door');
   const d = new Date(); setText('pmTime', d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }));
 }
@@ -7927,7 +8011,7 @@ $('pauseRespawn').onclick = () => {
   if (mode === 'online') { if (!net.alive) { begin(); return; } net.deaths++; net.alive = false; net.respawnAt = performance.now(); sendPresence(true); begin(); }
   else { player.pos.set(0, 1.6, 20); player.vy = 0; carry.set(0, 0, 0); setView(0, 0); begin(); flashSub('Back at the door'); }
 };
-$('pauseRestart').onclick = () => { if (mode !== 'solo') return; $('paused').hidden = true; resetSolo(); begin(); };
+$('pauseRestart').onclick = () => { if (mode !== 'solo' || net.coop) return; $('paused').hidden = true; resetSolo(); begin(); };
 $('pauseLoadout').onclick = () => { if (mode !== 'online') return; begin(); openGunsmith(); };
 document.addEventListener('pointerlockchange', () => {
   if (document.pointerLockElement) { dragLook = false; return; }
@@ -7977,7 +8061,7 @@ addEventListener('keydown', e => {
   if (c === KB('firemode')) cycleFireMode();
   if (c === KB('light') && state === 'play') toggleLight();
   if (c === KB('interact')) { if (mode === 'online') throwNade(); else tryInteract(); }   // multiplayer: G throws a grenade; edit loadouts from the pause menu
-  if (c === KB('skip') && mode === 'solo' && intermission && waveGap > 0.5) { waveGap = 0.01; sfx('click'); }
+  if (c === KB('skip') && mode === 'solo' && intermission && waveGap > 0.5) { if (coopClient()) { coopEv('sk', []); flashSub('Asked the team to start'); } else waveGap = 0.01; sfx('click'); }
   if (c === KB('w1')) switchTo(loadout[0]);
   if (c === KB('w2')) switchTo(loadout[1]);
   if (c === KB('w3')) knifeEquip();
@@ -8233,6 +8317,7 @@ const targets = [];
 function shoot() {
   if (fireCd > 0) return false;
   if (mode === 'online' && (!net.alive || net.ended)) return false;
+  if (mode === 'solo' && player.dead) return false;
   const W = WEAPONS[cur];
   if (ammo <= 0) { const n = performance.now(); if (n - dryAt > 250) { dryAt = n; sfx('dry'); triggerT = 1; } startReload(); return false; }
   if (mode === 'solo') shotsFired++;
@@ -8279,11 +8364,11 @@ function shoot() {
     if (pierce > 1) {
       const seen = new Set(); let fall = 1;
       for (const h of hits) { const he = h.object.userData.enemy; if (!he) break; if (seen.has(he) || he.dead) continue; seen.add(he); anyHit = true;
-        damageEnemy(he, dm * fall, h.object.userData.zone, h.point, ray.ray.direction); if (burn && !he.dead) he.burn = 3.2; fall *= 0.8; if (seen.size >= pierce) break; }
+        damageEnemy(he, dm * fall, h.object.userData.zone, h.point, ray.ray.direction); if (burn && !he.dead) { he.burn = 3.2; he.burnBy = null; if (he.rep) coopHitAcc(he.zid, 0, 4); } fall *= 0.8; if (seen.size >= pierce) break; }
     } else if (e) {
       anyHit = true;
       damageEnemy(e, dm, hit.object.userData.zone, hit.point, ray.ray.direction);
-      if (burn && !e.dead) { e.burn = 3.2; sparks(hit.point, 0xff8a2a, 6, 2.5); }
+      if (burn && !e.dead) { e.burn = 3.2; e.burnBy = null; if (e.rep) coopHitAcc(e.zid, 0, 4); sparks(hit.point, 0xff8a2a, 6, 2.5); }
     }
     if (!e) sparks(hit.point, rm ? (net.remotes.get(rm.peer)?.color ?? 0xffc46b) : 0xffc46b, rm ? 10 : W.pellets ? 2 : 5);
     if (rm) { const R = (W.range || 20) * FX.range, fall = hit.distance <= R ? 1 : Math.max(0.6, 1 - 0.4 * (hit.distance - R) / (R * 1.2));
@@ -8294,7 +8379,7 @@ function shoot() {
   _vw2.copy(_end).sub(_start).normalize().multiplyScalar(0.9); _vw2.y += 0.12; _vw2.addScaledVector(playerVel, 0.8);
   puff(_start, _vw2, 1.0, 0.07, 0.42, 0.5);
   if (W.anim) ejectBrass();
-  if (mode === 'online') {
+  if (mode === 'online' || net.coop) {
     net.shots.push([++net.shotSeq, r2(_start.x), r2(_start.y), r2(_start.z), r2(_end.x), r2(_end.y), r2(_end.z), target, dmg, cur, (FX.quiet ? 1 : 0) | (FX.hideTracer ? 2 : 0) | (headHit ? 4 : 0)]);
     if (net.shots.length > 8) net.shots.shift();
     sendPresence(true);
@@ -8304,10 +8389,11 @@ function shoot() {
   return true;
 }
 function hurtSolo(d) {
+  if (player.down || player.dead || state === 'over') return;
   player.hp = Math.max(0, player.hp - d); hurtFlash = 0.6;
   if (!hurtSolo.cd || performance.now() - hurtSolo.cd > 180) { sfx('hurt'); hurtSolo.cd = performance.now(); }
   updateHud();
-  if (player.hp <= 0) gameOver();
+  if (player.hp <= 0) { if (net.coop && coop.go && team().length) goDown(); else gameOver(); }
 }
 function gameOver() {
   $('gunsmith').hidden = true; $('wrap').classList.remove('shopping'); $('bossbar').hidden = true;
@@ -8315,6 +8401,8 @@ function gameOver() {
   state = 'over'; deathSound();
   if (score > best) { best = score; store.set('fb-best', best); }
   $('fscore').textContent = score; $('fwave').textContent = wave; $('fkills').textContent = kills;
+  if (net.coop) { coop.go = false; player.down = false; sendCoop(true); }
+  overNote();
   $('over').hidden = false; updateHud();
   if (document.pointerLockElement) document.exitPointerLock();
 }
@@ -8394,11 +8482,11 @@ renderer.setAnimationLoop(now => {
   if (!document.hidden) adaptResolution(Math.min(raw, 0.2));
   stepWorld(dt, t);
 
-  if (state === 'play' || (state === 'shop' && !gs.fromMenu) || (state === 'paused' && mode === 'online')) step(dt, t, state === 'play');
+  if (state === 'play' || (state === 'shop' && !gs.fromMenu) || (state === 'paused' && (mode === 'online' || net.coop))) step(dt, t, state === 'play');
   else if (state === 'menu') { player.yaw += dt * 0.08;
     if (curMap === 'ship') { player.pos.set(Math.sin(player.yaw) * 17, 11, Math.cos(player.yaw) * 17); player.pitch = -0.52; }
     else { player.pos.set(Math.sin(t * .05) * 3, 3, 18); player.pitch = -0.12; } }
-  if (mode === 'online') interpRemotes();
+  if (mode === 'online' || net.coop) interpRemotes();
   { const show = mode === 'online' && S.minimap && (state === 'play' || state === 'paused'); const mm = $('mmap'); if (mm.hidden === show) mm.hidden = !show; if (show) drawMinimap(); }
   if (state === 'play') { const Wx = WEAPONS[cur], mv = Math.min(1, Math.hypot(playerVel.x, playerVel.z) / 6);
     const g = 3 + Math.min(40, 420 * Wx.hip * fxOf(Wx).spread * (1 + bloom) + mv * 9 + (player.onGround ? 0 : 8)) * (1 - adsT);
@@ -8412,7 +8500,7 @@ renderer.setAnimationLoop(now => {
     _lean.set(player.pos.x + Math.cos(player.yaw) * 0.55 * leanT, player.pos.y - 0.08 * Math.abs(leanT), player.pos.z - Math.sin(player.yaw) * 0.55 * leanT);
     collide(_lean, 0.2); camera.position.copy(_lean);
   }
-  camera.position.y += Math.sin(bob) * 0.04 * (1 - 0.8 * adsT) - 0.72 * crouchK;
+  camera.position.y += Math.sin(bob) * 0.04 * (1 - 0.8 * adsT) - 0.72 * crouchK - 0.85 * downK;
   camera.rotation.set(player.pitch + camS.x[3] + cmP[0], player.yaw + camS.x[4] + cmP[1], -0.18 * leanT + 0.07 * slideK + camS.x[5] + cmP[2], 'YXZ');
   const Wc = WEAPONS[cur];
   const fov = S.fov - (S.fov - Wc.adsFov) * adsT + 9 * slideK * (1 - adsT);
@@ -8572,7 +8660,7 @@ const slideDir = new THREE.Vector3(), carry = new THREE.Vector3(), _sp = new THR
 function endSlide(cd = 0.35) { if (slideT > 0) { slideT = 0; slideCd = cd; } }
 let landVy = 0;
 function step(dt, t, active) {
-  const canAct = active && (mode === 'solo' || net.alive);
+  const canAct = active && (mode === 'solo' ? !player.dead : net.alive);
   // aim smoothing: ease the view toward the mouse target
   const tau = S.smooth * 0.03;
   const kS = tau > 0 ? 1 - Math.exp(-dt / tau) : 1;
@@ -8591,7 +8679,7 @@ function step(dt, t, active) {
     if (kHeld('right') || keys.ArrowRight) mv.add(right);
     if (kHeld('left') || keys.ArrowLeft) mv.sub(right);
   }
-  const cDown = canAct && kHeld('crouch'), sprintKey = kHeld('sprint') && adsT < 0.3;
+  const cDown = canAct && kHeld('crouch') && !player.down, sprintKey = kHeld('sprint') && adsT < 0.3 && !player.down;
   slideCd = Math.max(0, slideCd - dt);
   if (cDown && !cWas && slideT <= 0 && slideCd <= 0 && player.onGround && sprintKey && mv.lengthSq() > 0 && Math.hypot(playerVel.x, playerVel.z) > 6.5) {
     slideT = SLIDE_DUR; slideV = 12.5; slideDir.copy(mv).normalize(); carry.set(0, 0, 0);
@@ -8602,7 +8690,7 @@ function step(dt, t, active) {
   cWas = cDown;
   const crouching = cDown && slideT <= 0;
   const sprint = sprintKey && !crouching && slideT <= 0;
-  const speed = (sprint ? 9.5 : crouching ? 3.2 : 6) * (1 - 0.4 * adsT) * (1 - 0.3 * Math.abs(leanT)) * (knife.on ? 1.08 : fxOf(WEAPONS[cur]).move) * (mode === 'solo' && perks.fleet ? 1.12 : 1);
+  const speed = (sprint ? 9.5 : crouching ? 3.2 : 6) * (1 - 0.4 * adsT) * (1 - 0.3 * Math.abs(leanT)) * (knife.on ? 1.08 : fxOf(WEAPONS[cur]).move) * (mode === 'solo' && perks.fleet ? 1.12 : 1) * (player.down ? 0.22 : 1);
   if (slideT > 0) {
     // keep most of the sprint, steer a little with the movement keys, bleed speed off
     if (mv.lengthSq() > 0) { _sp.copy(mv).normalize(); slideDir.lerp(_sp, Math.min(1, dt * 1.6)).normalize(); }
@@ -8825,7 +8913,7 @@ function tryWall(B) {
   else { const k = Math.max(0, loadout.indexOf(cur)); loadout[k] = i; mags[i] = W.mag; W.ready = false; switchTo(i); flashSub(W.name + ' bought'); }
   _hp.set(B.x + B.nx * 0.4, 1.6, B.z + B.nz * 0.4); sparks(_hp, 0xffc46b, 24, 2.5); updateHud();
 }
-function tryInteract() { if (nearBox) { tryBox(); return; } if (nearPerk) { tryPerk(nearPerk); return; } if (nearTrap) { tryTrap(); return; } if (nearPod) { trySuitUp(); return; } if (nearBlast) { tryBlast(nearBlast); return; } if (nearStation) { tryStation(nearStation); return; } if (nearWall) { tryWall(nearWall); return; } if (nearForge) tryForge(); else if (nearBench) openGunsmith(); }
+function tryInteract() { if (coop.nearDown || player.down || player.dead) return; if (nearBox) { tryBox(); return; } if (nearPerk) { tryPerk(nearPerk); return; } if (nearTrap) { tryTrap(); return; } if (nearPod) { trySuitUp(); return; } if (nearBlast) { tryBlast(nearBlast); return; } if (nearStation) { tryStation(nearStation); return; } if (nearWall) { tryWall(nearWall); return; } if (nearForge) tryForge(); else if (nearBench) openGunsmith(); }
 // ---------- Gunsmith menu ----------
 // Full-screen workbench view: the gun sits on the right, the camera eases to whichever part you're looking at, and
 // hovering an option fits it to the model so you can see it before you buy.
@@ -9265,7 +9353,8 @@ function stepSolo(dt, t) {
   nearBench = state === 'play' && !nearForge && Math.abs(player.pos.x - BENCH.x) < 2.4 && Math.abs(player.pos.z - BENCH.z) < 2.3;
   nearPod = state === 'play' && Math.hypot(player.pos.x - EXO_POD.x, player.pos.z - EXO_POD.z) < 2.3;
   nearBlast = null; nearStation = null; nearWall = null; nearPerk = null; nearBox = false; nearTrap = false;
-  if (state === 'play') {
+  if (player.down || player.dead) { nearForge = false; nearBench = null; nearPod = false; }
+  if (state === 'play' && !player.down && !player.dead) {
     for (const B of WALLBUYS) { if (B.area && !areaOpen[B.area]) continue; const dx = player.pos.x - B.x, dz = player.pos.z - B.z, along = Math.abs(dx * B.nz - dz * B.nx), out = dx * B.nx + dz * B.nz; if (along < 1.4 && out > 0 && out < 2.2) nearWall = B; }
     for (const B of BLAST) if (!B.open && Math.abs(player.pos.x - B.A.sign * ARENA) < 2.8 && Math.abs(player.pos.z - B.A.gz) < 2.6) nearBlast = B;
     for (const S0 of STATIONS) if (Math.abs(player.pos.x - S0.x) < 1.8 && Math.abs(player.pos.z - S0.z) < 2.2) nearStation = S0;
@@ -9273,37 +9362,42 @@ function stepSolo(dt, t) {
     nearBox = Math.hypot(player.pos.x - BOX.x, player.pos.z - (BOX.z + 1.0)) < 1.7;
     nearTrap = Math.hypot(player.pos.x - (TRAP.x + 1.0), player.pos.z - TRAP.z) < 1.6;
   }
-  if (nearBox) boxPrompt(); else if (nearPerk) perkPrompt(); else if (nearTrap) trapPrompt(); else if (nearPod) podPrompt(); else if (nearBlast) blastPrompt(); else if (nearStation) areaStationPrompt(); else if (nearWall) wallPrompt(); else stationPrompt();
+  if (coop.nearDown) revivePrompt(); else if (player.down || player.dead) setPrompt(''); else if (nearBox) boxPrompt(); else if (nearPerk) perkPrompt(); else if (nearTrap) trapPrompt(); else if (nearPod) podPrompt(); else if (nearBlast) blastPrompt(); else if (nearStation) areaStationPrompt(); else if (nearWall) wallPrompt(); else stationPrompt();
   { const bb = $('bossbar'), on = !!boss && !boss.dead; if (bb.hidden === on) bb.hidden = !on; if (on) $('bossfill').style.width = Math.max(0, boss.hp / boss.maxHp * 100).toFixed(1) + '%'; }
+  if (!coopClient()) {
   if (bossDelay > 0) { bossDelay -= dt; if (bossDelay <= 0) { spawnEnemy('golem'); updateHud(); } }
-  if (toSpawn > 0) { spawnTimer -= dt; if (spawnTimer <= 0 && enemies.length < 34) { spawnEnemy(); toSpawn--; spawnTimer = Math.max(0.28, 1.15 - wave * 0.07); updateHud(); } }
+  if (toSpawn > 0) { spawnTimer -= dt; if (spawnTimer <= 0 && enemies.length < Math.min(42, 30 + 4 * coopN())) { spawnEnemy(); toSpawn--; spawnTimer = Math.max(0.28, 1.15 - wave * 0.07) / (1 + 0.3 * (coopN() - 1)); updateHud(); } }
   else if (enemies.length === 0 && bossDelay <= 0) {
     // intermission: time to shop, forge and suit up. N starts the next wave early.
-    if (waveGap <= 0 && !intermission) { intermission = true; waveGap = wave === 0 ? 5 : INTERMISSION; if (wave) { score += wave * 250; addXP(40 * wave, 'Wave ' + wave + ' cleared'); nadeCount = Math.min(nadeMax(), nadeCount + 1); showBanner('Wave cleared'); flashSub('Next wave in ' + INTERMISSION + 's · press N to start now'); dropPickup(); } updateHud(); }
+    if (waveGap <= 0 && !intermission) { intermission = true; waveGap = wave === 0 ? 5 : INTERMISSION; if (wave) waveClearRewards(); updateHud(); }
     waveGap -= dt;
     setText('tlSub', 'Next wave in ' + Math.max(0, Math.ceil(waveGap)) + 's · N to skip');
     if (waveGap <= 0) { intermission = false; startWave(); updateHud(); }
   }
+  } else if (intermission) { waveGap = Math.max(0, waveGap - dt); setText('tlSub', 'Next wave in ' + Math.ceil(waveGap) + 's · N to skip'); }
   const feet = player.pos.y - 1.6;
+  buildTargets();
   for (let n = enemies.length - 1; n >= 0; n--) {
     const e = enemies[n]; if (!e) continue;
+    if (e.rep) { stepReplica(e, dt, t); continue; }
     const p = e.root.position, Z = e.Z;
     if (e.burn > 0) {
       e.burn -= dt; e.burning = true; e.hp -= dt * 1.15;
       if ((e.burnFx = (e.burnFx || 0) - dt) <= 0) { e.burnFx = 0.06; e.torso.getWorldPosition(_hp); _hp.x += (Math.random() - 0.5) * 0.45 * e.sc; _hp.y += (Math.random() - 0.3) * 0.6 * e.sc; _hp.z += (Math.random() - 0.5) * 0.45 * e.sc; sparks(_hp, Math.random() < 0.5 ? 0xff6a14 : 0xffc040, 2, 1.8); }
-      if (e.hp <= 0) { killEnemy(e, false, null); continue; }
+      if (e.hp <= 0) { killEnemy(e, false, null, net.coop && e.burnBy === 'r'); continue; }
     } else e.burning = false;
     if (e.rise > 0) {   // boss climbing out of the pit
       e.rise -= dt; p.y = -2.6 * Math.max(0, e.rise / 2.4); if (Math.random() < dt * 30) sparks(_hp.set(p.x + (Math.random() - 0.5) * 2, 0.9, p.z + (Math.random() - 0.5) * 2), 0xff7a20, 4, 4);
       if (e.rise <= 0) { p.y = 0; camS.kick(3, -0.8); sfx('thud'); }
       e.root.rotation.y = e.yaw; animZombie(e, dt, t, 0); continue;
     }
-    let dx = player.pos.x - p.x, dz = player.pos.z - p.z; const dist = Math.hypot(dx, dz) || 0.001; dx /= dist; dz /= dist;
+    const T = zTarget(p);   // the nearest player still standing
+    let dx = T.x - p.x, dz = T.z - p.z; const dist = Math.hypot(dx, dz) || 0.001; dx /= dist; dz /= dist;
     e.atkCd -= dt; e.stagger = Math.max(0, e.stagger - dt); e.emerge = Math.max(0, e.emerge - dt * 1.4);
     if (Z.bloat) {   // gets close, swells up, pops
-      if (e.fuse === undefined && dist < 2.3 && feet < 1.6 && e.emerge <= 0) { e.fuse = 0.9; sfx('sizzle', 1.2); groan(e, 'snarl'); }
+      if (e.fuse === undefined && dist < 2.3 && T.feet < 1.6 && e.emerge <= 0) { e.fuse = 0.9; sfxAt('sizzle', 1.2, p); groan(e, 'snarl'); }
       if (e.fuse !== undefined) { e.fuse -= dt; e.torso.scale.setScalar(1 + (0.9 - e.fuse) * 0.45); if (Math.random() < dt * 30) { e.torso.getWorldPosition(_hp); sparks(_hp, 0x9aff2a, 2, 2); }
-        if (e.fuse <= 0) { killEnemy(e, false, null); continue; } } }
+        if (e.fuse <= 0) { killEnemy(e, false, null, net.coop); continue; } } }
     // melee: wind up, swing, connect partway through
     if (e.atkT >= 0) {
       e.atkT += dt;
@@ -9311,24 +9405,29 @@ function stepSolo(dt, t) {
         e.hitDone = true;
         if (Z.boss) {   // ground slam: shockwave ring, hits anything on the ground inside the radius
           shockwave(p.x, p.z, Z.slamR); sfx('thud'); sfx('splat', 0.5); camS.kick(3, -1.2 * Math.max(0.3, 1 - dist / 14)); camS.kick(5, (Math.random() - 0.5) * 2);
-          if (dist < Z.slamR && feet < 0.6) { hurtSolo(Z.dmg); player.vy = 6; player.onGround = false; carry.set(dx * 7, 0, dz * 7); flashSub('Jump the slam!'); }
+          for (const Tg of zTg) { const sd = Math.hypot(Tg.x - p.x, Tg.z - p.z); if (sd >= Z.slamR || Tg.feet >= 0.6) continue;
+            if (Tg.me) { const ux = (Tg.x - p.x) / (sd || 1), uz = (Tg.z - p.z) / (sd || 1); hurtSolo(Z.dmg); player.vy = 6; player.onGround = false; carry.set(ux * 7, 0, uz * 7); flashSub('Jump the slam!'); }
+            else coopEv('hu', [Tg.peer, Z.dmg]); }
         }
-        else if (dist < Z.reach + 0.5 && feet < 1.5) {
-          hurtSolo(Z.dmg); sfx('thud', 0.8); camS.kick(3, -0.6); camS.kick(5, (Math.random() - 0.5) * 1.6); swayS.kick(0, -dx * 0.8); swayS.kick(4, (Math.random() - 0.5) * 2);
-          if (Z.brute) { player.pos.x += dx * 1.1; player.pos.z += dz * 1.1; collide(player.pos, 0.45); camS.kick(3, -0.8); }
+        else if (dist < Z.reach + 0.5 && T.feet < 1.5) {
+          if (!T.me) { coopEv('hu', [T.peer, Z.dmg]); sfxAt('thud', 0.8, p); }
+          else { hurtSolo(Z.dmg); sfx('thud', 0.8); camS.kick(3, -0.6); camS.kick(5, (Math.random() - 0.5) * 1.6); swayS.kick(0, -dx * 0.8); swayS.kick(4, (Math.random() - 0.5) * 2);
+          if (Z.brute) { player.pos.x += dx * 1.1; player.pos.z += dz * 1.1; collide(player.pos, 0.45); camS.kick(3, -0.8); } }
         }
       }
       if (e.atkT >= Z.atkDur) { e.atkT = -1; e.atkCd = 0.3 + Math.random() * 0.3; }
-    } else if (dist < Z.reach && e.atkCd <= 0 && feet < 1.5 && e.emerge <= 0 && e.thT < 0) { e.atkT = 0; e.hitDone = false; groan(e, 'snarl'); }
+    } else if (dist < Z.reach && e.atkCd <= 0 && T.feet < 1.5 && e.emerge <= 0 && e.thT < 0) { e.atkT = 0; e.hitDone = false; groan(e, 'snarl'); }
     // burners lob slag from range
     if (Z.throws) {
       e.throwCd -= dt;
-      if (e.thT >= 0) { const prev = e.thT; e.thT += dt; if (prev < 0.5 && e.thT >= 0.5) { if (Z.boss) for (let k = 0; k < 3; k++) throwSlag(e, 3.5); else throwSlag(e); } if (e.thT >= 0.9) e.thT = -1; }
+      if (e.thT >= 0) { const prev = e.thT; e.thT += dt; if (prev < 0.5 && e.thT >= 0.5) { if (Z.boss) for (let k = 0; k < 3; k++) throwSlag(e, 3.5, T); else throwSlag(e, 0, T); } if (e.thT >= 0.9) e.thT = -1; }
       else if (e.throwCd <= 0 && dist > 4 && dist < (Z.boss ? 26 : 18) && e.atkT < 0 && e.emerge <= 0) { e.thT = 0; e.throwCd = Z.boss ? 3.2 + Math.random() : Math.max(1.8, 3.6 - wave * 0.1) + Math.random(); }
     }
     // steering: straight at you, circle at range for burners, detour when stuck on cover
     let mx = dx, mz = dz;
-    { const zr = regionOf(p.x), pr = regionOf(player.pos.x);
+    // spread out and come at you from the sides instead of in a single line
+    if (dist > 4 && !Z.boss) { const fk = e.flank * Math.min(1, (dist - 4) / 6) * 0.55; mx += -dz * fk; mz += dx * fk; }
+    { const zr = regionOf(p.x), pr = regionOf(T.x);
       if (zr !== pr) { const A = AREAS[zr !== 'main' ? zr : pr], toward = zr === 'main' ? A.sign : -A.sign;
         const gX = A.sign * ARENA, near = Math.hypot(p.x - gX, p.z - A.gz) < 1.6;
         const gx = near ? gX + toward * 3 : gX - toward * 0.8, gz = A.gz;   // line up with the opening, then push through
@@ -9353,7 +9452,7 @@ function stepSolo(dt, t) {
     }
     if (inMolten(p.x, p.z)) {
       e.hp -= dt * 1.5; if (Math.random() < dt * 10) sparks(_hp.set(p.x, 0.5, p.z), 0xff7a20, 3, 2);
-      if (e.hp <= 0) { killEnemy(e, false, null); continue; }
+      if (e.hp <= 0) { killEnemy(e, false, null, net.coop); continue; }
     }
     const face = dist < 4 || busy ? Math.atan2(dx, dz) : Math.atan2(mx, mz);
     let dy = face - e.yaw; dy = Math.atan2(Math.sin(dy), Math.cos(dy)); e.yaw += dy * Math.min(1, dt * (Z.run ? 8 : 5));
@@ -9361,7 +9460,7 @@ function stepSolo(dt, t) {
     animZombie(e, dt, t, sp);
     e.groanT -= dt; if (e.groanT <= 0) { e.groanT = 3 + Math.random() * 6; groan(e, 'groan'); }
     if (Z.throws && Math.random() < dt * 5) { e.torso.getWorldPosition(_hp); _hp.y += 0.2; sparks(_hp, 0xff7a20, 1, 1.2); }
-    if (state !== 'play' && state !== 'shop') return;
+    if (!zSimOn()) return;
   }
   for (let i = corpses.length - 1; i >= 0; i--) {
     const c = corpses[i];
@@ -9378,11 +9477,11 @@ function stepSolo(dt, t) {
     if (hitP) { hurtSolo(12); sfx('sizzle'); }
     else if (ground) { sparks(o.m.position, 0xff8a2a, 18, 3); sfx('sizzle', 0.6); bloodDecal(o.m.position.x, o.m.position.z, 0.01); if (o.m.position.distanceTo(_v2.set(player.pos.x, feet, player.pos.z)) < 1.3) hurtSolo(6); }
     if (hitP || ground || o.life <= 0 || Math.abs(o.m.position.x) > WORLD_X || Math.abs(o.m.position.z) > ARENA) { scene.remove(o.m); orbs.splice(i, 1); }
-    if (state !== 'play' && state !== 'shop') return;
+    if (!zSimOn()) return;
   }
   for (let i = pickups.length - 1; i >= 0; i--) {
     const pk = pickups[i]; pk.m.rotation.y += dt * 2; pk.m.position.y = 0.6 + Math.sin(t * 3) * 0.1;
-    if (Math.hypot(pk.m.position.x - player.pos.x, pk.m.position.z - player.pos.z) < 1.1) {
+    if (!player.down && !player.dead && Math.hypot(pk.m.position.x - player.pos.x, pk.m.position.z - player.pos.z) < 1.1) {
       if (pk.ammo) { for (const w of WEAPONS) w.reserve = maxReserve(w); for (let k = 0; k < WEAPONS.length; k++) mags[k] = WEAPONS[k].mag; ammo = WEAPONS[cur].mag; showBanner('Max ammo'); sfx('buy'); sparks(pk.m.position, 0xffc46b, 24); }
       else { player.hp = Math.min(maxHp(), player.hp + 35); sfx('pickup'); sparks(pk.m.position, 0x3fe08a, 14); }
       scene.remove(pk.m); pickups.splice(i, 1); updateHud();
@@ -9390,6 +9489,369 @@ function stepSolo(dt, t) {
   }
   if (feet < 0.2 && inMolten(player.pos.x, player.pos.z)) { burnT += dt; if (burnT > 0.25) { burnT = 0; hurtSolo(6); sfx('sizzle', 0.7); sparks(_hp.set(player.pos.x, 0.2, player.pos.z), 0xff7a20, 8, 2.5); } }
 }
+
+// =====================================================================================================================
+// ---------- power-ups: Max Ammo, Insta-Kill, Double Points, Nuke. Dropped by the infected, shared by the whole team ----------
+// =====================================================================================================================
+const PU_K = ['max', 'insta', 'dbl', 'nuke'];
+const PU_INFO = {
+  max: { name: 'Max Ammo', c: 0x7fd0ff, g: 'MAX', sub: 'Every gun and grenade refilled' },
+  insta: { name: 'Insta-Kill', c: 0xff4a3a, g: '☠', sub: 'One hit kills for 30 s' },
+  dbl: { name: 'Double Points', c: 0xffd23a, g: '2×', sub: 'Double scrap for 30 s' },
+  nuke: { name: 'Nuke', c: 0x9aff4a, g: '☢', sub: '+400 scrap · everything on the floor dies' },
+};
+const puDrops = [], puGone = new Set(), puA = { insta: 0, dbl: 0 }, PU_TEX = {};
+let puSeq = 0, puWave = 0;
+const instaOn = () => performance.now() < puA.insta, dblOn = () => performance.now() < puA.dbl;
+const puRingGeo = new THREE.RingGeometry(0.55, 0.7, 40).rotateX(-Math.PI / 2), puBeamGeo = new THREE.CylinderGeometry(0.32, 0.5, 2.8, 16, 1, true);
+function puTexture(k) {
+  if (PU_TEX[k]) return PU_TEX[k];
+  const I = PU_INFO[k], col = CSS(I.c);
+  return (PU_TEX[k] = canvasTex(128, 128, (g) => {
+    const gr = g.createRadialGradient(64, 64, 8, 64, 64, 62); gr.addColorStop(0, col); gr.addColorStop(0.55, col + '88'); gr.addColorStop(1, col + '00');
+    g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
+    g.fillStyle = '#0d0f12'; g.beginPath(); g.arc(64, 64, 38, 0, 7); g.fill(); g.strokeStyle = col; g.lineWidth = 5; g.stroke();
+    g.fillStyle = col; g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = `800 ${I.g.length > 2 ? 26 : 40}px "IBM Plex Mono", monospace`; g.fillText(I.g, 64, 67);
+  }));
+}
+function spawnPU(k, x, z, id, life = 26) {
+  const I = PU_INFO[k]; if (!I) return;
+  const G = new THREE.Group(); G.position.set(x, groundAt(x, z, 10), z);
+  const spr = new THREE.Sprite(new THREE.SpriteMaterial({ map: puTexture(k), depthWrite: false, transparent: true })); spr.scale.set(0.95, 0.95, 1); spr.position.y = 1.0; G.add(spr);
+  const ring = new THREE.Mesh(puRingGeo, new THREE.MeshBasicMaterial({ color: I.c, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false })); ring.position.y = 0.05; G.add(ring);
+  const beam = new THREE.Mesh(puBeamGeo, new THREE.MeshBasicMaterial({ color: I.c, transparent: true, opacity: 0.14, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })); beam.position.y = 1.4; G.add(beam);
+  scene.add(G); puDrops.push({ id, k, G, spr, ring, beam, life, x, z });
+  sfxAt('perk', 0.5, G.position);
+}
+function removePU(d) { scene.remove(d.G); d.spr.material.dispose(); d.ring.material.dispose(); d.beam.material.dispose(); const i = puDrops.indexOf(d); if (i >= 0) puDrops.splice(i, 1); }
+function clearPU() { while (puDrops.length) removePU(puDrops[0]); puGone.clear(); puA.insta = puA.dbl = 0; puWave = 0; renderPuHud(); }
+function maybeDropPU(e) {
+  if (!isAuth() || e.Z.boss || puWave >= 4 || mode !== 'solo') return;
+  if (Math.random() > (net.coop ? 0.04 : 0.032)) return;
+  const r = Math.random(), k = r < 0.3 ? 'max' : r < 0.58 ? 'dbl' : r < 0.85 ? 'insta' : 'nuke';
+  puWave++; spawnPU(k, e.root.position.x, e.root.position.z, coop.tag * 1000 + (++puSeq % 1000));
+}
+// the announcer: a big brassy chord, a different one for each power-up
+function puSound(k) {
+  if (!actx || !sfxBus) return; const t0 = actx.currentTime, base = k === 'nuke' ? 55 : k === 'insta' ? 98 : k === 'dbl' ? 130.8 : 110;
+  for (const m of [1, 1.5, 2, 2.52]) { const o = actx.createOscillator(), g = actx.createGain(), f = actx.createBiquadFilter(); o.type = 'sawtooth';
+    o.frequency.setValueAtTime(base * m, t0); o.frequency.exponentialRampToValueAtTime(base * m * (k === 'nuke' ? 0.5 : 1.03), t0 + 1.2);
+    f.type = 'lowpass'; f.frequency.value = 1500; g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.03, t0 + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.3);
+    o.connect(f); f.connect(g); g.connect(sfxBus); o.start(t0); o.stop(t0 + 1.35); }
+  if (k === 'nuke') nz(t0, 2.2, 0.45, 'lowpass', 240, 0.7, [sfxBus]);
+}
+function puFlash(color) {
+  let el = $('puFlash'); if (!el) { el = document.createElement('div'); el.id = 'puFlash'; el.style.cssText = 'position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .9s'; $('wrap').append(el); }
+  el.style.background = color; el.style.transition = 'none'; el.style.opacity = 0.85; void el.offsetWidth; el.style.transition = 'opacity .9s'; el.style.opacity = 0;
+}
+function activatePU(k, who) {
+  const I = PU_INFO[k]; if (!I) return;
+  const nm = who && who !== net.me ? (net.remotes.get(who)?.name || 'A teammate') : '';
+  showBanner(I.name); flashSub(nm ? nm + ' · ' + I.sub : I.sub); puSound(k);
+  if (k === 'max') { for (const w of WEAPONS) w.reserve = maxReserve(w); for (let i = 0; i < WEAPONS.length; i++) mags[i] = WEAPONS[i].mag; ammo = WEAPONS[cur].mag; nadeCount = nadeMax(); }
+  else if (k === 'insta') puA.insta = performance.now() + 30000;
+  else if (k === 'dbl') puA.dbl = performance.now() + 30000;
+  else if (k === 'nuke') {
+    puFlash('#fff6dc'); camS.kick(3, -1.2);
+    if (isAuth()) for (const e of enemies.slice()) if (!e.dead && !e.Z.boss && !(e.rise > 0)) { e.torso.getWorldPosition(_hp); sparks(_hp, 0xffd27a, 12, 4); killEnemy(e, false, null, true); }
+    score += 400; popPoints(400);
+  }
+  updateHud(); renderPuHud();
+}
+function stepPU(dt, t) {
+  for (let i = puDrops.length - 1; i >= 0; i--) {
+    const d = puDrops[i]; d.life -= dt;
+    d.spr.position.y = 1.0 + Math.sin(t * 2.4 + d.id) * 0.12; d.ring.rotation.y = t; d.ring.scale.setScalar(1 + Math.sin(t * 4) * 0.08);
+    d.G.visible = d.life > 6 || Math.sin(t * (d.life < 3 ? 22 : 12)) > -0.2;   // blinks before it goes
+    if (d.life <= 0 && isAuth()) { removePU(d); continue; }
+    if (state !== 'play' || player.down || player.dead) continue;
+    if (Math.hypot(player.pos.x - d.x, player.pos.z - d.z) < 1.3 && player.pos.y - 1.6 < 1.8 + d.G.position.y) {
+      if (isAuth()) { const k = d.k; removePU(d); activatePU(k, net.me); if (net.coop && coop.go) coopEv('pa', [PU_K.indexOf(k), net.me]); }
+      else { puGone.add(d.id); coopEv('pk', [d.id]); removePU(d); sfx('pickup'); }
+    }
+  }
+  renderPuHud();
+}
+function syncPU(list) {
+  const ids = new Set();
+  for (const s of list) { if (!Array.isArray(s) || s.length < 5) continue; const id = +s[0]; ids.add(id); if (puGone.has(id) || puDrops.some(d => d.id === id)) continue;
+    const k = PU_K[s[1] | 0], x = +s[2], z = +s[3]; if (!k || !isFinite(x) || !isFinite(z)) continue; spawnPU(k, x, z, id, +s[4] || 20); }
+  for (const d of puDrops.slice()) if (!ids.has(d.id)) removePU(d);
+}
+function renderPuHud() {
+  const el = $('puHud'); if (!el) return; const now = performance.now(); let h = '';
+  if (mode === 'solo' && state !== 'menu') for (const k of ['insta', 'dbl']) { const left = puA[k] - now; if (left > 0) h += `<span style="--c:${CSS(PU_INFO[k].c)}">${PU_INFO[k].name}<b>${Math.ceil(left / 1000)}</b></span>`; }
+  if (el.dataset.h !== h) { el.dataset.h = h; el.innerHTML = h; }
+}
+
+// =====================================================================================================================
+// ---------- co-op zombies: up to 4 players on the same room code ----------
+// One player (the one who started the game earliest and is still here) runs the horde: spawning, AI, waves, power-up drops.
+// Everyone else sees copies of those zombies, shoots them, and sends their hits to the host, who sends back damage, deaths
+// and the wave clock. Doors, the ladle trap and power-ups are shared; scrap, perks, guns and the box are your own.
+// Go down and a teammate has 30 s to revive you (hold the interact key on you); bleed out and you're back next wave.
+// =====================================================================================================================
+const ZTK = Object.keys(ZT);
+const EV_CAP = { ch: 24, hu: 10, rv: 4, pk: 4, pa: 6, so: 12, tp: 3, sk: 3 };
+const team = () => { const out = []; for (const r of net.remotes.values()) if (r.go && r.gi === coop.gi && r.seen) out.push(r); return out; };
+function coopEv(k, payload) { if (!net.coop || !coop.go) return; const L = coop.ev[k]; L.push([++coop.seq, ...payload]); while (L.length > EV_CAP[k]) L.shift(); sendCoop(true); }
+function coopHitAcc(zid, d, fl) { if (!net.coop || !coop.go) return; const a = coop.hitAcc.get(zid) || [0, 0]; a[0] += d; a[1] |= fl; coop.hitAcc.set(zid, a); }
+// receive a list of [seq, ...] events from a teammate, each one once; the first time we see them we only note where they're up to
+function evIn(r, p, key, fn) {
+  const L = Array.isArray(p[key]) ? p[key] : []; r.ev = r.ev || {};
+  if (r.ev[key] === undefined) { r.ev[key] = L.reduce((m, e) => Math.max(m, Array.isArray(e) ? +e[0] || 0 : 0), 0); return; }
+  for (const e of L) { if (!Array.isArray(e)) continue; const sq = +e[0]; if (!(sq > r.ev[key])) continue; r.ev[key] = sq; if (fn) try { fn(e); } catch (er) { console.error(er); } }
+}
+const r1 = v => Math.round(v * 10) / 10;
+function zSnap(e) { return [e.zid, ZTK.indexOf(e.type), r2(e.root.position.x), r2(e.root.position.z), r2(e.root.position.y), r2(e.yaw), r1(Math.max(0, e.hp)), (e.atkT >= 0 ? 1 : 0) | (e.thT >= 0 ? 2 : 0) | (e.burning ? 4 : 0) | (e.fuse !== undefined ? 8 : 0) | (e.emerge > 0.3 ? 16 : 0)]; }
+function sendCoop(force) {
+  if (!net.match || !net.coop) return;
+  const now = performance.now(); if (!force && now - net.sendT < 50) return; net.sendT = now;
+  for (const [zid, a] of coop.hitAcc) { coop.ev.ch.push([++coop.seq, zid, r2(a[0]), a[1]]); while (coop.ev.ch.length > EV_CAP.ch) coop.ev.ch.shift(); } coop.hitAcc.clear();
+  const host = coop.go && isAuth();
+  net.match.presence({
+    n: net.name, c: net.color, w: cur, z: 1,
+    p: [r2(player.pos.x), r2(player.pos.y), r2(player.pos.z)], r: [r2(player.yaw), r2(player.pitch)], l: r2(leanT),
+    a: player.dead ? 0 : 1, i: 0, hp: Math.ceil(player.hp), k: kills, d: 0, s: net.shots, gn: net.nades, lv: levelOf(prog.xp).L, st: 0, mi: 0,
+    zt: coop.zt, aw: document.hidden ? 1 : 0, gi: coop.gi, go: coop.go ? 1 : 0, dn: player.down ? 1 : 0, bl: player.down ? Math.ceil(coop.bleed) : 0, pts: Math.max(0, score - spent), wv: wave,
+    ar: (areaOpen.east ? 1 : 0) | (areaOpen.west ? 2 : 0),
+    ch: coop.ev.ch, hu: coop.ev.hu, rv: coop.ev.rv, pk: coop.ev.pk, pa: coop.ev.pa, so: coop.ev.so, tp: coop.ev.tp, sk: coop.ev.sk,
+    zs: host ? enemies.filter(e => !e.dead).slice(0, 44).map(zSnap) : null,
+    zw: host ? [wave, intermission ? 1 : 0, r1(Math.max(0, waveGap)), toSpawn, bossDelay > 0 ? 1 : 0] : null,
+    pu: host ? puDrops.map(d => [d.id, PU_K.indexOf(d.k), r2(d.x), r2(d.z), Math.round(d.life)]) : null,
+  }).catch(() => {});
+}
+function retag(r) {
+  if (r.tag) { r.g.remove(r.tag); r.tag.material.map.dispose(); r.tag.material.dispose(); }
+  r.tag = nameTag(r.dn ? '✚ ' + r.name : r.name, r.dn ? 0xff3a2a : r.color); r.g.add(r.tag); r.tagKey = r.name + r.color;
+}
+function coopIngest(peer) {
+  if (peer.sameTab || !net.coop) return;
+  const r = net.remotes.get(peer.peer); if (!r) return; const p = peer.presence || {};
+  r.heardT = performance.now(); r.zt = +p.zt || 0; r.aw = p.aw === 1; r.gi = p.gi | 0; r.go = p.go === 1; r.pts = p.pts | 0; r.bl = p.bl | 0; r.wv = p.wv | 0; r.dead = p.a === 0;
+  const same = coop.go && r.go && r.gi === coop.gi;
+  const dn = p.dn === 1; if (dn !== !!r.dn) { r.dn = dn; retag(r); if (dn && same) { flashSub(r.name + ' is down · hold ' + keyLabel(KB('interact')) + ' on them to revive'); sfx('hurt', 0.6); } }
+  if (Array.isArray(p.zs)) { r.zs = p.zs; r.zsNew = true; } else r.zs = null;
+  r.zw = Array.isArray(p.zw) ? p.zw : null; r.pu = Array.isArray(p.pu) ? p.pu : null;
+  for (const k of Object.keys(EV_CAP)) evIn(r, p, k, same ? (e) => coopOnEv(k, e, r) : null);
+  if (same) { const ar = p.ar | 0;
+    for (const [bit, key] of [[1, 'east'], [2, 'west']]) if ((ar & bit) && !areaOpen[key]) { setArea(key, true); const B = BLAST.find(b => b.key === key); if (B) B.t = 0; sfx('blast'); flashSub(r.name + ' opened the ' + AREAS[key].name); } }
+}
+function coopOnEv(k, e, r) {
+  if (k === 'ch') { if (isAuth()) coopApplyHit(e); }
+  else if (k === 'hu') { if (e[1] === net.me) { const d = Math.min(80, Math.max(0, +e[2] || 0)); hurtSolo(d); camS.kick(3, -0.6); camS.kick(5, (Math.random() - 0.5) * 1.6); } }
+  else if (k === 'rv') { if (e[1] === net.me && player.down) coopRevived(r); }
+  else if (k === 'pk') { if (isAuth()) { const d = puDrops.find(q => q.id === +e[1]); if (d) { const k2 = d.k; removePU(d); activatePU(k2, r.peer); coopEv('pa', [PU_K.indexOf(k2), r.peer]); } } }
+  else if (k === 'pa') { if (!isAuth()) activatePU(PU_K[e[1] | 0], e[2]); }
+  else if (k === 'so') { if (r.peer === coop.host && !isAuth()) spawnOrb(e.slice(1)); }
+  else if (k === 'tp') { if (TRAP.st === 'idle') startTrap(false, r.name); }
+  else if (k === 'sk') { if (isAuth() && intermission && waveGap > 0.5) { waveGap = 0.01; flashSub(r.name + ' started the next wave'); } }
+}
+function coopApplyHit(h) {
+  const z = coop.zById.get(+h[1]); if (!z || z.dead || z.rep) return;
+  const dmg = +h[2] || 0, fl = h[3] | 0;
+  if (fl & 4) { z.burn = 3.2; z.burnBy = 'r'; }
+  if (fl & 2) { killEnemy(z, !!(fl & 1), null, true); return; }
+  if (dmg > 0) { z.hp -= dmg; if (!z.Z.boss) { z.flV += 3; z.stagger = Math.max(z.stagger, 0.15); } if (z.hp <= 0) killEnemy(z, !!(fl & 1), null, true); }
+}
+// a copy of one of the host's zombies: glides to where the host says it is and plays the same moves
+function syncReplicas(list) {
+  const seen = new Set();
+  for (const s of list) {
+    if (!Array.isArray(s) || s.length < 8) continue; const id = +s[0]; if (!id || coop.deadZ.has(id)) continue;
+    const x = +s[2], z = +s[3], y = +s[4], yaw = +s[5], hp = +s[6], f = s[7] | 0; if (![x, z, y, yaw, hp].every(isFinite)) continue;
+    seen.add(id);
+    let e = coop.zById.get(id);
+    if (!e) { const type = ZTK[s[1] | 0]; if (!type) continue; e = makeEnemy(type, x, y, z, yaw, id, true); e.emerge = f & 16 ? 1 : 0; e.maxHp = Math.max(e.maxHp, hp); e.hp = hp; e.zf = 0; }
+    if (!e.rep) continue;
+    e.tx = x; e.tz = z; e.ty = y; e.tyaw = yaw; e.hp = Math.min(e.hp, hp);
+    if ((f & 1) && !(e.zf & 1)) { e.atkT = 0; groan(e, 'snarl'); }
+    if ((f & 2) && !(e.zf & 2)) e.thT = 0;
+    if ((f & 8) && !(e.zf & 8)) { e.fuseV = 0; sfxAt('sizzle', 1.2, e.root.position); }
+    e.zf = f;
+  }
+  for (const e of enemies.slice()) if (e.rep && !seen.has(e.zid)) killEnemy(e, false, null, true);
+}
+function stepReplica(e, dt, t) {
+  const p = e.root.position, k = Math.min(1, dt * 9), ox = p.x, oz = p.z;
+  p.x += (e.tx - p.x) * k; p.z += (e.tz - p.z) * k; p.y += (e.ty - p.y) * k;
+  const sp = Math.hypot(p.x - ox, p.z - oz) / Math.max(dt, 1e-3); e.rsp += (Math.min(8, sp) - e.rsp) * Math.min(1, dt * 6);
+  let dy = e.tyaw - e.yaw; dy = Math.atan2(Math.sin(dy), Math.cos(dy)); e.yaw += dy * Math.min(1, dt * 8); e.root.rotation.y = e.yaw;
+  if (e.atkT >= 0) { e.atkT += dt; if (e.atkT >= e.Z.atkDur) e.atkT = -1; }
+  if (e.thT >= 0) { e.thT += dt; if (e.thT >= 0.9) e.thT = -1; }
+  e.burning = !!(e.zf & 4);
+  if (e.burning && (e.burnFx = (e.burnFx || 0) - dt) <= 0) { e.burnFx = 0.06; e.torso.getWorldPosition(_hp); _hp.x += (Math.random() - 0.5) * 0.45 * e.sc; _hp.y += (Math.random() - 0.3) * 0.6 * e.sc; sparks(_hp, Math.random() < 0.5 ? 0xff6a14 : 0xffc040, 2, 1.8); }
+  if (e.zf & 8) { e.fuseV = (e.fuseV || 0) + dt; e.torso.scale.setScalar(1 + Math.min(0.9, e.fuseV) * 0.45); if (Math.random() < dt * 30) { e.torso.getWorldPosition(_hp); sparks(_hp, 0x9aff2a, 2, 2); } }
+  e.stagger = Math.max(0, e.stagger - dt); e.emerge = Math.max(0, e.emerge - dt * 1.4);
+  animZombie(e, dt, t, e.rsp * (e.stagger > 0 ? 0.5 : 1));
+  e.groanT -= dt; if (e.groanT <= 0) { e.groanT = 3 + Math.random() * 6; groan(e, 'groan'); }
+  if (e.Z.throws && Math.random() < dt * 5) { e.torso.getWorldPosition(_hp); _hp.y += 0.2; sparks(_hp, 0xff7a20, 1, 1.2); }
+}
+// who the horde chases: the nearest player who's up (downed, bled-out and tabbed-away players are left alone)
+const zTg = [];
+function buildTargets() {
+  zTg.length = 0;
+  if (!player.down && !player.dead) zTg.push({ me: true, x: player.pos.x, z: player.pos.z, feet: player.pos.y - 1.6 });
+  if (net.coop && coop.go) for (const r of team()) if (!r.dn && !r.dead && !r.aw && r.g && r.samples.length) zTg.push({ me: false, peer: r.peer, x: r.g.position.x, z: r.g.position.z, feet: r.g.position.y });
+  if (!zTg.length) zTg.push({ me: true, x: player.pos.x, z: player.pos.z, feet: player.pos.y - 1.6 });
+}
+function zTarget(p) { let best = zTg[0], bd = 1e18; for (const T of zTg) { const d = (T.x - p.x) * (T.x - p.x) + (T.z - p.z) * (T.z - p.z); if (d < bd) { bd = d; best = T; } } return best; }
+// host: the earliest starter among this game's players who has the page in front of them
+function coopPickHost() {
+  let best = document.hidden ? null : { id: net.me, zt: coop.zt };
+  const now = performance.now();
+  for (const r of net.remotes.values()) { if (!r.go || r.gi !== coop.gi || r.aw || !r.zt || now - (r.heardT || 0) > 4000) continue;   // gone quiet: someone else takes over
+    if (!best || r.zt < best.zt || (r.zt === best.zt && String(r.peer) < String(best.id))) best = { id: r.peer, zt: r.zt }; }
+  return best ? best.id : net.me;
+}
+function clientWave(zw) {
+  const w = zw[0] | 0, inter = zw[1] === 1;
+  if (coop.fresh) {   // just joined a game in progress: catch up without replaying the old waves' rewards
+    coop.fresh = false; wave = w; intermission = inter; const bonus = Math.min(6000, 500 * Math.max(0, w - 1)); score += bonus;
+    showBanner('Wave ' + w); flashSub(bonus ? 'Joined your team · +' + bonus + ' scrap to catch up' : 'Joined your team'); updateHud();
+  }
+  if (w > wave) { wave = w; intermission = false; waveStartFx(); updateHud(); }
+  else if (inter && !intermission && w === wave) { intermission = true; waveClearRewards(); updateHud(); }
+  else if (!inter && intermission) intermission = false;
+  if (intermission) waveGap = +zw[2] || 0;
+  toSpawn = zw[3] | 0; bossDelay = zw[4] ? 1 : -1;
+}
+function goDown() {
+  player.down = true; player.hp = 0; coop.bleed = 30; aiming = false; hurtFlash = 1;
+  showBanner('You\'re down'); flashSub('Hang on · a teammate can revive you'); deathSound(); sendCoop(true);
+}
+function coopRevived(r) { player.down = false; player.hp = Math.round(maxHp() * 0.5); showBanner('Revived'); flashSub('Revived by ' + r.name); sfx('perk'); sendCoop(true); updateHud(); }
+function bleedOut() { player.down = false; player.dead = true; player.hp = 0; aiming = false; showBanner('Bled out'); flashSub('You\'re back next wave · your perks are gone'); sendCoop(true); updateHud(); }
+function coopRespawn() { player.dead = false; player.down = false; player.hp = maxHp(); resetPerks(); player.pos.set(0, 1.6, 20); player.vy = 0; setView(0, 0); flashSub('Back in the fight'); sendCoop(true); updateHud(); }
+function revivePrompt() {
+  const r = coop.nearDown, pct = Math.min(100, coop.reviveT / 2.5 * 100);
+  setPrompt(`<div class="ph"><span class="pt">Revive</span><span class="pc own">${r.bl || 0}s</span></div><div class="pn"><kbd>${keyLabel(KB('interact'))}</kbd>Hold to revive ${escHtml(r.name)}</div><div class="pd"><span style="display:block;height:5px;background:#ffffff22"><span style="display:block;height:100%;width:${pct.toFixed(0)}%;background:#3fe08a"></span></span></div>`);
+}
+const escHtml = (t) => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+function stepCoop(dt, t) {
+  downK += ((player.down || player.dead ? 1 : 0) - downK) * Math.min(1, dt * 5);
+  $('wrap').classList.toggle('down', !!player.down);
+  if (!net.coop || !coop.go) { renderDownHud(); return; }
+  const h = coopPickHost();
+  if (h !== coop.host) {
+    const was = coop.host; coop.host = h;
+    if (h === net.me) {   // taking the horde over: our copies become the real thing, and we pick up the wave clock where it was
+      for (const e of enemies) if (e.rep) { e.rep = false; e.lastP.copy(e.root.position); e.atkT = -1; e.thT = -1; }
+      const zw = coop.lastZw; if (zw) { toSpawn = Math.max(0, zw[3] | 0); intermission = zw[1] === 1; waveGap = +zw[2] || 0; if (zw[4]) bossDelay = 1; }
+      if (was) flashSub('You\'re running the horde now');
+    } else for (const e of enemies) { e.rep = true; e.tx = e.root.position.x; e.tz = e.root.position.z; e.ty = e.root.position.y; e.tyaw = e.yaw; }
+  }
+  if (!isAuth()) { const H = net.remotes.get(coop.host);
+    if (H) { if (H.zw) { coop.lastZw = H.zw; clientWave(H.zw); } if (H.zsNew && H.zs) { H.zsNew = false; syncReplicas(H.zs); } if (H.pu) syncPU(H.pu); } }
+  // reviving: hold the interact key next to a downed teammate
+  coop.nearDown = null;
+  if (state === 'play' && !player.down && !player.dead) for (const r of team()) if (r.dn && !(r.revAt > performance.now() - 1500) && Math.hypot(r.g.position.x - player.pos.x, r.g.position.z - player.pos.z) < 2.2 && Math.abs(r.g.position.y - (player.pos.y - 1.6)) < 1.6) coop.nearDown = r;
+  if (coop.nearDown && kHeld('interact')) { coop.reviveT += dt; if (coop.reviveT >= 2.5) { const r = coop.nearDown; coopEv('rv', [r.peer]); r.revAt = performance.now(); coop.reviveT = 0; score += 100; popPoints(100); addXP(50, 'Revive'); sfx('perk'); flashSub('Revived ' + r.name); } }
+  else coop.reviveT = 0;
+  if (player.down) { coop.bleed -= dt; if (coop.bleed <= 0) bleedOut(); }
+  // everyone down or out: the shift is over for the whole team
+  if ((player.down || player.dead) && state !== 'over' && !team().some(r => !r.dn && !r.dead)) gameOver();
+  renderCoopRoster(); renderDownHud();
+  sendCoop(false);
+}
+function renderDownHud() {
+  const el = $('downHud'); if (!el) return;
+  const h = player.down ? `<b>Down</b>Bleeding out · ${Math.max(0, Math.ceil(coop.bleed))}s<i><u style="width:${Math.max(0, coop.bleed / 30 * 100).toFixed(1)}%"></u></i>` : player.dead ? `<b>Bled out</b>Back next wave` : '';
+  if (el.dataset.h !== h) { el.dataset.h = h; el.innerHTML = h; } el.hidden = !h || state === 'menu' || mode !== 'solo';
+}
+let coopRosterKey = '';
+function renderCoopRoster() {
+  const rows = [{ name: net.name, color: COLORS[net.color], pts: Math.max(0, score - spent), st: player.dead ? 'OUT' : player.down ? 'DOWN' : '', me: true, host: isAuth() }];
+  for (const r of team()) rows.push({ name: r.name, color: r.color, pts: r.pts, st: r.dead ? 'OUT' : r.dn ? 'DOWN ' + r.bl + 's' : r.aw ? 'AWAY' : '', host: r.peer === coop.host });
+  const key = JSON.stringify(rows); if (key === coopRosterKey) return; coopRosterKey = key;
+  const el = $('roster'); el.textContent = '';
+  for (const row of rows) {
+    const d = document.createElement('div'); d.className = (row.me ? 'me' : '') + (row.st ? ' dn' : '');
+    const n = document.createElement('span'), sw = document.createElement('i'); sw.style.background = CSS(row.color);
+    n.append(sw, document.createTextNode(row.name + (row.me ? ' (you)' : ''))); if (row.host) { const st = document.createElement('em'); st.textContent = '★'; st.title = 'Running the horde'; n.append(st); }
+    const s2 = document.createElement('span'); s2.textContent = row.st || row.pts.toLocaleString(); d.append(n, s2); el.append(d);
+  }
+}
+// ---- joining, leaving, playing again ----
+function zStatus(t, bad) { const el = $('zStatus'); if (!el) return; el.textContent = t; el.className = 'status' + (bad ? '' : net.lobby && net.lobby.connected && net.lobby.connected() ? ' ok' : ''); }
+function zStatusLine() {
+  if (coop.joining) return;
+  if (!net.lobby) { zStatus(SUPABASE_URL ? 'Couldn\'t reach the game server for co-op. Solo still works.' : 'Co-op needs the website version, or this page opened in Claude.', true); $('zJoin').disabled = true; return; }
+  const ok = net.lobby.connected && net.lobby.connected(); $('zJoin').disabled = !ok;
+  zStatus(ok ? 'Pick a room code and share it with your friends.' : 'Connecting…');
+}
+function renderCoopRooms(counts) {
+  const el = $('zMatches'); if (!el) return; el.textContent = '';
+  for (const [k, n] of Object.entries(counts).filter(([k]) => k.endsWith('|coop')).sort((a, b) => b[1] - a[1]).slice(0, 6)) {
+    const cd = k.split('|')[0], b = document.createElement('button'); b.type = 'button'; b.textContent = cd + ' · ' + n + ' playing'; b.onclick = () => { $('zCode').value = cd; }; el.append(b);
+  }
+}
+async function joinCoop() {
+  if (!net.lobby || coop.joining) return;
+  const code = cleanCode($('zCode').value) || 'horde'; $('zCode').value = code;
+  if (!cloud.profile) { const want = cleanName($('zName').value) || net.name;
+    if (isProfane(want)) { flagName(want, 'callsign'); net.name = 'Rivet' + (100 + Math.floor(Math.random() * 900)); } else net.name = want;
+    $('zName').value = net.name; $('callsign').value = net.name; store.set('fb-name', net.name); }
+  coop.joining = true; $('zJoin').disabled = true; zStatus('Joining ' + code + '…');
+  try {
+    if (mode === 'online') await leaveMatch();
+    await leaveCoop();
+    net.match = await net.lobby.join('fz-' + code);
+  } catch (e) { coop.joining = false; net.match = null; zStatus('Couldn\'t join that room. Try again in a moment.', true); $('zJoin').disabled = false; return; }
+  net.coop = true; net.code = code; net.shots = []; net.nades = [];
+  for (const p of net.lobby.peers()) if (p.sameTab) net.me = p.peer;
+  const used = new Set(net.match.peers().filter(p => !p.sameTab).map(p => (p.presence && p.presence.c) | 0));
+  net.color = [...COLORS.keys()].find(i => !used.has(i)) ?? Math.floor(Math.random() * COLORS.length);
+  net.match.onPeers(ch => {
+    for (const p of ch.joined.concat(ch.updated)) { ingest(p); coopIngest(p); }
+    for (const p of ch.left) { const r = net.remotes.get(p.peer); if (r) { if (r.go && r.gi === coop.gi && coop.go) flashSub(r.name + ' left'); removeRemote(r); } }
+  }, () => { leaveCoop(); zStatus('The co-op connection closed.', true); });
+  net.lobby.presence({ m: code, mp: 'coop' }).catch(() => {});
+  coop.go = false; coop.gi = 0; net.match.presence({ n: net.name, c: net.color, z: 1, go: 0, gi: 0 }).catch(() => {});
+  zStatus('Looking for your team…');
+  await new Promise(r => setTimeout(r, 1400));
+  coop.joining = false; $('zJoin').disabled = false;
+  if (!net.coop) return;
+  const others = net.match.peers().filter(p => !p.sameTab && p.presence && p.presence.z === 1);
+  const live = others.filter(p => p.presence.go === 1);
+  const gi = live.reduce((m, p) => Math.max(m, p.presence.gi | 0), 0), inGame = live.filter(p => (p.presence.gi | 0) === gi);
+  if (inGame.length >= 4) { zStatus('That room is full (4 players). Try another code.', true); await leaveCoop(); return; }
+  if (inGame.length) coopStart(gi, true); else coopStart(others.reduce((m, p) => Math.max(m, p.presence.gi | 0), 0) + 1, false);
+}
+function coopStart(gi, asClient) {
+  coop.gi = gi; coop.zt = Date.now(); coop.go = true; coop.host = asClient ? null : net.me; coop.lastZw = null; coop.fresh = asClient;
+  for (const k in coop.ev) coop.ev[k].length = 0;
+  $('zPanel').hidden = true; $('msTiles').hidden = false;
+  mode = 'solo'; setMap('foundry'); setHudMode(); resetSolo(asClient); coopRosterKey = '';
+  begin(); showBanner('Co-op · ' + net.code); if (!asClient) flashSub('Room ' + net.code + ' · friends who join this code drop straight in');
+  sendCoop(true);
+}
+function coopAgain() {
+  let gi = 0, live = false; for (const r of net.remotes.values()) { if (r.go && r.gi > coop.gi) { gi = Math.max(gi, r.gi); live = true; } }
+  if (live) { coopStart(gi, true); return; }
+  for (const r of net.remotes.values()) gi = Math.max(gi, r.gi | 0);
+  coopStart(Math.max(gi, coop.gi) + 1, false);
+}
+async function leaveCoop() {
+  if (!net.coop) return;
+  net.coop = false; coop.go = false; coop.host = null; const m = net.match; net.match = null;
+  for (const r of [...net.remotes.values()]) removeRemote(r);
+  for (const e of enemies) e.rep = false;
+  player.down = player.dead = false; $('wrap').classList.remove('down');
+  if (net.lobby) net.lobby.presence({ m: null }).catch(() => {});
+  if (m) try { await m.leave(); } catch (e) {}
+  setHudMode();
+}
+function overNote() {
+  const el = $('overNote'); if (!el) return;
+  if (!net.coop) { el.hidden = true; $('again').textContent = 'Clock in again'; return; }
+  let nxt = false; for (const r of net.remotes.values()) if (r.go && r.gi > coop.gi) nxt = true;
+  const t = nxt ? 'Your team already clocked back in · press the button to join them' : 'The whole team went down · room ' + net.code;
+  if (el.textContent !== t) el.textContent = t; el.hidden = false;
+  $('again').textContent = nxt ? 'Join your team' : 'Clock in again';
+}
+setInterval(() => { if (state === 'over' && net.coop) overNote(); }, 500);
+document.addEventListener('visibilitychange', () => { if (!net.coop || !coop.go) return; if (!document.hidden) coop.zt = Date.now(); sendCoop(true); });
 
 setHudMode();
 initNet();
