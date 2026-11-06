@@ -4,23 +4,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Hot Zone · Zombies, co-op and multiplayer in your browser</title>
-<meta name="description" content="Hold a burning foundry against waves of the infected with up to 3 friends, or fight in a rain-soaked container yard. Free, no download, plays in your browser.">
+<meta name="description" content="A free browser FPS. Hold a burning foundry against the horde with up to 3 friends: 9 areas to open, the Mystery Box, perks, traps, an Easter egg and daily challenges. Or fight in multiplayer. No download, works on phones too.">
 <meta name="theme-color" content="#c41e14">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E %3Cdefs%3E %3CradialGradient id='g' cx='50%25' cy='78%25' r='70%25'%3E%3Cstop offset='0' stop-color='%23ff7a1a'/%3E%3Cstop offset='.45' stop-color='%23b8240f'/%3E%3Cstop offset='1' stop-color='%231a0806'/%3E%3C/radialGradient%3E %3ClinearGradient id='f' x1='0' y1='1' x2='0' y2='0'%3E%3Cstop offset='0' stop-color='%23ff4a12'/%3E%3Cstop offset='.6' stop-color='%23ff9a2a'/%3E%3Cstop offset='1' stop-color='%23ffe08a'/%3E%3C/linearGradient%3E %3C/defs%3E %3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E %3Cpath d='M32 7c3 9 13 14 13 27 0 9-6 16-13 16s-13-7-13-16c0-6 3-10 6-13 0 5 2 8 5 9-2-7 1-15 2-23z' fill='url(%23f)'/%3E %3Cpath d='M24 39c0-4 3-6 8-6s8 2 8 6c0 3-2 4-3 5v4h-10v-4c-1-1-3-2-3-5z' fill='%231a0806'/%3E %3Ccircle cx='28.5' cy='39.5' r='2.4' fill='%23ffd27a'/%3E%3Ccircle cx='35.5' cy='39.5' r='2.4' fill='%23ffd27a'/%3E %3Cpath d='M30 46h1.4v3H30zM32.6 46H34v3h-1.4z' fill='%23ff9a2a'/%3E %3C/svg%3E">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Hot Zone">
+<meta name="application-name" content="Hot Zone">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Hot Zone">
-<meta property="og:title" content="Hot Zone">
-<meta property="og:description" content="Zombies · Co-op · Multiplayer. Hold the foundry against the horde with your friends. Free in your browser.">
+<meta property="og:title" content="Hot Zone · Zombies in your browser">
+<meta property="og:description" content="Hold the foundry against the horde with up to 3 friends. Mystery Box, perks, wonder weapon, Easter egg and multiplayer. Free, no download, plays on phones too.">
 <meta property="og:url" content="https://hotzonee.github.io/Hot-Zone/">
 <meta property="og:image" content="https://hotzonee.github.io/Hot-Zone/preview.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:alt" content="Hot Zone: glowing-eyed infected shamble through a dark foundry">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Hot Zone">
-<meta name="twitter:description" content="Zombies · Co-op · Multiplayer. Free in your browser.">
+<meta name="twitter:title" content="Hot Zone · Zombies in your browser">
+<meta name="twitter:description" content="Co-op zombies and multiplayer. Free, no download, plays on phones too.">
 <meta name="twitter:image" content="https://hotzonee.github.io/Hot-Zone/preview.jpg">
 </head>
 <body style="margin:0;background:#110d0b">
@@ -1109,24 +1113,39 @@ button:focus-visible { outline: 3px solid var(--bone); outline-offset: 4px; }
 .z-daily .zd-row i { width: 14px; height: 14px; border: 1px solid rgba(232,220,203,.4); display: grid; place-items: center; font-style: normal; font-size: 11px; color: #3fe08a; } .z-daily .zd-row em { font-style: normal; color: #ffcf5a; font-size: 11px; }
 .z-daily .zd-row u { position: absolute; left: 26px; right: 0; bottom: 2px; height: 3px; background: rgba(255,255,255,.08); text-decoration: none; } .z-daily .zd-row u::after { content: ''; position: absolute; inset: 0; width: var(--p); background: linear-gradient(90deg, #8a1a10, #ff5a3a); }
 .z-daily .zd-row.done span { color: #9fe6a0; text-decoration: line-through; text-decoration-color: rgba(159,230,160,.5); } .z-daily .zd-row.done u::after { background: #3fe08a; }
-#tUI { position: absolute; inset: 0; z-index: 9; display: none; touch-action: none; -webkit-user-select: none; user-select: none; }
+#tUI { position: absolute; inset: 0; z-index: 9; display: none; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; --top: .8; }
 #tUI.live { display: block; }
-#tStick { position: absolute; width: 124px; height: 124px; margin: -62px 0 0 -62px; border-radius: 50%; border: 2px solid rgba(255,255,255,.22); background: rgba(0,0,0,.18); opacity: 0; pointer-events: none; }
-#tStick.on { opacity: 1; } #tStick i { position: absolute; left: 50%; top: 50%; width: 54px; height: 54px; border-radius: 50%; background: rgba(255,255,255,.28); border: 2px solid rgba(255,255,255,.5); transform: translate(-50%,-50%); }
-#tUI .tb { position: absolute; width: 58px; height: 58px; border-radius: 50%; border: 2px solid rgba(232,220,203,.4); background: rgba(14,8,6,.45); color: #f2ead8; font: 600 10px var(--mono, monospace); letter-spacing: .08em; padding: 0; touch-action: none; }
-#tUI .tb.on { background: rgba(196,30,20,.55); border-color: #ff5a3a; } #tUI .tb.big { width: 92px; height: 92px; font-size: 13px; background: rgba(160,20,12,.4); border-color: rgba(255,90,58,.6); } #tUI .tb.sm { width: 46px; height: 46px; font-size: 9px; }
-#tUI .tb.use.hot { border-color: #ffcf5a; box-shadow: 0 0 14px rgba(255,207,90,.6); color: #ffcf5a; }
-#tBtns { position: absolute; right: max(14px, env(safe-area-inset-right)); bottom: 22px; width: 260px; height: 250px; }
-#tBtns [data-a="fire"] { right: 8px; bottom: 58px; } #tBtns [data-a="ads"] { right: 112px; bottom: 30px; } #tBtns [data-a="jump"] { right: 18px; bottom: 160px; } #tBtns [data-a="crouch"] { right: 108px; bottom: 112px; }
-#tBtns [data-a="reload"] { right: 190px; bottom: 60px; } #tBtns [data-a="interact"] { right: 92px; bottom: 192px; } #tBtns [data-a="swap"] { right: 180px; bottom: 150px; }
-#tBtns [data-a="nade"] { right: 6px; bottom: 6px; } #tBtns [data-a="melee"] { right: 196px; bottom: 6px; } #tBtns [data-a="streak"] { right: 170px; bottom: 214px; }
-#tPause { left: max(14px, env(safe-area-inset-left)); top: 12px; width: 44px !important; height: 44px !important; font-size: 13px !important; }
+#tStickGhost { position: absolute; left: calc(max(20px, env(safe-area-inset-left)) + 60px); bottom: 60px; width: 120px; height: 120px; margin: 0 0 -60px -60px; border-radius: 50%; border: 2px dashed rgba(255,255,255,.18); opacity: calc(var(--top) * .9); pointer-events: none; }
+#tStickGhost::after { content: ''; position: absolute; inset: 0; display: grid; place-items: center; font: 600 10px var(--mono, monospace); letter-spacing: .2em; color: rgba(255,255,255,.35); }
+#tUI.stickon #tStickGhost { opacity: 0; }
+#tStick { position: absolute; width: 132px; height: 132px; margin: -66px 0 0 -66px; border-radius: 50%; border: 2px solid rgba(255,255,255,.25); background: radial-gradient(circle, rgba(0,0,0,.05), rgba(0,0,0,.28)); opacity: 0; pointer-events: none; transition: border-color .15s; }
+#tStick.on { opacity: var(--top); } #tStick i { position: absolute; left: 50%; top: 50%; width: 58px; height: 58px; border-radius: 50%; background: rgba(255,255,255,.3); border: 2px solid rgba(255,255,255,.6); transform: translate(-50%,-50%); }
+#tStick b { position: absolute; left: 50%; top: -22px; transform: translateX(-50%); font: 700 10px var(--mono, monospace); letter-spacing: .2em; color: #ffcf5a; opacity: 0; transition: opacity .15s; }
+#tStick.spr { border-color: #ffcf5a; } #tStick.spr i { background: rgba(255,207,90,.5); border-color: #ffcf5a; } #tStick.spr b { opacity: 1; }
+#tUI .tb { position: absolute; display: grid; place-content: center; justify-items: center; gap: 1px; width: 58px; height: 58px; border-radius: 50%; border: 2px solid rgba(232,220,203,.45); background: rgba(14,8,6,.5); color: #f2ead8; padding: 0; touch-action: none; opacity: var(--top); transition: transform .06s, background .1s; }
+#tUI .tb svg { width: 26px; height: 26px; display: block; flex: none; } #tUI .tb small { font: 700 9px var(--mono, monospace); letter-spacing: .1em; opacity: .8; }
+#tUI .tb.on { background: rgba(196,30,20,.6); border-color: #ff5a3a; transform: scale(.94); }
+#tUI .tb.big { background: radial-gradient(circle at 50% 40%, rgba(200,30,18,.55), rgba(120,14,8,.55)); border: 3px solid rgba(255,90,58,.75); } #tUI .tb.big svg { width: 42px; height: 42px; }
+#tUI .tb.big.lock { border-color: #ffcf5a; box-shadow: 0 0 18px rgba(255,207,90,.55); }
+#tUI .tb.hot { border-color: #ffcf5a; color: #ffcf5a; box-shadow: 0 0 12px rgba(255,207,90,.5); } #tUI .tb.dim { opacity: calc(var(--top) * .4); }
+#tUI .tb.lock { background: rgba(255,207,90,.28); border-color: #ffcf5a; color: #ffcf5a; }
+#tBtns { position: absolute; right: env(safe-area-inset-right); bottom: 0; width: 0; height: 0; }
+#tFireL { left: calc(max(16px, env(safe-area-inset-left)) + 150px); bottom: 150px; width: 64px !important; height: 64px !important; background: rgba(160,20,12,.4) !important; border-color: rgba(255,90,58,.6) !important; }
+#tPause { left: max(14px, env(safe-area-inset-left)); top: 12px; width: 46px !important; height: 46px !important; font-size: 13px; }
+#wrap.touch #prompt { bottom: 46% !important; pointer-events: none; }
+#wrap.touch #prompt kbd { font-size: 0 !important; min-width: 44px !important; } #wrap.touch #prompt kbd::after { content: 'TAP'; font: 400 14px "Saira Stencil One", Impact, sans-serif; }
+#wrap.touch #prompt.tapped { filter: brightness(1.4) drop-shadow(0 0 14px rgba(255,90,58,.6)); }
 #tRotate { position: fixed; inset: 0; display: none; place-content: center; text-align: center; gap: 8px; background: #0a0705; z-index: 50; color: #f2ead8; font: 600 13px var(--mono, monospace); }
 #tRotate b { font: 400 26px "Saira Stencil One", Impact, sans-serif; letter-spacing: .06em; } #tRotate span { color: #a89a88; }
 @media (orientation: portrait) { #wrap.touch #tRotate { display: grid; } }
 #wrap.touch #zhR { bottom: auto; top: calc(10px * var(--uis, 1)); transform-origin: top right; }
-#wrap.touch #zhL { --uis: .7; } #wrap.touch #zhR { --uis: .7; }
-#wrap.touch #prompt { bottom: 40% !important; }
+#wrap.touch #zhL { --uis: .62; bottom: auto; top: 64px; transform-origin: top left; } #wrap.touch #zhR { --uis: .7; }
+
+#zhDial { display: none !important; }
+#zhGren { display: flex; justify-content: flex-end; gap: 5px; margin-top: 6px; }
+#zhGren i { width: 11px; height: 14px; border-radius: 45% 45% 40% 40%; background: rgba(0,0,0,.5); border: 1px solid rgba(232,220,203,.3); }
+#zhGren i.on { background: radial-gradient(circle at 35% 30%, #9aa080, #3a4030); border-color: rgba(232,220,203,.75); }
+.zh-ammo { padding-bottom: 6px !important; }
 </style>
 
 <div id="wrap">
@@ -1134,7 +1153,7 @@ button:focus-visible { outline: 3px solid var(--bone); outline-offset: 4px; }
   <div class="hud tr" id="trPanel"><div class="label" id="trLabel">Score</div><div class="big" id="trVal">0</div><div class="label" style="margin-top:6px" id="trSub">Best 0</div><div id="roster"></div><div id="feed"></div></div>
   <div id="zh" hidden>
     <div id="zhL"><canvas id="zhRound" width="260" height="150"></canvas><div id="zhSub"></div><div id="zhPerks"></div><div id="zhScores"></div><div id="zhHpBar"><i id="zhHp"></i></div></div>
-    <div id="zhR"><div class="zh-ammo"><div class="zh-n"><b id="zhMag">0</b><span id="zhRes">0</span></div><em id="zhName"></em><small id="zhNote" hidden></small></div>
+    <div id="zhR"><div class="zh-ammo"><div class="zh-n"><b id="zhMag">0</b><span id="zhRes">0</span></div><em id="zhName"></em><small id="zhNote" hidden></small><div id="zhGren"></div></div>
       <div id="zhDial"><svg viewBox="0 0 120 120"><defs><filter id="zhRough"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="2.2"/></filter></defs>
         <circle cx="60" cy="60" r="54" class="zh-bg"/><circle cx="60" cy="60" r="46" class="zh-track"/><circle id="zhArc" cx="60" cy="60" r="46" class="zh-arc" transform="rotate(-90 60 60)"/>
         <circle cx="60" cy="60" r="36" class="zh-exo"/><circle cx="60" cy="60" r="31" class="zh-core"/>
@@ -6094,7 +6113,7 @@ function stepTracers(dt) {
 // ---------- settings ----------
 const DEFAULTS = { sens: 1, adsSens: 0.3, adsBind: { t: 'm', c: 2 }, adsMode: 'hold', smooth: 1, invert: false, leanMode: 'hold', ksMode: 'aim', hints: false,
   mp5Sight: 'holo', mp5Camo: 'reef', music: true, menuVol: 100, gameVol: 100, combat: true, death: true,
-  gfx: 'high', gfxAuto: true, touch: 'auto', fov: 75, vmFov: 62, xhair: 'cross', xhColor: 'bone', fps: false, bob: 1, minimap: true, hitSound: true, sfxVol: 100,
+  gfx: 'high', gfxAuto: true, touch: 'auto', tSens: 1, tSize: 'm', tOpacity: 0.8, tAssist: true, tAuto: false, tLeftFire: false, tHaptic: true, fov: 75, vmFov: 62, xhair: 'cross', xhColor: 'bone', fps: false, bob: 1, minimap: true, hitSound: true, sfxVol: 100,
   binds: { fwd: 'KeyW', back: 'KeyS', left: 'KeyA', right: 'KeyD', jump: 'Space', sprint: 'ShiftLeft', crouch: 'KeyC', reload: 'KeyR', interact: 'KeyG',
     inspect: 'KeyF', firemode: 'KeyB', light: 'KeyT', leanL: 'KeyQ', leanR: 'KeyE', w1: 'Digit1', w2: 'Digit2', w3: 'Digit3', melee: 'KeyV', board: 'Tab', skip: 'KeyN', nade: 'KeyX', streak: 'Digit4' } };
 const S = JSON.parse(JSON.stringify(DEFAULTS));
@@ -7689,6 +7708,7 @@ function renderMpTop() {
 }
 // red arcs around the crosshair pointing at whoever hit you
 function dmgArc(x, z, strength) {
+  try { if (TOUCH) vib(40); } catch (e) {}
   const dx = x - player.pos.x, dz = z - player.pos.z, y = player.yaw;
   const df = -dx * Math.sin(y) - dz * Math.cos(y), dr = dx * Math.cos(y) - dz * Math.sin(y);
   const a = Math.atan2(dr, df) * 180 / Math.PI, el = document.createElement('i');
@@ -8561,7 +8581,7 @@ function stepShipExtra(dt, t) {
 function stepFeatures(dt, t) {
   stepNades(dt); stepExplosions(dt); stepBarrels(dt);
   if (mode === 'solo') { stepBox(dt, t); boxVisual(dt, t); stepPU(dt, t); stepCoop(dt, t); stepZExtras(dt, t); stepNight(dt, t); stepM2(dt, t); }
-  try { stepTouch(); stepLowHP(dt); } catch (e) {}
+  try { stepTouch(); touchAssist(dt); stepLowHP(dt); } catch (e) {}
   if (mode === 'online') stepStreaks(dt);
   stepMapZ(dt, t); stepShipExtra(dt, t);
   updateNadeHud(); renderPerks();
@@ -8804,7 +8824,13 @@ const SCHEMA = {
       { k: 'xhair', label: 'Style', type: 'select', opts: [['cross', 'Cross'], ['dot', 'Dot'], ['circle', 'Circle'], ['tee', 'T-shape'], ['none', 'None']] },
       { k: 'xhColor', label: 'Colour', type: 'select', opts: [['bone', 'White'], ['green', 'Green'], ['cyan', 'Cyan'], ['red', 'Red'], ['yellow', 'Yellow'], ['magenta', 'Magenta']] },
     ]],
-    ['Performance', [{ k: 'fps', label: 'Show FPS', type: 'toggle' }, { k: 'gfxAuto', label: 'Lower quality automatically if it stutters', type: 'toggle' }, { k: 'touch', label: 'Touch controls (reload to apply)', type: 'select', opts: [['auto', 'Auto'], ['on', 'On'], ['off', 'Off']] }]],
+    ['Performance', [{ k: 'fps', label: 'Show FPS', type: 'toggle' }, { k: 'gfxAuto', label: 'Lower quality automatically if it stutters', type: 'toggle' }]],
+    ['Touch controls', [{ k: 'touch', label: 'Touch controls (reload to apply)', type: 'select', opts: [['auto', 'Auto'], ['on', 'On'], ['off', 'Off']] },
+      { k: 'tSens', label: 'Touch look speed', type: 'range', min: 0.3, max: 2.5, step: 0.05, fmt: v => v.toFixed(2) },
+      { k: 'tSize', label: 'Button size', type: 'select', opts: [['s', 'Small'], ['m', 'Medium'], ['l', 'Large']] },
+      { k: 'tOpacity', label: 'Button opacity', type: 'range', min: 0.3, max: 1, step: 0.05, fmt: v => Math.round(v * 100) + '%' },
+      { k: 'tAssist', label: 'Aim assist', type: 'toggle' }, { k: 'tAuto', label: 'Auto-fire when on target', type: 'toggle' },
+      { k: 'tLeftFire', label: 'Left fire button', type: 'toggle' }, { k: 'tHaptic', label: 'Vibration', type: 'toggle' }]],
   ],
   audio: [
     ['Audio', [
@@ -11473,7 +11499,7 @@ function m2Motion(dt, t) {
   const D = m2.disp; if (D) { D.t -= dt; if (D.t <= 0) { D.t = 0.25; const g = D.g; g.fillStyle = power ? '#06121c' : '#1a0606'; g.fillRect(0, 0, 512, 256);
     g.strokeStyle = power ? 'rgba(90,200,255,0.7)' : 'rgba(255,70,50,0.6)'; g.lineWidth = 2; const S = 3.0, ox = 256, oz = 70, R = (x0, z0, x1, z1) => g.strokeRect(ox + x0 * S, oz + z0 * S, (x1 - x0) * S, (z1 - z0) * S);
     R(-26, -18, 26, 26 - 8); R(26, -4, 44, 22); R(-44, -18, -26, 6); g.font = 'bold 16px "IBM Plex Mono", monospace'; g.fillStyle = power ? '#7fd0ff' : '#ff5a40';
-    g.fillText(power ? 'PLANT STATUS · ONLINE' : 'CONTAINMENT FAILURE', 14, 24); g.font = '12px "IBM Plex Mono", monospace'; g.fillText('WAVE ' + wave + ' · ' + enemies.length + ' ON THE FLOOR', 14, 44);
+    g.fillText(power ? 'PLANT STATUS · ONLINE' : 'CONTAINMENT FAILURE', 14, 24); g.font = '12px "IBM Plex Mono", monospace'; g.fillText('WAVE ' + wave, 14, 44);
     g.fillText(m2.train === 'here' ? 'LINE 7 · BOARDING' : m2.train === 'coming' ? 'LINE 7 · INBOUND ' + Math.ceil(m2.trainT) + 's' : m2.ee & 8 ? 'PIT · ACTIVITY' : 'LINE 7 · NO SERVICE', 14, 240);
     for (const e of enemies) { if (e.dead) continue; const q = e.root.position, x = ox + q.x * S, y = oz + Math.min(18, q.z) * S; if (x < 0 || x > 512 || y < 0 || y > 256) continue; g.fillStyle = Math.sin(performance.now() / 120) > 0 ? '#ff3a2a' : '#a01a10'; g.fillRect(x - 2, y - 2, 4, 4); }
     g.fillStyle = '#3aff7a'; g.fillRect(ox + player.pos.x * S - 3, oz + Math.min(18, player.pos.z) * S - 3, 6, 6); for (let y = 0; y < 256; y += 3) { g.fillStyle = 'rgba(0,0,0,0.18)'; g.fillRect(0, y, 512, 1); } D.tex.needsUpdate = true; } }
@@ -11511,7 +11537,7 @@ let lastShown = false;
 function stepLastMarks(t) {
   const alive = enemies.filter(e => !e.dead);
   const on = mode === 'solo' && curMap !== 'ship' && state === 'play' && !intermission && toSpawn <= 0 && bossDelay <= 0 && alive.length > 0 && alive.length <= 3;
-  if (on && !lastShown) flashSub(alive.length === 1 ? 'Last one · it shows through walls' : 'Last ' + alive.length + ' · they show through walls');
+  if (on && !lastShown) flashSub('The stragglers show through walls');
   lastShown = on;
   lastMarks.forEach((M, i) => { const e = on ? alive[i] : null; const vis = !!e; M.body.visible = M.core.visible = M.tip.visible = vis; if (!vis) return;
     const p = e.root.position, far = Math.max(1, Math.hypot(p.x - player.pos.x, p.z - player.pos.z) / 10), sc = (e.sc || 1) * far, pulse = 0.75 + 0.25 * Math.sin(t * 5 + i);
@@ -11618,6 +11644,7 @@ function stepGore(dt) {
 // ---------- hit feedback: a red kill marker with its own thump, low health heartbeat and a pulsing red edge ----------
 // =====================================================================================================================
 function killMarker(head) {
+  if (TOUCH) vib(head ? 30 : 18);
   const h = $('hit'); if (!h) return; h.classList.add('kill'); clearTimeout(killMarker.t); killMarker.t = setTimeout(() => h.classList.remove('kill'), 220);
   if (!actx || !sfxBus || !S.hitSound) return; const t0 = actx.currentTime + 0.01;
   const o = actx.createOscillator(), g = actx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(head ? 180 : 140, t0); o.frequency.exponentialRampToValueAtTime(60, t0 + 0.12);
@@ -11656,57 +11683,101 @@ function gfxWatch(avg) {
 // =====================================================================================================================
 const TOUCH = (() => { try { if (S.touch === 'on' || /[?&]touch=1/.test(location.search)) return true; if (S.touch === 'off') return false;
   const tp = (navigator.maxTouchPoints || 0) > 0 || 'ontouchstart' in window; return tp && (matchMedia('(pointer: coarse)').matches || !matchMedia('(hover: hover)').matches || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)); } catch (e) { return false; } })();
-const tc = { stick: null, look: null, fire: null, mv: { x: 0, y: 0 } };
+// touch: a floating stick (left), drag-to-look (right) with aim assist, a thumb-arc of buttons round a big FIRE, tap the prompt to use things
+const tc = { stick: null, look: null, fire: null, held: new Map(), crouch: false, slow: 1, autoFiring: false, tgt: null, sprintLock: false };
+const vib = (ms) => { try { if (S.tHaptic !== false && navigator.vibrate) navigator.vibrate(ms); } catch (e) {} };
 function keyTap(code, down) { try { window.dispatchEvent(new KeyboardEvent(down ? 'keydown' : 'keyup', { code, key: code, bubbles: true })); } catch (e) {} }
+const TICON = {
+  fire: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/></svg>',
+  ads: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 6v4M12 14v4M6 12h4M14 12h4" stroke="currentColor" stroke-width="2"/></svg>',
+  jump: '<svg viewBox="0 0 24 24"><path d="M5 14l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M5 20l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2" opacity=".5"/></svg>',
+  crouch: '<svg viewBox="0 0 24 24"><path d="M5 6l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M4 19h16" stroke="currentColor" stroke-width="2.4"/></svg>',
+  reload: '<svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.1-5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M19 3v5h-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>',
+  swap: '<svg viewBox="0 0 24 24"><path d="M4 8h14l-4-4M20 16H6l4 4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>',
+  nade: '<svg viewBox="0 0 24 24"><circle cx="12" cy="14" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M10 7h4v-3h-4zM14 5l4-2" fill="none" stroke="currentColor" stroke-width="2"/></svg>',
+  melee: '<svg viewBox="0 0 24 24"><path d="M4 20l9-9M13 11l6-7 1 1-7 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M6 14l4 4" stroke="currentColor" stroke-width="2.4"/></svg>',
+  streak: '<svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.8 6.4.6-4.8 4.3 1.4 6.3L12 16.8 6.4 20l1.4-6.3L3 9.4l6.4-.6z" fill="currentColor"/></svg>',
+};
+// [action, size, right, bottom] — centres measured from the bottom-right corner, laid out in an arc round FIRE
+const TLAYOUT = [['fire', 112, 84, 100], ['ads', 74, 206, 60], ['jump', 70, 70, 228], ['reload', 60, 190, 178], ['crouch', 60, 302, 52], ['swap', 54, 290, 140], ['nade', 54, 186, 274], ['streak', 54, 80, 320]];
 function touchSetup() {
   if (!TOUCH) return; const wrap = $('wrap'); wrap.classList.add('touch');
   { let m = document.querySelector('meta[name="viewport"]'); if (!m) { m = document.createElement('meta'); m.name = 'viewport'; document.head.append(m); } m.content = 'width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover'; }
-  const ui = document.createElement('div'); ui.id = 'tUI'; ui.innerHTML = `
-    <div id="tStick"><i></i></div>
-    <button class="tb" data-a="pause" id="tPause">❚❚</button>
-    <div id="tBtns">
-      <button class="tb big" data-a="fire">FIRE</button>
-      <button class="tb" data-a="ads">AIM</button><button class="tb" data-a="jump">JUMP</button><button class="tb" data-a="crouch">DUCK</button>
-      <button class="tb" data-a="reload">RLD</button><button class="tb use" data-a="interact">USE</button><button class="tb" data-a="swap">SWAP</button>
-      <button class="tb sm" data-a="nade">NADE</button><button class="tb sm" data-a="melee">KNIFE</button><button class="tb sm" data-a="streak">STRK</button>
-    </div>
+  const ui = document.createElement('div'); ui.id = 'tUI';
+  ui.innerHTML = `<div id="tStickGhost"></div><div id="tStick"><i></i><b>SPRINT</b></div><button class="tb" data-a="pause" id="tPause">❚❚</button>
+    <button class="tb" data-a="fire" id="tFireL">${TICON.fire}</button><div id="tBtns">${TLAYOUT.map(([a]) => `<button class="tb" data-a="${a}">${TICON[a]}<small>${{ fire: '', ads: 'AIM', jump: 'JUMP', reload: 'RELOAD', crouch: 'DUCK', swap: 'SWAP', nade: 'NADE', streak: 'STREAK' }[a]}</small></button>`).join('')}</div>
     <div id="tRotate"><b>Turn your phone sideways</b><span>Hot Zone plays in landscape</span></div>`;
-  wrap.append(ui);
-  const stick = $('tStick'), knob = stick.querySelector('i'), R = 56;
-  const setMove = (x, y) => { tc.mv.x = x; tc.mv.y = y; const dz = 0.28; keys[KB('fwd')] = y < -dz; keys[KB('back')] = y > dz; keys[KB('left')] = x < -dz; keys[KB('right')] = x > dz; keys[KB('sprint')] = y < -0.86; };
-  const btnAt = (t) => { const el = document.elementFromPoint(t.clientX, t.clientY); return el && el.closest ? el.closest('.tb') : null; };
-  const lookBy = (dx, dy) => { const m = 0.0042 * S.sens * (1 + (S.adsSens - 1) * adsT); tYaw -= dx * m; tPitch -= (S.invert ? -dy : dy) * m; tPitch = Math.max(-1.45, Math.min(1.45, tPitch)); };
+  wrap.append(ui); touchLayout();
+  const stick = $('tStick'), knob = stick.querySelector('i'), R = 58;
+  const setMove = (x, y) => { const dz = 0.25; keys[KB('fwd')] = y < -dz; keys[KB('back')] = y > dz; keys[KB('left')] = x < -dz; keys[KB('right')] = x > dz;
+    const spr = y < -0.82 && Math.abs(x) < 0.6; keys[KB('sprint')] = spr; if (spr !== tc.sprintLock) { tc.sprintLock = spr; stick.classList.toggle('spr', spr); if (spr) vib(6); } };
+  const btnAt = (t) => { const el = document.elementFromPoint(t.clientX, t.clientY); return el && el.closest ? el.closest('#tUI .tb') : null; };
+  const lookBy = (dx, dy, dtMs) => { const sp = Math.hypot(dx, dy) / Math.max(8, dtMs || 16) * 16, acc = 1 + Math.min(0.9, sp / 40);
+    const m = 0.0038 * (S.tSens || 1) * acc * tc.slow * (1 - 0.45 * adsT); tYaw -= dx * m; tPitch -= (S.invert ? -dy : dy) * m; tPitch = Math.max(-1.45, Math.min(1.45, tPitch)); };
   const act = (a, down) => {
-    if (a === 'fire') { if (down) { fireHeld = true; trigEdge = true; } else fireHeld = false; return; }
-    if (a === 'ads') { if (down) { if (knife.on) knifeAttack(true); else { const was = S.adsMode; S.adsMode = 'toggle'; adsDown(); S.adsMode = was; } } return; }
+    if (a === 'fire') { if (down) { if (mode === 'solo' && tc.tgt && tc.tgt.dist < 1.7 && tc.tgt.d < 0.35) { keyTap(KB('melee'), true); setTimeout(() => keyTap(KB('melee'), false), 60); vib(20); return; } fireHeld = true; trigEdge = true; vib(8); } else if (!tc.fireL && !tc.fire) fireHeld = false; return; }   // up close, FIRE knifes
+    if (a === 'ads') { if (down) { if (knife.on) knifeAttack(true); else { const was = S.adsMode; S.adsMode = 'toggle'; adsDown(); S.adsMode = was; } vib(6); } return; }
     if (a === 'pause') { if (down) pause(); return; }
-    if (a === 'swap') { if (down) { const k = Math.max(0, loadout.indexOf(cur)); keyTap(KB(['w1', 'w2', 'w3'][(k + 1) % Math.max(1, loadout.length)] || 'w1'), true); } else keyTap(KB('w1'), false); return; }
-    keyTap(KB(a), down);
+    if (a === 'crouch') { if (down) { tc.crouch = !tc.crouch; if (keys[KB('sprint')] && !tc.crouch) tc.crouch = true; keys[KB('crouch')] = tc.crouch; keyTap(KB('crouch'), tc.crouch); ui.querySelector('[data-a="crouch"]').classList.toggle('lock', tc.crouch); vib(6); } return; }
+    if (a === 'swap') { if (down) { window.dispatchEvent(new WheelEvent('wheel', { deltaY: 120, bubbles: true })); vib(6); } return; }
+    keyTap(KB(a), down); if (down) vib(6);
   };
+  const inPrompt = (t) => { const p = $('prompt'); if (!p || !p.innerHTML || p.hidden) return false; const r = p.getBoundingClientRect(); return t.clientX > r.left - 10 && t.clientX < r.right + 10 && t.clientY > r.top - 10 && t.clientY < r.bottom + 10; };
   ui.addEventListener('touchstart', (ev) => { if (state !== 'play') return; ev.preventDefault();
     for (const t of ev.changedTouches) { const b = btnAt(t);
-      if (b) { b.classList.add('on'); const a = b.dataset.a; act(a, true); if (a === 'fire') tc.fire = { id: t.identifier, x: t.clientX, y: t.clientY }; else (b._ids || (b._ids = new Set())).add(t.identifier); continue; }
-      if (t.clientX < innerWidth * 0.42 && !tc.stick) { tc.stick = { id: t.identifier, x: t.clientX, y: t.clientY }; stick.style.left = t.clientX + 'px'; stick.style.top = t.clientY + 'px'; stick.classList.add('on'); knob.style.transform = 'translate(-50%,-50%)'; }
-      else if (!tc.look) tc.look = { id: t.identifier, x: t.clientX, y: t.clientY }; } }, { passive: false });
-  ui.addEventListener('touchmove', (ev) => { ev.preventDefault();
+      if (b) { const a = b.dataset.a; b.classList.add('on'); tc.held.set(t.identifier, { b, a, x: t.clientX, y: t.clientY, ts: performance.now() }); if (a === 'fire') { if (b.id === 'tFireL') tc.fireL = true; else tc.fire = true; } act(a, true); continue; }
+      if (inPrompt(t)) { tc.held.set(t.identifier, { a: 'interact', b: $('prompt') }); $('prompt').classList.add('tapped'); act('interact', true); continue; }
+      if (t.clientX < innerWidth * 0.45 && !tc.stick) { tc.stick = { id: t.identifier, x: t.clientX, y: t.clientY }; stick.style.left = t.clientX + 'px'; stick.style.top = t.clientY + 'px'; stick.classList.add('on'); knob.style.transform = 'translate(-50%,-50%)'; ui.classList.add('stickon'); }
+      else if (!tc.look) tc.look = { id: t.identifier, x: t.clientX, y: t.clientY, ts: performance.now() }; } }, { passive: false });
+  ui.addEventListener('touchmove', (ev) => { ev.preventDefault(); const now = performance.now();
     for (const t of ev.changedTouches) {
-      if (tc.stick && t.identifier === tc.stick.id) { let dx = t.clientX - tc.stick.x, dy = t.clientY - tc.stick.y; const l = Math.hypot(dx, dy); if (l > R) { dx *= R / l; dy *= R / l; } knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`; setMove(dx / R, dy / R); }
-      else if (tc.look && t.identifier === tc.look.id) { lookBy(t.clientX - tc.look.x, t.clientY - tc.look.y); tc.look.x = t.clientX; tc.look.y = t.clientY; }
-      else if (tc.fire && t.identifier === tc.fire.id) { lookBy(t.clientX - tc.fire.x, t.clientY - tc.fire.y); tc.fire.x = t.clientX; tc.fire.y = t.clientY; } } }, { passive: false });
+      if (tc.stick && t.identifier === tc.stick.id) { let dx = t.clientX - tc.stick.x, dy = t.clientY - tc.stick.y; const l = Math.hypot(dx, dy);
+        if (l > R * 1.6) { tc.stick.x += dx * (1 - R * 1.6 / l); tc.stick.y += dy * (1 - R * 1.6 / l); stick.style.left = tc.stick.x + 'px'; stick.style.top = tc.stick.y + 'px'; dx = t.clientX - tc.stick.x; dy = t.clientY - tc.stick.y; }   // the stick follows a thumb that drifts too far
+        const l2 = Math.hypot(dx, dy), k = l2 > R ? R / l2 : 1; knob.style.transform = `translate(calc(-50% + ${dx * k}px), calc(-50% + ${dy * k}px))`; setMove(dx * k / R, dy * k / R); continue; }
+      if (tc.look && t.identifier === tc.look.id) { lookBy(t.clientX - tc.look.x, t.clientY - tc.look.y, now - tc.look.ts); tc.look.x = t.clientX; tc.look.y = t.clientY; tc.look.ts = now; continue; }
+      const h = tc.held.get(t.identifier); if (h && (h.a === 'fire' || h.a === 'ads')) { lookBy(t.clientX - h.x, t.clientY - h.y, now - h.ts); h.x = t.clientX; h.y = t.clientY; h.ts = now; } } }, { passive: false });
   const end = (ev) => { for (const t of ev.changedTouches) {
-      if (tc.stick && t.identifier === tc.stick.id) { tc.stick = null; stick.classList.remove('on'); setMove(0, 0); }
+      if (tc.stick && t.identifier === tc.stick.id) { tc.stick = null; stick.classList.remove('on', 'spr'); tc.sprintLock = false; setMove(0, 0); ui.classList.remove('stickon'); }
       if (tc.look && t.identifier === tc.look.id) tc.look = null;
-      if (tc.fire && t.identifier === tc.fire.id) { tc.fire = null; act('fire', false); ui.querySelector('[data-a="fire"]').classList.remove('on'); }
-      for (const b of ui.querySelectorAll('.tb')) if (b._ids && b._ids.has(t.identifier)) { b._ids.delete(t.identifier); b.classList.remove('on'); act(b.dataset.a, false); } } };
+      const h = tc.held.get(t.identifier); if (h) { tc.held.delete(t.identifier); if (h.b) h.b.classList.remove('on', 'tapped'); if (h.a === 'fire') { if (h.b.id === 'tFireL') tc.fireL = false; else tc.fire = false; } act(h.a, false); } } };
   ui.addEventListener('touchend', end); ui.addEventListener('touchcancel', end);
-  // no pointer lock on phones: never pause because it was "lost"
   canvas.addEventListener('touchstart', (ev) => ev.preventDefault(), { passive: false });
+}
+function touchLayout() {
+  const ui = $('tUI'); if (!ui) return; const sc = { s: 0.84, m: 1, l: 1.16 }[S.tSize || 'm'] * Math.min(1, Math.max(0.78, innerHeight / 420));
+  for (const [a, sz, r, b] of TLAYOUT) { const el = ui.querySelector(`#tBtns [data-a="${a}"]`); if (!el) continue; const s = sz * sc; el.style.width = el.style.height = s + 'px'; el.style.right = (r * sc - s / 2) + 'px'; el.style.bottom = (b * sc - s / 2) + 'px'; el.classList.toggle('big', a === 'fire'); }
+  ui.style.setProperty('--top', String(S.tOpacity ?? 0.8)); const fl = $('tFireL'); if (fl) fl.hidden = S.tLeftFire === false;
+}
+// aim assist: the crosshair drags a little over a target (finger moves slower) and, while firing or aiming, eases onto it. Weaker against players
+const _ta = new THREE.Vector3(), _tr = new THREE.Raycaster();
+function touchAssist(dt) {
+  tc.slow = 1; tc.tgt = null; if (!TOUCH || state !== 'play' || S.tAssist === false) return;
+  const asp = innerWidth / innerHeight; let best = null, bd = 0.2;
+  const consider = (p, ref) => { _ta.copy(p).project(camera); if (_ta.z > 1 || _ta.z < -1) return; const d = Math.hypot(_ta.x * asp, _ta.y); if (d < bd) { bd = d; best = { p: p.clone(), ref, d }; } };
+  if (mode === 'solo') { for (const e of enemies) if (!e.dead && !e.rise && e.torso) { e.torso.getWorldPosition(_hp); _hp.y += 0.15 * e.sc; consider(_hp, e); } }
+  else for (const r of net.remotes.values()) { if (!r.alive || r.inv || !r.g) continue; _hp.copy(r.g.position); _hp.y += 1.3; consider(_hp, r); }
+  if (!best) { if (tc.autoFiring) { tc.autoFiring = false; if (!tc.fire && !tc.fireL) fireHeld = false; } return; }
+  const dist = camera.position.distanceTo(best.p); _tr.set(camera.position, best.p.clone().sub(camera.position).normalize()); _tr.far = dist - 0.4;
+  if (_tr.intersectObjects(world, false).some(h => !h.object.userData.enemy && !h.object.userData.remote)) { best = null; }
+  if (!best) { if (tc.autoFiring) { tc.autoFiring = false; if (!tc.fire && !tc.fireL) fireHeld = false; } return; }
+  best.dist = dist; tc.tgt = best; const strength = mode === 'solo' ? 1 : 0.45;
+  if (best.d < 0.18) tc.slow = 1 - 0.45 * strength;
+  if ((fireHeld || aiming || adsT > 0.5) && best.d < 0.16) { const dx = best.p.x - camera.position.x, dy = best.p.y - camera.position.y, dz = best.p.z - camera.position.z;
+    const yT = Math.atan2(-dx, -dz), pT = Math.atan2(dy, Math.hypot(dx, dz)); let dyaw = yT - tYaw; while (dyaw > Math.PI) dyaw -= Math.PI * 2; while (dyaw < -Math.PI) dyaw += Math.PI * 2;
+    const k = Math.min(1, dt * (aiming ? 4.5 : 3) * strength); tYaw += dyaw * k; tPitch += (pT - tPitch) * k; }
+  // auto-fire (optional): pull the trigger when a target sits under the crosshair
+  if (S.tAuto && best.d < 0.05 * (1 + 2 / Math.max(2, dist))) { if (!fireHeld) { fireHeld = true; trigEdge = true; tc.autoFiring = true; } }
+  else if (tc.autoFiring) { tc.autoFiring = false; if (!tc.fire && !tc.fireL) fireHeld = false; }
 }
 function stepTouch() {
   if (!TOUCH) return; const ui = $('tUI'); if (!ui) return; const show = state === 'play';
-  if (ui.classList.contains('live') !== show) { ui.classList.toggle('live', show); if (!show) { tc.stick = tc.look = tc.fire = null; fireHeld = false; for (const a of ['fwd', 'back', 'left', 'right', 'sprint']) keys[KB(a)] = false; } }
-  const use = ui.querySelector('.use'); if (use) { const any = !!$('prompt').innerHTML; if (use.classList.contains('hot') !== any) use.classList.toggle('hot', any); }
-  const strk = ui.querySelector('[data-a="streak"]'); if (strk) strk.hidden = mode !== 'online';
+  if (ui.classList.contains('live') !== show) { ui.classList.toggle('live', show); touchLayout();
+    if (!show) { tc.stick = tc.look = null; tc.fire = tc.fireL = false; tc.held.clear(); fireHeld = false; for (const a of ['fwd', 'back', 'left', 'right', 'sprint']) keys[KB(a)] = false; ui.querySelectorAll('.tb.on').forEach(b => b.classList.remove('on')); } }
+  if (tc.crouch && !keys[KB('crouch')]) { tc.crouch = false; const c = ui.querySelector('[data-a="crouch"]'); if (c) c.classList.remove('lock'); }
+  const strk = ui.querySelector('#tBtns [data-a="streak"]'); if (strk) { const on = mode === 'online'; if (strk.hidden === on) strk.hidden = !on; strk.classList.toggle('hot', on && ks.ready.length > 0); }
+  const rl = ui.querySelector('#tBtns [data-a="reload"]'); if (rl) { const W = WEAPONS[cur], low = !knife.on && ammo <= Math.floor(W.mag * 0.25); if (rl.classList.contains('hot') !== low) rl.classList.toggle('hot', low); }
+  const nd = ui.querySelector('#tBtns [data-a="nade"]'); if (nd) { const none = nadeCount <= 0; if (nd.classList.contains('dim') !== none) nd.classList.toggle('dim', none); }
+  const fb = ui.querySelector('#tBtns [data-a="fire"]'); if (fb) { const lock = !!tc.tgt && tc.tgt.d < 0.08; if (fb.classList.contains('lock') !== lock) fb.classList.toggle('lock', lock); }
 }
 
 function stepWallBuys(t) {
@@ -12079,7 +12150,7 @@ function zhUpdate() {
   const left = enemies.length + toSpawn + (bossDelay > 0 ? 1 : 0), prog = intermission ? 1 : 1 - Math.min(1, left / zh.total);
   const pk = Math.round(prog * 200); if (K.prog !== pk) { K.prog = pk; $('zhArc').style.strokeDashoffset = (289 * (1 - prog)).toFixed(1); }
   set('zhLeft', intermission ? String(Math.max(0, Math.ceil(waveGap))) : String(left)); set('zhLeftL', intermission ? 'next' : 'left');
-  const nk = nadeCount + '/' + nadeMax(); if (K.nades !== nk) { K.nades = nk; let h = ''; for (let i = 0; i < nadeMax(); i++) { const a = (200 + i * 17) * Math.PI / 180, x = 60 + Math.cos(a) * 66, y = 60 - Math.sin(a) * 66; h += `<i class="${i < nadeCount ? 'on' : ''}" style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px"></i>`; } $('zhNades').innerHTML = h; }
+  const nk = nadeCount + '/' + nadeMax(); if (K.nades !== nk) { K.nades = nk; $('zhGren').innerHTML = Array.from({ length: nadeMax() }, (_, i) => `<i class="${i < nadeCount ? 'on' : ''}"></i>`).join(''); let h = ''; for (let i = 0; i < nadeMax(); i++) { const a = (200 + i * 17) * Math.PI / 180, x = 60 + Math.cos(a) * 66, y = 60 - Math.sin(a) * 66; h += `<i class="${i < nadeCount ? 'on' : ''}" style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px"></i>`; } $('zhNades').innerHTML = h; }
   if (K.exo !== exoOn) { K.exo = exoOn; $('zhDial').classList.toggle('exo', !!exoOn); }
   const pw = !!power; if (K.pw !== pw) { K.pw = pw; $('zhDial').classList.toggle('pw', pw); }
 }
